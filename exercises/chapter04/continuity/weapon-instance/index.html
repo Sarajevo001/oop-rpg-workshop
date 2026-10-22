@@ -1,0 +1,74 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第2章 連続性検証</title><style>body{font:16px system-ui;max-width:750px;margin:2rem auto;padding:0 1rem}section{border:1px solid #ddd;border-radius:8px;padding:1rem;margin:1rem 0}button{margin:.25rem;padding:.5rem}#log{min-height:2rem}</style></head><body><h1>第2章 連続性検証</h1><p>第1章の敵3体・共通ダメージ計算を保持したまま、味方を複数に増やした例。</p><section><h2>味方</h2><div id="allies"></div></section><section><h2>敵</h2><div id="enemies"></div></section><section><h2>行動</h2><div id="actions"></div></section><section><h2>ログ</h2><div id="log" aria-live="polite"></div></section><button id="reset">やり直す</button><script>function calculateDamage(attack,defense){return Math.max(1,attack-defense*2)}
+const enemies=[{name:"スライム",hp:15,defense:1,attack:4},{name:"ゴブリン",hp:20,defense:2,attack:5},{name:"オーク",hp:28,defense:3,attack:6}];
+const alliesView=document.querySelector("#allies"),enemyView=document.querySelector("#enemies"),actionsView=document.querySelector("#actions"),logView=document.querySelector("#log");
+function log(message){logView.textContent=message}
+function addButton(label,fn,disabled=false){const b=document.createElement("button");b.textContent=label;b.disabled=disabled;b.addEventListener("click",fn);actionsView.append(b)}
+document.querySelector("#reset").addEventListener("click",()=>location.reload());
+class Character{
+ constructor(name,hp,attack,defense){this.name=name;this.maxHp=hp;this.hp=hp;this.attack=attack;this.defense=defense}
+ get alive(){return this.hp>0}
+ takeDamage(amount){const actual=Math.min(this.hp,Math.max(0,amount));this.hp-=actual;return actual}
+ heal(amount){const actual=this.alive?Math.min(this.maxHp-this.hp,Math.max(0,amount)):0;this.hp+=actual;return actual}
+ strike(target){return target.takeDamage(calculateDamage(this.attack,target.defense))}
+}
+const allies=[new Character("勇者",30,8,2),new Character("僧侶",18,4,1),new Character("戦士",24,7,3)];
+// 第1章で使った敵3体の状態・値は保持し、ここでクラスのインスタンスへ置換する。
+const foes=enemies.map(e=>new Character(e.name,e.hp,e.attack,e.defense));
+let nextNumber=1;
+function addAlly(){allies.push(new Character("新入り"+nextNumber++,20,5,2));log("味方を追加しました");render()}
+function removeAlly(actor){if(allies.length===1){log("最後の味方は削除できません");return}allies.splice(allies.indexOf(actor),1);log(actor.name+"を編成から外しました");render()}
+function enemyTurn(){
+ const attacker=foes.find(e=>e.alive),target=allies.find(a=>a.alive);
+ if(!attacker||!target)return;
+ const damage=attacker.strike(target);
+ log(logView.textContent+" / "+attacker.name+"の反撃: "+target.name+"に"+damage+"ダメージ");
+}
+function attackEnemy(actor,enemy){
+ if(!actor.alive||!enemy.alive)return;
+ const damage=actor.strike(enemy);
+ log(actor.name+"の攻撃: "+enemy.name+"に"+damage+"ダメージ");enemyTurn();render();
+}
+function healAlly(actor){const amount=actor.heal(5);log(actor.name+"が"+amount+"回復");enemyTurn();render()}
+class Weapon{
+ constructor(name,resource,maxResource){this.name=name;this.resource=resource;this.maxResource=maxResource}
+ get status(){return this.resource+"/"+this.maxResource}
+}
+class Sword extends Weapon{
+ constructor(){super("剣",3,3)}
+ use(actor,enemy){if(this.resource<=0)return null;this.resource--;return enemy.takeDamage(calculateDamage(actor.attack+2,enemy.defense))}
+}
+class Bow extends Weapon{
+ constructor(){super("弓",3,3)}
+ use(actor,enemy){if(this.resource<=0)return null;this.resource--;return enemy.takeDamage(calculateDamage(actor.attack+1,enemy.defense))}
+}
+class Staff extends Weapon{
+ constructor(){super("杖",6,6)}
+ use(_actor,enemy){if(this.resource<2)return null;this.resource-=2;return enemy.takeDamage(6)}
+}
+const hero=allies[0],weapons=[new Sword(),new Bow(),new Staff()];
+hero.weapon=weapons[0];
+function equip(weapon){hero.weapon=weapon;log(hero.name+"は"+weapon.name+"を装備");render()}
+function useWeapon(actor,enemy){
+ if(!actor.alive||!enemy.alive)return;
+ const weapon=actor.weapon;
+ const damage=weapon.use(actor,enemy);
+ if(damage===null){log(weapon.name+"は使用できない");return}
+ log(actor.name+"の"+weapon.name+"攻撃: "+enemy.name+"に"+damage+"ダメージ");enemyTurn();render();
+}
+function render(){
+ alliesView.replaceChildren();enemyView.replaceChildren();actionsView.replaceChildren();
+ const info=document.createElement("div");info.textContent="装備: "+hero.weapon.name+" / "+weapons.map(w=>w.name+" "+w.status).join(" / ");alliesView.append(info);
+ for(const actor of allies){
+  const d=document.createElement("div");d.textContent=actor.name+" HP "+actor.hp+"/"+actor.maxHp;alliesView.append(d);
+  addButton(actor.name+"を回復",()=>healAlly(actor),!actor.alive||actor.hp===actor.maxHp);
+  addButton(actor.name+"を外す",()=>removeAlly(actor),allies.length===1);
+ }
+ addButton("味方を追加",addAlly);
+ for(const weapon of weapons)addButton(weapon.name+"を装備",()=>equip(weapon));
+ for(const enemy of foes){
+  const d=document.createElement("div");d.textContent=enemy.name+" HP "+enemy.hp;enemyView.append(d);
+  addButton("勇者の武器 → "+enemy.name,()=>useWeapon(hero,enemy),!hero.alive||!enemy.alive);
+  for(const actor of allies.slice(1))addButton(actor.name+"の攻撃 → "+enemy.name,()=>performAction(actor,enemy,actions.attack),!actor.alive||!enemy.alive);
+ }
+}
+render();</script></body></html>
