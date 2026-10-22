@@ -1,0 +1,48 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第1章 重複実装例</title><style>body{font:16px system-ui;margin:2rem auto;max-width:650px;padding:0 1rem}button{padding:.6rem;margin:.25rem}#log{white-space:pre-line;background:#f4f5f8;padding:1rem;min-height:6rem}section{border:1px solid #ddd;padding:1rem;border-radius:8px;margin:1rem 0}</style></head><body><h1>第1章 重複実装例</h1><p>勇者の攻撃力: 8 / 敵の防御力: 敵ごとに異なります</p><section><h2>敵</h2><div id="enemies"></div></section><section><h2>戦闘ログ</h2><div id="log" aria-live="polite">攻撃する敵を選んでください。</div></section><button id="reset">やり直す</button><script>const heroAttack = 8;
+const enemies = [
+  { name: "スライム", hp: 15, defense: 1 },
+  { name: "ゴブリン", hp: 20, defense: 2 },
+  { name: "オーク", hp: 28, defense: 3 }
+];
+const enemyView = document.querySelector("#enemies");
+const logView = document.querySelector("#log");
+function render() {
+  enemyView.replaceChildren();
+  for (let i = 0; i < enemies.length; i++) {
+    const enemy = enemies[i];
+    const button = document.createElement("button");
+    button.textContent = `${enemy.name} HP ${enemy.hp}`;
+    button.disabled = enemy.hp === 0;
+    // 敵ごとに個別の処理へ分岐。ここは意図的な重複です。
+    if (i === 0) button.addEventListener("click", attackSlime);
+    if (i === 1) button.addEventListener("click", attackGoblin);
+    if (i === 2) button.addEventListener("click", attackOrc);
+    enemyView.append(button);
+  }
+}
+function attackSlime() {
+  const enemy = enemies[0];
+  const damage = Math.max(1, heroAttack - enemy.defense);
+  const actual = Math.min(enemy.hp, damage);
+  enemy.hp -= actual;
+  logView.textContent = `${enemy.name}に${actual}ダメージ！`;
+  render();
+}
+function attackGoblin() {
+  const enemy = enemies[1];
+  const damage = Math.max(1, heroAttack - enemy.defense);
+  const actual = Math.min(enemy.hp, damage);
+  enemy.hp -= actual;
+  logView.textContent = `${enemy.name}に${actual}ダメージ！`;
+  render();
+}
+function attackOrc() {
+  const enemy = enemies[2];
+  const damage = Math.max(1, heroAttack - enemy.defense);
+  const actual = Math.min(enemy.hp, damage);
+  enemy.hp -= actual;
+  logView.textContent = `${enemy.name}に${actual}ダメージ！`;
+  render();
+}
+document.querySelector("#reset").addEventListener("click", () => location.reload());
+render();</script></body></html>
