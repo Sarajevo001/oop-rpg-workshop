@@ -1,0 +1,36 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第2章 オブジェクト</title><style>body{font:16px system-ui;max-width:720px;margin:2rem auto;padding:0 1rem}button{margin:.3rem;padding:.6rem}section{border:1px solid #ccc;border-radius:8px;padding:1rem;margin:1rem 0}#log{white-space:pre-line}</style></head><body><h1>第2章 オブジェクト</h1><p>第1章で導入した共通ダメージ計算を引き継いでいます。</p><section><h2>味方</h2><div id="allies"></div></section><section><h2>敵</h2><div id="enemies"></div></section><section><h2>操作</h2><div id="actions"></div></section><section><h2>ログ</h2><div id="log" aria-live="polite"></div></section><button id="reset">最初から</button><script>function calculateDamage(attack, defense) { return Math.max(1, attack - defense * 2); }
+const enemy = { name: "スライム", hp: 30, defense: 1 };
+const logView = document.querySelector("#log");
+function writeLog(message) { logView.textContent = message; }
+function showEnemy() { document.querySelector("#enemies").textContent = `${enemy.name} HP ${enemy.hp}`; }
+function makeButton(label, onClick) { const b = document.createElement("button"); b.textContent=label; b.addEventListener("click",onClick); document.querySelector("#actions").append(b); }
+document.querySelector("#reset").addEventListener("click",()=>location.reload());
+// オブジェクトにまとめれば配列の位置合わせ問題は解消する。
+// ここでは、まだクラスは使っていない。
+const allies = [
+  { name:"勇者", hp:30, maxHp:30, attack:8, defense:2 },
+  { name:"僧侶", hp:18, maxHp:18, attack:4, defense:1 },
+  { name:"戦士", hp:24, maxHp:24, attack:7, defense:3 }
+];
+function showAllies() {
+  document.querySelector("#allies").textContent =
+    allies.map(a=>`${a.name} HP ${a.hp}/${a.maxHp}`).join(" / ");
+}
+function attack(actor) {
+  if (enemy.hp <= 0 || actor.hp <= 0) return;
+  const damage = Math.min(enemy.hp,calculateDamage(actor.attack,enemy.defense));
+  enemy.hp -= damage;
+  writeLog(`${actor.name}の攻撃！ ${damage}ダメージ`);
+  showEnemy();
+}
+function heal(actor) {
+  const amount = Math.min(5,actor.maxHp-actor.hp);
+  actor.hp += amount;
+  writeLog(`${actor.name}が${amount}回復`);
+  showAllies();
+}
+for (const actor of allies) {
+  makeButton(`${actor.name}で攻撃`,()=>attack(actor));
+  makeButton(`${actor.name}を回復`,()=>heal(actor));
+}
+showAllies(); showEnemy();</script></body></html>
