@@ -1,0 +1,45 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>第2章 クラス</title><style>body{font:16px system-ui;max-width:720px;margin:2rem auto;padding:0 1rem}button{margin:.3rem;padding:.6rem}section{border:1px solid #ccc;border-radius:8px;padding:1rem;margin:1rem 0}#log{white-space:pre-line}</style></head><body><h1>第2章 クラス</h1><p>第1章で導入した共通ダメージ計算を引き継いでいます。</p><section><h2>味方</h2><div id="allies"></div></section><section><h2>敵</h2><div id="enemies"></div></section><section><h2>操作</h2><div id="actions"></div></section><section><h2>ログ</h2><div id="log" aria-live="polite"></div></section><button id="reset">最初から</button><script>function calculateDamage(attack, defense) { return Math.max(1, attack - defense * 2); }
+const enemy = { name: "スライム", hp: 30, defense: 1 };
+const logView = document.querySelector("#log");
+function writeLog(message) { logView.textContent = message; }
+function showEnemy() { document.querySelector("#enemies").textContent = `${enemy.name} HP ${enemy.hp}`; }
+function makeButton(label, onClick) { const b = document.createElement("button"); b.textContent=label; b.addEventListener("click",onClick); document.querySelector("#actions").append(b); }
+document.querySelector("#reset").addEventListener("click",()=>location.reload());
+class Character {
+  constructor(name,maxHp,attack,defense) {
+    this.name=name; this.maxHp=maxHp; this.hp=maxHp;
+    this.attack=attack; this.defense=defense;
+  }
+  strike(target) {
+    if (this.hp <= 0 || target.hp <= 0) return 0;
+    const damage=Math.min(target.hp,calculateDamage(this.attack,target.defense));
+    target.hp -= damage;
+    return damage;
+  }
+  heal(amount) {
+    const actual=Math.min(amount,this.maxHp-this.hp);
+    this.hp+=actual;
+    return actual;
+  }
+}
+const allies=[
+  new Character("勇者",30,8,2),
+  new Character("僧侶",18,4,1),
+  new Character("戦士",24,7,3)
+];
+function showAllies() {
+  document.querySelector("#allies").textContent =
+    allies.map(a=>`${a.name} HP ${a.hp}/${a.maxHp}`).join(" / ");
+}
+for (const actor of allies) {
+  makeButton(`${actor.name}で攻撃`,()=>{
+    const damage=actor.strike(enemy);
+    writeLog(`${actor.name}の攻撃！ ${damage}ダメージ`);
+    showEnemy();
+  });
+  makeButton(`${actor.name}を回復`,()=>{
+    writeLog(`${actor.name}が${actor.heal(5)}回復`);
+    showAllies();
+  });
+}
+showAllies();showEnemy();</script></body></html>
