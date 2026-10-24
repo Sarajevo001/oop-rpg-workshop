@@ -31,9 +31,22 @@ class Slime {
   }
 }
 let characters, finished;
+let turnNumber=0;
+let currentTurnLog=null;
 
 const $=id=>document.querySelector("#"+id);
-function log(message){const p=document.createElement("p");p.textContent=message;$("log").appendChild(p);}
+function log(message){
+ const p=document.createElement("p");p.textContent=message;
+ (currentTurnLog||$("log")).appendChild(p);
+}
+function beginTurnLog(){
+ const section=document.createElement("section");
+ const heading=document.createElement("h3");
+ heading.textContent="ターン"+(++turnNumber);
+ section.appendChild(heading);
+ $("log").prepend(section);
+ currentTurnLog=section;
+}
 function living(team){return characters.filter(c=>c.team===team&&c.hp>0);}
 function enemies(){return living("enemy");}
 function allies(){return living("friend");}
@@ -52,6 +65,7 @@ function render(){
 
 function nextTurn(){
  if(finished)return;
+ beginTurnLog();
  for(const actor of allies()){
   const target=enemies()[0];if(!target)break;
   log(actor.attack(target));
@@ -64,6 +78,7 @@ function nextTurn(){
   }
   if(!allies().length){finished=true;log("味方が全員倒れた");}
  }
+ currentTurnLog=null;
  render();
 }
 function resetGame(){
@@ -73,7 +88,7 @@ function resetGame(){
   new Slime("仲間スライム","friend"),
   new Wizard("魔法使い")
  ];
- finished=false;$("log").replaceChildren();
+ finished=false;turnNumber=0;currentTurnLog=null;$("log").replaceChildren();
  
  log(`${enemies().length}体の敵スライムが現れた！`);render();
 }

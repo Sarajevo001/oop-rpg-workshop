@@ -33,10 +33,23 @@ class Slime {
 
 
 let characters, finished;
+let turnNumber=0;
+let currentTurnLog=null;
 let friendlyController, enemyController;
 
 const $=id=>document.querySelector("#"+id);
-function log(message){const p=document.createElement("p");p.textContent=message;$("log").appendChild(p);}
+function log(message){
+ const p=document.createElement("p");p.textContent=message;
+ (currentTurnLog||$("log")).appendChild(p);
+}
+function beginTurnLog(){
+ const section=document.createElement("section");
+ const heading=document.createElement("h3");
+ heading.textContent="ターン"+(++turnNumber);
+ section.appendChild(heading);
+ $("log").prepend(section);
+ currentTurnLog=section;
+}
 function living(team){return characters.filter(c=>c.team===team&&c.hp>0);}
 function enemies(){return living("enemy");}
 function allies(){return living("friend");}
@@ -50,18 +63,27 @@ function render(){
   host.appendChild(card);
  }
  $("next-turn").disabled=finished;
- $("friend-target").disabled=$("auto-friend").checked;
+ updateTargetOptions();
+ $("friend-target").disabled=$("auto-friend").checked || $("friend-target").options.length===0;
 }
 function updateTargetOptions(){
- const select=$("friend-target");select.replaceChildren();
- characters.forEach((c,index)=>{
-  if(c.team!=="enemy")return;
+ const select=$("friend-target");
+ const previous=select.value;
+ select.replaceChildren();
+ characters.forEach((character,index)=>{
+  if(character.team!=="enemy"||character.hp<=0)return;
   const option=document.createElement("option");
-  option.value=String(index);option.textContent=c.name;select.appendChild(option);
+  option.value=String(index);option.textContent=character.name;
+  select.appendChild(option);
  });
+ const preserved=Array.from(select.options).some(option=>option.value===previous);
+ if(preserved)select.value=previous;
+ else if(select.options.length)select.selectedIndex=0;
+ select.disabled=$("auto-friend").checked||select.options.length===0;
 }
 function playerControl(actor,targets){
- const selected=characters[Number($("friend-target").value)];
+ const value=$("friend-target").value;
+ const selected=value===""?null:characters[Number(value)];
  return selected&&targets.includes(selected)&&actor.canAttack(selected)?selected:null;
 }
 function cpuControl(actor,targets){
@@ -70,6 +92,8 @@ function cpuControl(actor,targets){
 
 function nextTurn(){
  if(finished)return;
+ updateTargetOptions();
+ beginTurnLog();
  const hero=characters.find(c=>c.name==="勇者");
  const wizard=characters.find(c=>c.name==="魔法使い");
  const friend=characters.find(c=>c.name==="仲間スライム");
@@ -87,6 +111,7 @@ function nextTurn(){
   }
   if(!allies().length){finished=true;log("味方が全員倒れた");}
  }
+ currentTurnLog=null;
  render();
 }
 function resetGame(){
@@ -97,7 +122,7 @@ function resetGame(){
   new Slime("敵スライムA","enemy"),
   new Slime("敵スライムB","enemy")
  ];
- finished=false;$("log").replaceChildren();
+ finished=false;turnNumber=0;currentTurnLog=null;$("log").replaceChildren();
  $("auto-friend").checked=false;updateTargetOptions();
  
  friendlyController=playerControl;enemyController=cpuControl;
