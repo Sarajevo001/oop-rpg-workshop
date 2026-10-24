@@ -29,11 +29,13 @@ class Slime {
 let hero;
 let enemySlime;
 let finished;
+let turnNumber = 0;
+let currentTurnLog = null;
 
 function showMessage(message) {
   const paragraph = document.createElement("p");
   paragraph.textContent = message;
-  document.querySelector("#log").appendChild(paragraph);
+  (currentTurnLog || document.querySelector("#log")).appendChild(paragraph);
 }
 
 function render() {
@@ -57,8 +59,18 @@ function render() {
   document.querySelector("#next-turn").disabled = finished;
 }
 
+function beginTurnLog() {
+  const section = document.createElement("section");
+  const heading = document.createElement("h3");
+  heading.textContent = "ターン" + (++turnNumber);
+  section.appendChild(heading);
+  document.querySelector("#log").prepend(section);
+  currentTurnLog = section;
+}
+
 function nextTurn() {
   if (finished) return;
+  beginTurnLog();
 
   showMessage(hero.attack(enemySlime));
   if (enemySlime.hp === 0) {
@@ -80,6 +92,8 @@ function resetGame() {
   hero = new Hero("勇者");
   enemySlime = new Slime("敵スライム");
   finished = false;
+  turnNumber = 0;
+  currentTurnLog = null;
   document.querySelector("#log").replaceChildren();
   showMessage("敵スライムが現れた！");
   render();
