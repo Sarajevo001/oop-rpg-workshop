@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>スライムRPG | 第1章 初期コード</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; background: #f8fafc; color: #172033; }
+    h1 { font-size: 1.7rem; }
+    .battle { display: flex; gap: 1rem; margin: 1.5rem 0; }
+    .character { flex: 1; padding: 1.25rem; border-radius: 14px; background: white; border: 1px solid #d7dfea; text-align: center; }
+    .sprite { font-size: 3.5rem; }
+    .hp { font-weight: bold; }
+    button { padding: .8rem 1.1rem; font-size: 1rem; border: 0; border-radius: 8px; background: #245ac2; color: white; cursor: pointer; }
+    button:disabled { background: #9ca3af; cursor: not-allowed; }
+    #log { padding: 1rem; background: white; border: 1px solid #d7dfea; border-radius: 10px; min-height: 4rem; }
+    #log p { margin: .3rem 0; }
+  </style>
+</head>
+<body>
+  <h1>⚔️ スライムRPG</h1>
+  <p>「1ターン進める」を押すと、勇者と敵スライムが順番に攻撃します。</p>
+  <div class="battle">
+    <section class="character"><div class="sprite">🧑‍🦱</div><h2 id="hero-name"></h2><p class="hp" id="hero-hp"></p></section>
+    <section class="character"><div class="sprite">🟦</div><h2 id="slime-name"></h2><p class="hp" id="slime-hp"></p></section>
+  </div>
+  <p><button id="next-turn">1ターン進める</button> <button id="reset">最初から</button></p>
+  <h2>戦闘ログ</h2>
+  <div id="log" role="log" aria-live="polite"></div>
+  <script src="game.js"></script>
+</body>
+</html>
