@@ -34,21 +34,44 @@ class Slime {
   }
 }
 let hero, enemySlime, friendlySlime, wizard, finished;
+let turnNumber = 0;
+let currentTurnLog = null;
 function showMessage(message) {
-  const p = document.createElement("p");
-  p.textContent = message;
-  document.querySelector("#log").appendChild(p);
+  const p = document.createElement("p"); p.textContent = message;
+  (currentTurnLog || document.querySelector("#log")).appendChild(p);
 }
 function render() {
-  const actors = [["hero", hero], ["enemy", enemySlime], ["friend", friendlySlime], ["wizard", wizard]];
-  for (const [id, actor] of actors) {
-    document.querySelector(`#${id}-name`).textContent = actor.name;
-    document.querySelector(`#${id}-hp`).textContent = `HP: ${actor.hp}`;
+  const host = document.querySelector(".battle");
+  host.replaceChildren();
+  for (const actor of [hero, enemySlime, friendlySlime]) {
+    const card = document.createElement("section");
+    card.className = "character";
+    const sprite = document.createElement("div");
+    sprite.className = "sprite";
+    sprite.textContent = actor instanceof Hero ? "🧑‍🦱"
+      : actor.name === "仲間スライム" ? "🟩" : "🟦";
+    const name = document.createElement("h2");
+    name.textContent = actor.name;
+    const hp = document.createElement("p");
+    hp.className = "hp";
+    hp.textContent = `HP: ${actor.hp}`;
+    card.append(sprite, name, hp);
+    host.appendChild(card);
   }
   document.querySelector("#next-turn").disabled = finished;
 }
+function beginTurnLog() {
+  const section = document.createElement("section");
+  const heading = document.createElement("h3");
+  heading.textContent = "ターン" + (++turnNumber);
+  section.appendChild(heading);
+  document.querySelector("#log").prepend(section);
+  currentTurnLog = section;
+}
+
 function nextTurn() {
   if (finished) return;
+  beginTurnLog();
   showMessage(hero.attack(enemySlime));
   if (enemySlime.hp > 0) {
     showMessage(friendlySlime.attack(enemySlime));
@@ -72,6 +95,8 @@ function resetGame() {
   friendlySlime = new Slime("仲間スライム");
   wizard = new Wizard("魔法使い");
   finished = false;
+  turnNumber = 0;
+  currentTurnLog = null;
   document.querySelector("#log").replaceChildren();
   showMessage("スライムの攻撃可否ルールを検証中");
   render();
