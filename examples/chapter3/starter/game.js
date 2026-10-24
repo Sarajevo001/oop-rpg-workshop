@@ -17,8 +17,7 @@ class Wizard {
 class Slime {
   constructor(name, team, sprite) {
     this.name = name;
-    this.hp = 30;
-    this.sprite = sprite; this.sprite = sprite;
+    this.hp = 30; this.sprite = sprite;
     this.team = team;
   }
   canAttack(target) {
