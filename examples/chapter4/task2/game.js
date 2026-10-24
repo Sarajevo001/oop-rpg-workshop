@@ -84,7 +84,7 @@ function updateTargetOptions(){
 function playerControl(actor,targets){
  const value=$("friend-target").value;
  const selected=value===""?null:characters[Number(value)];
- return selected&&targets.includes(selected)&&actor.canAttack(selected)?selected:null;
+ return selected&&targets.includes(selected)&&actor.team!==selected.team?selected:null;
 }
 function cpuControl(actor,targets){
  return targets.filter(c=>c.hp>0&&actor.canAttack(c)).sort((a,b)=>a.hp-b.hp)[0]||null;
