@@ -1,5 +1,5 @@
 class Hero {
-  constructor(name) { this.name = name; this.hp = 40; this.sprite = "🧑‍🦱"; this.team = "friend"; }
+  constructor(name, controller) { this.name = name; this.controller = controller; this.hp = 40; this.sprite = "🧑‍🦱"; this.team = "friend"; }
   attack(target) {
     const damage = 8;
     target.hp = Math.max(0, target.hp - damage);
@@ -7,7 +7,7 @@ class Hero {
   }
 }
 class Wizard {
-  constructor(name) { this.name = name; this.hp = 25; this.sprite = "🧙"; this.team = "friend"; }
+  constructor(name, controller) { this.name = name; this.controller = controller; this.hp = 25; this.sprite = "🧙"; this.team = "friend"; }
   attack(target) {
     const damage = 6;
     target.hp = Math.max(0, target.hp - damage);
@@ -102,19 +102,14 @@ function nextTurn(){
  if(finished)return;
  updateTargetOptions();
  beginTurnLog();
- const hero=characters.find(c=>c.name==="勇者");
- const wizard=characters.find(c=>c.name==="魔法使い");
- const friend=characters.find(c=>c.name==="仲間スライム");
- let target=playerControl(hero,enemies());
- if(hero.hp>0&&target)log(hero.attack(target));
- updateTargetOptions();
- if(friend.hp>0&&enemies().length){
-  target=friend.controller(friend,enemies());
-  if(target)log(friend.attack(target));else log("仲間スライムは攻撃を見送った");
+ for(const actor of allies()){
+  updateTargetOptions();
+  const targets=enemies();
+  if(!targets.length)break;
+  const target=actor.controller(actor,targets);
+  if(target)log(actor.attack(target));
+  else log(actor.name+"は攻撃を見送った");
  }
- updateTargetOptions();
- target=playerControl(wizard,enemies());
- if(wizard.hp>0&&target)log(wizard.attack(target));
  if(!enemies().length){finished=true;log("敵スライムをすべて倒した！");}
  else{
   for(const enemy of enemies()){
@@ -128,8 +123,8 @@ function nextTurn(){
 }
 function resetGame(){
  characters=[
-  new Hero("勇者"),
-  new Wizard("魔法使い"),
+  new Hero("勇者",playerControl),
+  new Wizard("魔法使い",playerControl),
   new Slime("仲間スライム","friend","🟩",playerControl),
   new Slime("敵スライムA","enemy","🟦",cpuControl),
   new Slime("敵スライムB","enemy","🟦",cpuControl)
