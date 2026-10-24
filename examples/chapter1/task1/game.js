@@ -23,9 +23,11 @@ class FriendlySlime {
   }
 }
 let hero, enemySlime, friendlySlime, finished;
+let turnNumber = 0;
+let currentTurnLog = null;
 function showMessage(message) {
   const p = document.createElement("p"); p.textContent = message;
-  document.querySelector("#log").appendChild(p);
+  (currentTurnLog || document.querySelector("#log")).appendChild(p);
 }
 function render() {
   const host = document.querySelector(".battle");
@@ -47,8 +49,18 @@ function render() {
   }
   document.querySelector("#next-turn").disabled = finished;
 }
+function beginTurnLog() {
+  const section = document.createElement("section");
+  const heading = document.createElement("h3");
+  heading.textContent = "ターン" + (++turnNumber);
+  section.appendChild(heading);
+  document.querySelector("#log").prepend(section);
+  currentTurnLog = section;
+}
+
 function nextTurn() {
   if (finished) return;
+  beginTurnLog();
   showMessage(hero.attack(enemySlime));
   if (enemySlime.hp > 0) showMessage(friendlySlime.attack(enemySlime));
   if (enemySlime.hp === 0) {
@@ -64,6 +76,8 @@ function resetGame() {
   enemySlime = new Slime("敵スライム");
   friendlySlime = new FriendlySlime("仲間スライム");
   finished = false;
+  turnNumber = 0;
+  currentTurnLog = null;
   document.querySelector("#log").replaceChildren();
   showMessage("仲間スライムが加勢した！");
   render();
