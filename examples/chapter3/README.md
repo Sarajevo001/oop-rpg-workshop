@@ -3,11 +3,11 @@
 - `starter/`：第2章 `solution/` とHTML・JS完全一致。
 - `task1/`：仲間スライムはプレイヤー操作、敵はCPU操作。
 - `task2/`：仲間スライムもCPU操作へ切替可能にする。
-- `solution/`：操作関数を `friendlyController` / `enemyController` に保持し、`team` と操作方式を分離。
+- `solution/`：操作関数を各 `Slime` インスタンスの `controller` プロパティへコンストラクターで渡し、`team` と操作方式を分離。
 
 改善版は単一の `characters` 配列で管理し、表示と選択肢を配列から生成する。敵の追加に応じて個別変数・UI分岐を増やさない。死亡した味方は攻撃しない。
 
-**要再検討**：操作関数はゲーム側の変数で保持しており、企画書の「キャラクター生成時等に渡す」と完全一致しない。
+**改善例の確定**：`new Slime(name, team, sprite, controller)` で操作関数を注入。仲間スライムの切替ではその個体の `controller` を差し替える。敵スライムは `cpuControl` を持ち、行動時に `enemy.controller(enemy, allies())` を呼ぶ。ゲーム側の `friendlyController` / `enemyController` は使用しない。第4章では同じ `controller` に個体別の状態を持つオブジェクトを渡す。
 
 `solution/` と第4章 `starter/` はHTML・JS完全一致（改修後も維持）。DOM簡易モックで選択・戦闘・リセット確認済み。実ブラウザ操作、受講者負担、課題文・講師台本は未完了。
 
