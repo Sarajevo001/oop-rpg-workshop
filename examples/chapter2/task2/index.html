@@ -1,8 +1,12 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>スライムRPG 第2章 課題2</title>
-<style>body{font-family:system-ui,sans-serif;max-width:850px;margin:2rem auto;padding:0 1rem;background:#f8fafc;color:#172033}.battle{display:flex;gap:.7rem;flex-wrap:wrap}.character{flex:1;min-width:120px;padding:1rem;border:1px solid #ccd4df;background:white;border-radius:12px;text-align:center}.sprite{font-size:3rem}button{padding:.8rem;border:0;border-radius:8px;background:#245ac2;color:white;cursor:pointer}button:disabled{background:#aaa}#log{background:white;padding:1rem;border-radius:12px;min-height:4rem}#log p{margin:.25rem}</style></head>
-<body><h1>⚔️ スライムRPG 第2章</h1><p>攻撃できる相手を確認しよう。</p><div class="battle">
-<section class="character"><div class="sprite">🧑‍🦱</div><h2 id="hero-name"></h2><p id="hero-hp"></p></section>
-<section class="character"><div class="sprite">🟦</div><h2 id="enemy-name"></h2><p id="enemy-hp"></p></section>
-<section class="character"><div class="sprite">🟩</div><h2 id="friend-name"></h2><p id="friend-hp"></p></section>
-<section class="character"><div class="sprite">🧙</div><h2 id="wizard-name"></h2><p id="wizard-hp"></p></section>
-</div><p><button id="next-turn">1ターン進める</button> <button id="reset">最初から</button></p><h2>戦闘ログ</h2><div id="log" role="log" aria-live="polite"></div><script src="game.js"></script></body></html>
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>スライムRPG 第2章 課題2</title>
+<style>
+body{font-family:system-ui,sans-serif;max-width:800px;margin:2rem auto;padding:0 1rem;background:#f8fafc;color:#172033}
+.battle{display:flex;gap:1rem}.character{flex:1;padding:1rem;border:1px solid #ccd4df;background:white;border-radius:12px;text-align:center}
+.sprite{font-size:3rem}button{padding:.8rem;border:0;border-radius:8px;background:#245ac2;color:white;cursor:pointer}button:disabled{background:#aaa}
+#log{background:white;padding:1rem;border-radius:12px;min-height:4rem}#log p{margin:.25rem}
+</style></head><body>
+<h1>⚔️ スライムRPG 第2章</h1><p>勇者と仲間スライムが敵スライムを攻撃します。</p>
+<div class="battle"></div><p><button id="next-turn">1ターン進める</button> <button id="reset">最初から</button></p>
+<h2>戦闘ログ</h2><div id="log" role="log" aria-live="polite"></div><script src="game.js"></script></body></html>
