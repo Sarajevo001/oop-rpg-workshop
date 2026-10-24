@@ -77,7 +77,7 @@ function updateTargetOptions(){
  const preserved=Array.from(select.options).some(option=>option.value===previous);
  if(preserved)select.value=previous;
  else if(select.options.length)select.selectedIndex=0;
- select.disabled=$("auto-friend").checked||select.options.length===0;
+ select.disabled=select.options.length===0;
 }
 function playerControl(actor,targets){
  const value=$("friend-target").value;
