@@ -1,5 +1,5 @@
 class Hero {
-  constructor(name) { this.name = name; this.hp = 40; this.team = "friend"; }
+  constructor(name) { this.name = name; this.hp = 40; this.sprite = "🧑‍🦱"; this.team = "friend"; }
   attack(target) {
     const damage = 8;
     target.hp = Math.max(0, target.hp - damage);
@@ -7,7 +7,7 @@ class Hero {
   }
 }
 class Wizard {
-  constructor(name) { this.name = name; this.hp = 25; this.team = "friend"; }
+  constructor(name) { this.name = name; this.hp = 25; this.sprite = "🧙"; this.team = "friend"; }
   attack(target) {
     const damage = 6;
     target.hp = Math.max(0, target.hp - damage);
@@ -15,9 +15,10 @@ class Wizard {
   }
 }
 class Slime {
-  constructor(name, team) {
+  constructor(name, team, sprite) {
     this.name = name;
     this.hp = 30;
+    this.sprite = sprite;
     this.team = team;
   }
   canAttack(target) {
@@ -61,7 +62,7 @@ function render(){
   card.className="character";
   const sprite=document.createElement("div");
   sprite.className="sprite";
-  sprite.textContent=character instanceof Hero?"🧑‍🦱":character instanceof Wizard?"🧙":character.team==="friend"?"🟩":"🟦";
+  sprite.textContent=character.sprite;
   const name=document.createElement("h2");
   name.textContent=character.name;
   const hp=document.createElement("p");
@@ -136,9 +137,9 @@ function resetGame(){
  characters=[
   new Hero("勇者"),
   new Wizard("魔法使い"),
-  new Slime("仲間スライム","friend"),
-  new Slime("敵スライムA","enemy"),
-  new Slime("敵スライムB","enemy")
+  new Slime("仲間スライム","friend","🟩"),
+  new Slime("敵スライムA","enemy","🟦"),
+  new Slime("敵スライムB","enemy","🟦")
  ];
  finished=false;turnNumber=0;currentTurnLog=null;$("log").replaceChildren();
  $("auto-friend").checked=false;updateTargetOptions();
