@@ -15,7 +15,8 @@ class Wizard {
   }
 }
 class Slime {
-  constructor(name, team, sprite) {
+  constructor(name, team, sprite, controller) {
+    this.controller = controller;
     this.name = name;
     this.hp = 30;
     this.sprite = sprite;
@@ -116,7 +117,7 @@ function nextTurn(){
  if(hero.hp>0&&target)log(hero.attack(target));
  updateTargetOptions();
  if(friend.hp>0&&enemies().length){
-  target=$("auto-friend").checked?cpuControl(friend,enemies()):playerControl(friend,enemies());
+  target=friend.controller(friend,enemies());
   if(target)log(friend.attack(target));else log("仲間スライムは攻撃を見送った");
  }
  updateTargetOptions();
@@ -137,9 +138,9 @@ function resetGame(){
  characters=[
   new Hero("勇者"),
   new Wizard("魔法使い"),
-  new Slime("仲間スライム","friend","🟩"),
-  new Slime("敵スライムA","enemy","🟦"),
-  new Slime("敵スライムB","enemy","🟦")
+  new Slime("仲間スライム","friend","🟩",playerControl),
+  new Slime("敵スライムA","enemy","🟦",cpuControl),
+  new Slime("敵スライムB","enemy","🟦",cpuControl)
  ];
  finished=false;turnNumber=0;currentTurnLog=null;$("log").replaceChildren();
  $("auto-friend").checked=false;updateTargetOptions();
@@ -150,7 +151,7 @@ function resetGame(){
 $("next-turn").addEventListener("click",nextTurn);
 $("reset").addEventListener("click",resetGame);
 $("auto-friend").addEventListener("change",()=>{
- 
+ characters.find(c=>c.name==="仲間スライム").controller=$("auto-friend").checked?cpuControl:playerControl;
  render();
 });
 resetGame();
