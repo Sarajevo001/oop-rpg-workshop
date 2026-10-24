@@ -15,7 +15,8 @@ class Wizard {
   }
 }
 class Slime {
-  constructor(name, team) {
+  constructor(name, team, controller = null) {
+    this.controller = controller;
     this.name = name;
     this.hp = 30;
     this.team = team;
@@ -33,7 +34,7 @@ class Slime {
 
 let hero,wizard,friendlySlime,enemySlime,enemySlime2,enemySlime3,finished;
 let friendlyController,enemyController;
-let enemyControllers;
+
 const $ = id => document.querySelector("#"+id);
 function log(message){const p=document.createElement("p");p.textContent=message;$("log").appendChild(p);}
 function enemies(){return [enemySlime,enemySlime2,enemySlime3].filter(x=>x.hp>0);}
@@ -73,7 +74,7 @@ function nextTurn(){
  if(!enemies().length){finished=true;log("敵スライムをすべて倒した！");}
  else{
   for(const enemy of enemies()){
-   target=enemyControllers.get(enemy).choose(enemy,allies());
+   target=enemy.controller.choose(enemy,allies());
    if(target)log(enemy.attack(target));
   }
   if(!allies().length){finished=true;log("味方が全員倒れた");}
@@ -83,13 +84,13 @@ function nextTurn(){
 function resetGame(){
  hero=new Hero("勇者");wizard=new Wizard("魔法使い");
  friendlySlime=new Slime("仲間スライム","friend");
- enemySlime=new Slime("敵スライムA","enemy");
- enemySlime2=new Slime("敵スライムB","enemy");
- enemySlime3=new Slime("敵スライムC","enemy");
+ enemySlime=new Slime("敵スライムA","enemy",new StatefulCpuController(2));
+ enemySlime2=new Slime("敵スライムB","enemy",new StatefulCpuController(3));
+ enemySlime3=new Slime("敵スライムC","enemy",new StatefulCpuController(4));
  finished=false;$("log").replaceChildren();
  $("auto-friend").checked=false;$("friend-target").value="a";
  friendlyController=playerControl;enemyController=cpuControl;
- enemyControllers=new Map([[enemySlime,new StatefulCpuController(2)],[enemySlime2,new StatefulCpuController(3)],[enemySlime3,new StatefulCpuController(4)]]);
+
  log("2体の敵スライムが現れた！");render();
 }
 $("next-turn").addEventListener("click",nextTurn);
