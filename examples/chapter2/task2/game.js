@@ -43,12 +43,13 @@ function showMessage(message) {
 function render() {
   const host = document.querySelector(".battle");
   host.replaceChildren();
-  for (const actor of [hero, enemySlime, friendlySlime]) {
+  for (const actor of [hero, enemySlime, friendlySlime, wizard]) {
     const card = document.createElement("section");
     card.className = "character";
     const sprite = document.createElement("div");
     sprite.className = "sprite";
     sprite.textContent = actor instanceof Hero ? "🧑‍🦱"
+      : actor instanceof Wizard ? "🧙"
       : actor.name === "仲間スライム" ? "🟩" : "🟦";
     const name = document.createElement("h2");
     name.textContent = actor.name;
