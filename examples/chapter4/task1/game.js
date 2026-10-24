@@ -54,17 +54,24 @@ function living(team){return characters.filter(c=>c.team===team&&c.hp>0);}
 function enemies(){return living("enemy");}
 function allies(){return living("friend");}
 function render(){
- const host=$("actors");
+ const host=$("actors")||document.querySelector(".battle");
  host.replaceChildren();
  for(const character of characters){
   const card=document.createElement("article");
-  
-  card.textContent=character.name+" HP:"+character.hp;
+  card.className="character";
+  const sprite=document.createElement("div");
+  sprite.className="sprite";
+  sprite.textContent=character instanceof Hero?"🧑‍🦱":character instanceof Wizard?"🧙":character.team==="friend"?"🟩":"🟦";
+  const name=document.createElement("h2");
+  name.textContent=character.name;
+  const hp=document.createElement("p");
+  hp.textContent="HP: "+character.hp;
+  card.append(sprite,name,hp);
   host.appendChild(card);
  }
  $("next-turn").disabled=finished;
  updateTargetOptions();
- $("friend-target").disabled=false || $("friend-target").options.length===0;
+ $("friend-target").disabled=$("friend-target").options.length===0;
 }
 function updateTargetOptions(){
  const select=$("friend-target");
