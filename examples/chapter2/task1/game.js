@@ -1,5 +1,5 @@
 class Hero {
-  constructor(name) { this.name = name; this.hp = 40; this.sprite = "🧑‍🦱"; this.sprite = "🧑‍🦱"; }
+  constructor(name) { this.name = name; this.hp = 40; this.sprite = "🧑‍🦱"; }
   attack(target) {
     const damage = 8;
     target.hp = Math.max(0, target.hp - damage);
