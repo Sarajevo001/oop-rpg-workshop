@@ -37,10 +37,23 @@ function showMessage(message) {
 }
 
 function render() {
-  document.querySelector("#hero-name").textContent = hero.name;
-  document.querySelector("#hero-hp").textContent = `HP: ${hero.hp}`;
-  document.querySelector("#slime-name").textContent = enemySlime.name;
-  document.querySelector("#slime-hp").textContent = `HP: ${enemySlime.hp}`;
+  const host = document.querySelector(".battle");
+  host.replaceChildren();
+  for (const actor of [hero, enemySlime]) {
+    const card = document.createElement("section");
+    card.className = "character";
+    const sprite = document.createElement("div");
+    sprite.className = "sprite";
+    sprite.textContent = actor instanceof Hero ? "🧑‍🦱"
+      : actor.name === "仲間スライム" ? "🟩" : "🟦";
+    const name = document.createElement("h2");
+    name.textContent = actor.name;
+    const hp = document.createElement("p");
+    hp.className = "hp";
+    hp.textContent = `HP: ${actor.hp}`;
+    card.append(sprite, name, hp);
+    host.appendChild(card);
+  }
   document.querySelector("#next-turn").disabled = finished;
 }
 

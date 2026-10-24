@@ -8,9 +8,5 @@ body{font-family:system-ui,sans-serif;max-width:800px;margin:2rem auto;padding:0
 #log{background:white;padding:1rem;border-radius:12px;min-height:4rem}#log p{margin:.25rem}
 </style></head><body>
 <h1>⚔️ スライムRPG</h1><p>勇者と仲間スライムが敵スライムを攻撃します。</p>
-<div class="battle">
-<section class="character"><div class="sprite">🧑‍🦱</div><h2 id="hero-name"></h2><p id="hero-hp"></p></section>
-<section class="character"><div class="sprite">🟦</div><h2 id="enemy-name"></h2><p id="enemy-hp"></p></section>
-<section class="character"><div class="sprite">🟩</div><h2 id="friend-name"></h2><p id="friend-hp"></p></section>
-</div><p><button id="next-turn">1ターン進める</button> <button id="reset">最初から</button></p>
+<div class="battle"></div><p><button id="next-turn">1ターン進める</button> <button id="reset">最初から</button></p>
 <h2>戦闘ログ</h2><div id="log" role="log" aria-live="polite"></div><script src="game.js"></script></body></html>
