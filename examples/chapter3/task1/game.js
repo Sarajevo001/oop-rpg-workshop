@@ -95,12 +95,16 @@ function nextTurn(){
  const hero=characters.find(c=>c.name==="勇者");
  const wizard=characters.find(c=>c.name==="魔法使い");
  const friend=characters.find(c=>c.name==="仲間スライム");
- let target=enemies()[0];if(hero.hp>0&&target)log(hero.attack(target));
+ let target=playerControl(hero,enemies());
+ if(hero.hp>0&&target)log(hero.attack(target));
+ updateTargetOptions();
  if(friend.hp>0&&enemies().length){
   target=friend.team==="friend"?playerControl(friend,enemies()):cpuControl(friend,enemies());
   if(target)log(friend.attack(target));else log("仲間スライムは攻撃を見送った");
  }
- target=enemies()[0];if(wizard.hp>0&&target)log(wizard.attack(target));
+ updateTargetOptions();
+ target=playerControl(wizard,enemies());
+ if(wizard.hp>0&&target)log(wizard.attack(target));
  if(!enemies().length){finished=true;log("敵スライムをすべて倒した！");}
  else{
   for(const enemy of enemies()){
