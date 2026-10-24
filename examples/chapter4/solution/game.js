@@ -15,7 +15,7 @@ class Wizard {
   }
 }
 class Slime {
-  constructor(name, team, controller = null, sprite) {
+  constructor(name, team, sprite, controller) {
     this.controller = controller;
     this.name = name;
     this.hp = 30;
@@ -37,7 +37,6 @@ class Slime {
 let characters, finished;
 let turnNumber=0;
 let currentTurnLog=null;
-let friendlyController, enemyController;
 
 const $=id=>document.querySelector("#"+id);
 function log(message){
@@ -119,7 +118,7 @@ function nextTurn(){
  if(hero.hp>0&&target)log(hero.attack(target));
  updateTargetOptions();
  if(friend.hp>0&&enemies().length){
-  target=friendlyController(friend,enemies());
+  target=friend.controller(friend,enemies());
   if(target)log(friend.attack(target));else log("仲間スライムは攻撃を見送った");
  }
  updateTargetOptions();
@@ -140,21 +139,20 @@ function resetGame(){
  characters=[
   new Hero("勇者"),
   new Wizard("魔法使い"),
-  new Slime("仲間スライム","friend",null,"🟩"),
-  new Slime("敵スライムA","enemy",new AlternatingTargetController(),"🟦"),
-  new Slime("敵スライムB","enemy",new AlternatingTargetController(),"🟦"),
-  new Slime("敵スライムC","enemy",new AlternatingTargetController(),"🟦")
+  new Slime("仲間スライム","friend","🟩",playerControl),
+  new Slime("敵スライムA","enemy","🟦",new AlternatingTargetController()),
+  new Slime("敵スライムB","enemy","🟦",new AlternatingTargetController()),
+  new Slime("敵スライムC","enemy","🟦",new AlternatingTargetController())
  ];
  finished=false;turnNumber=0;currentTurnLog=null;$("log").replaceChildren();
  $("auto-friend").checked=false;updateTargetOptions();
  
- friendlyController=playerControl;enemyController=cpuControl;
- log(`${enemies().length}体の敵スライムが現れた！`);render();
+  log(`${enemies().length}体の敵スライムが現れた！`);render();
 }
 $("next-turn").addEventListener("click",nextTurn);
 $("reset").addEventListener("click",resetGame);
 $("auto-friend").addEventListener("change",()=>{
- friendlyController=$("auto-friend").checked?cpuControl:playerControl;
+ characters.find(c=>c.name==="仲間スライム").controller=$("auto-friend").checked?cpuControl:playerControl;
  render();
 });
 resetGame();
