@@ -32,45 +32,58 @@ class Slime {
   }
 }
 
-let hero,wizard,friendlySlime,enemySlime,enemySlime2,enemySlime3,finished;
-let friendlyController,enemyController;
+
+let hero, wizard, friendlySlime, enemySlimes, finished;
+let friendlyController, enemyController;
 
 const $ = id => document.querySelector("#"+id);
 function log(message){const p=document.createElement("p");p.textContent=message;$("log").appendChild(p);}
-function enemies(){return [enemySlime,enemySlime2,enemySlime3].filter(x=>x.hp>0);}
+function enemies(){return enemySlimes.filter(x=>x.hp>0);}
 function allies(){return [hero,wizard,friendlySlime].filter(x=>x.hp>0);}
 function playerControl(actor,targets){
- const selected=$("friend-target").value==="a"?enemySlime:enemySlime2;
- return selected.hp>0&&actor.canAttack(selected)?selected:null;
+ const selected=enemySlimes[Number($("friend-target").value)];
+ return selected&&targets.includes(selected)&&actor.canAttack(selected)?selected:null;
 }
 function cpuControl(actor,targets){
  return targets.filter(x=>x.hp>0&&actor.canAttack(x)).sort((a,b)=>a.hp-b.hp)[0]||null;
 }
+function updateTargetOptions(){
+ const select=$("friend-target");select.replaceChildren();
+ enemySlimes.forEach((enemy,index)=>{
+  const option=document.createElement("option");
+  option.value=String(index);option.textContent=enemy.name;select.appendChild(option);
+ });
+}
 function render(){
- for(const [id,actor] of [["hero",hero],["wizard",wizard],["friend",friendlySlime],["enemy",enemySlime],["enemy2",enemySlime2],["enemy3",enemySlime3]])
+ for(const [id,actor] of [["hero",hero],["wizard",wizard],["friend",friendlySlime]])
   $(id).textContent=actor.name+" HP:"+actor.hp;
+ const list=$("enemy-list");list.replaceChildren();
+ for(const enemy of enemySlimes){
+  const article=document.createElement("article");
+  article.textContent=enemy.name+" HP:"+enemy.hp;list.appendChild(article);
+ }
  $("next-turn").disabled=finished;
  $("friend-target").disabled=$("auto-friend").checked;
 }
-class StatefulCpuController {
- constructor(interval){this.interval=interval;this.elapsed=0;this.preferLowest=true;}
+
+// 改善例：個体ごとの判断状態をコントローラー自身が保持する
+class AlternatingTargetController {
+ constructor(){this.preferLowest=true;}
  choose(actor,targets){
-  this.elapsed++;
-  if(this.elapsed>=this.interval){this.elapsed=0;this.preferLowest=!this.preferLowest;}
   const available=targets.filter(t=>t.hp>0&&actor.canAttack(t));
   available.sort((a,b)=>this.preferLowest?a.hp-b.hp:b.hp-a.hp);
+  if(available.length)this.preferLowest=!this.preferLowest;
   return available[0]||null;
  }
 }
 function nextTurn(){
  if(finished)return;
- let target=enemies()[0];if(target)log(hero.attack(target));
- if(enemies().length){
- // 所属に関係なく、渡された操作関数を呼ぶ
- target=friendlyController(friendlySlime,enemies());
- if(target)log(friendlySlime.attack(target));else log("仲間スライムは攻撃を見送った");
+ let target=enemies()[0];if(hero.hp>0&&target)log(hero.attack(target));
+ if(friendlySlime.hp>0&&enemies().length){
+  target=friendlyController(friendlySlime,enemies());
+  if(target)log(friendlySlime.attack(target));else log("仲間スライムは攻撃を見送った");
  }
- target=enemies()[0];if(target)log(wizard.attack(target));
+ target=enemies()[0];if(wizard.hp>0&&target)log(wizard.attack(target));
  if(!enemies().length){finished=true;log("敵スライムをすべて倒した！");}
  else{
   for(const enemy of enemies()){
@@ -84,14 +97,16 @@ function nextTurn(){
 function resetGame(){
  hero=new Hero("勇者");wizard=new Wizard("魔法使い");
  friendlySlime=new Slime("仲間スライム","friend");
- enemySlime=new Slime("敵スライムA","enemy",new StatefulCpuController(2));
- enemySlime2=new Slime("敵スライムB","enemy",new StatefulCpuController(3));
- enemySlime3=new Slime("敵スライムC","enemy",new StatefulCpuController(4));
+ enemySlimes=[
+  new Slime("敵スライムA","enemy",new AlternatingTargetController()),
+  new Slime("敵スライムB","enemy",new AlternatingTargetController()),
+  new Slime("敵スライムC","enemy",new AlternatingTargetController())
+ ];
  finished=false;$("log").replaceChildren();
- $("auto-friend").checked=false;$("friend-target").value="a";
+ $("auto-friend").checked=false;updateTargetOptions();
  friendlyController=playerControl;enemyController=cpuControl;
-
- log("2体の敵スライムが現れた！");render();
+ 
+ log(`${enemySlimes.length}体の敵スライムが現れた！`);render();
 }
 $("next-turn").addEventListener("click",nextTurn);
 $("reset").addEventListener("click",resetGame);
