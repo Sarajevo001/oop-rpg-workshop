@@ -82,7 +82,7 @@ function nextTurn(){
  const friend=characters.find(c=>c.name==="仲間スライム");
  let target=enemies()[0];if(hero.hp>0&&target)log(hero.attack(target));
  if(friend.hp>0&&enemies().length){
-  target=friendlyController(friend,enemies());
+  target=$("auto-friend").checked?cpuControl(friend,enemies()):playerControl(friend,enemies());
   if(target)log(friend.attack(target));else log("仲間スライムは攻撃を見送った");
  }
  target=enemies()[0];if(wizard.hp>0&&target)log(wizard.attack(target));
