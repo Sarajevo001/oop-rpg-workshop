@@ -1,5 +1,5 @@
 class Hero {
-  constructor(name) { this.name = name; this.hp = 40; }
+  constructor(name) { this.name = name; this.hp = 40; this.sprite = "🧑‍🦱"; }
   attack(target) {
     const damage = 8;
     target.hp = Math.max(0, target.hp - damage);
@@ -7,7 +7,7 @@ class Hero {
   }
 }
 class Slime {
-  constructor(name) { this.name = name; this.hp = 30; }
+  constructor(name, sprite) { this.name = name; this.hp = 30; this.sprite = sprite; }
   attack(target) {
     const damage = 7;
     target.hp = Math.max(0, target.hp - damage);
@@ -29,8 +29,7 @@ function render() {
     card.className = "character";
     const sprite = document.createElement("div");
     sprite.className = "sprite";
-    sprite.textContent = actor instanceof Hero ? "🧑‍🦱"
-      : actor.name === "仲間スライム" ? "🟩" : "🟦";
+    sprite.textContent = actor.sprite;
     const name = document.createElement("h2");
     name.textContent = actor.name;
     const hp = document.createElement("p");
@@ -65,8 +64,8 @@ function nextTurn() {
 }
 function resetGame() {
   hero = new Hero("勇者");
-  enemySlime = new Slime("敵スライム");
-  friendlySlime = new Slime("仲間スライム");
+  enemySlime = new Slime("敵スライム","🟦");
+  friendlySlime = new Slime("仲間スライム","🟩");
   finished = false;
   turnNumber = 0;
   currentTurnLog = null;
