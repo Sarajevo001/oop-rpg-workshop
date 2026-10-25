@@ -37,7 +37,8 @@ class Slime {
 let characters, finished;
 let turnNumber=0;
 let currentTurnLog=null;
-let enemyModes;
+let enemyModeA=true;
+let enemyModeB=true;
 
 const $=id=>document.querySelector("#"+id);
 function log(message){
@@ -100,10 +101,17 @@ function cpuControl(actor,targets){
 }
 function centrallyControlledTarget(actor,targets){
  const candidates=targets.filter(t=>t.hp>0&&actor.canAttack(t));
- const lowest=enemyModes.get(actor);
+ if(!candidates.length)return null;
+ let lowest;
+ if(actor.name==="敵スライムA"){
+  lowest=enemyModeA;
+  enemyModeA=!enemyModeA;
+ }else if(actor.name==="敵スライムB"){
+  lowest=enemyModeB;
+  enemyModeB=!enemyModeB;
+ }
  candidates.sort((a,b)=>lowest?a.hp-b.hp:b.hp-a.hp);
- if(candidates.length)enemyModes.set(actor,!lowest);
- return candidates[0]||null;
+ return candidates[0];
 }
 
 function nextTurn(){
@@ -139,7 +147,8 @@ function resetGame(){
  ];
  finished=false;turnNumber=0;currentTurnLog=null;$("log").replaceChildren();
  $("auto-friend").checked=false;updateTargetOptions();
- enemyModes=new Map(enemies().map(enemy=>[enemy,true]));
+ enemyModeA=true;
+ enemyModeB=true;
  
  log(`${enemies().length}体の敵スライムが現れた！`);render();
 }
