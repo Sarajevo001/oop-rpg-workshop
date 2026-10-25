@@ -21,6 +21,13 @@ class Slime {
     this.hp = 30;
     this.sprite = sprite;
     this.team = team;
+    this.lockedTarget = null;
+  }
+  chooseTarget(targets) {
+    if (!this.lockedTarget || this.lockedTarget.hp <= 0 || !targets.includes(this.lockedTarget)) {
+      this.lockedTarget = this.controller(this, targets);
+    }
+    return this.lockedTarget;
   }
   canAttack(target) {
     return this.team !== target.team;
@@ -37,8 +44,6 @@ class Slime {
 let characters, finished;
 let turnNumber=0;
 let currentTurnLog=null;
-let enemyModeA=true;
-let enemyModeB=true;
 
 const $=id=>document.querySelector("#"+id);
 function log(message){
@@ -99,20 +104,6 @@ function playerControl(actor,targets){
 function cpuControl(actor,targets){
  return targets.filter(c=>c.hp>0&&actor.canAttack(c)).sort((a,b)=>a.hp-b.hp)[0]||null;
 }
-function centrallyControlledTarget(actor,targets){
- const candidates=targets.filter(t=>t.hp>0&&actor.canAttack(t));
- if(!candidates.length)return null;
- let lowest;
- if(actor.name==="敵スライムA"){
-  lowest=enemyModeA;
-  enemyModeA=!enemyModeA;
- }else if(actor.name==="敵スライムB"){
-  lowest=enemyModeB;
-  enemyModeB=!enemyModeB;
- }
- candidates.sort((a,b)=>lowest?a.hp-b.hp:b.hp-a.hp);
- return candidates[0];
-}
 
 function nextTurn(){
  if(finished)return;
@@ -129,7 +120,7 @@ function nextTurn(){
  if(!enemies().length){finished=true;log("敵スライムをすべて倒した！");}
  else{
   for(const enemy of enemies()){
-   const target=centrallyControlledTarget(enemy,allies());
+   const target=enemy.chooseTarget(allies());
    if(target)log(enemy.attack(target));
   }
   if(!allies().length){finished=true;log("味方が全員倒れた");}
@@ -147,8 +138,6 @@ function resetGame(){
  ];
  finished=false;turnNumber=0;currentTurnLog=null;$("log").replaceChildren();
  $("auto-friend").checked=false;updateTargetOptions();
- enemyModeA=true;
- enemyModeB=true;
  
  log(`${enemies().length}体の敵スライムが現れた！`);render();
 }
