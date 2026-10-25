@@ -97,13 +97,13 @@ function playerControl(actor,targets){
 function cpuControl(actor,targets){
  return targets.filter(c=>c.hp>0&&actor.canAttack(c)).sort((a,b)=>a.hp-b.hp)[0]||null;
 }
-class AlternatingTargetController {
- constructor(){this.preferLowest=true;}
+class TrackingController {
+ constructor(){this.lockedTarget=null;}
  choose(actor,targets){
-  const candidates=targets.filter(t=>t.hp>0&&actor.canAttack(t));
-  candidates.sort((a,b)=>this.preferLowest?a.hp-b.hp:b.hp-a.hp);
-  if(candidates.length)this.preferLowest=!this.preferLowest;
-  return candidates[0]||null;
+  if(!this.lockedTarget || this.lockedTarget.hp<=0 || !targets.includes(this.lockedTarget)){
+   this.lockedTarget=cpuControl(actor,targets);
+  }
+  return this.lockedTarget;
  }
 }
 
@@ -131,13 +131,14 @@ function nextTurn(){
  render();
 }
 function resetGame(){
+ const sharedController=new TrackingController();
  characters=[
   new Hero("勇者",playerControl),
   new Wizard("魔法使い",playerControl),
   new Slime("仲間スライム","friend","🟩",playerControl),
-  new Slime("敵スライムA","enemy","🟦",new AlternatingTargetController()),
-  new Slime("敵スライムB","enemy","🟦",new AlternatingTargetController()),
-  new Slime("敵スライムC","enemy","🟦",new AlternatingTargetController())
+  new Slime("敵スライムA","enemy","🟦",sharedController),
+  new Slime("敵スライムB","enemy","🟦",sharedController),
+  new Slime("敵スライムC","enemy","🟦",new TrackingController())
  ];
  finished=false;turnNumber=0;currentTurnLog=null;$("log").replaceChildren();
  $("auto-friend").checked=false;updateTargetOptions();
