@@ -3,5 +3,5 @@
 .character .sprite{font-size:3rem;line-height:1.3}
 .character h2{font-size:1.1rem;margin:.3rem 0}
 .character p{margin:.3rem 0}
-#actors,.battle{display:flex;flex-wrap:wrap;gap:1rem}
+#actors{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:1rem}.battle{display:flex;flex-wrap:wrap;gap:1rem}
 </style></head><body><h1>第3章：仲間スライム、誰が操作するねん！</h1><div id="actors"></div><p><label><input type="checkbox" id="auto-friend">仲間スライムをCPU操作にする</label></p><p><label>プレイヤーが狙う敵：<select id="friend-target"></select></label></p><p><button id="next-turn">1ターン進める</button> <button id="reset">最初から</button></p><div id="log" role="log"></div><script src="game.js"></script></body></html>
