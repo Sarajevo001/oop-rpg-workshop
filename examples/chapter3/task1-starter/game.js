@@ -105,6 +105,8 @@ function nextTurn(){
   const target=enemies()[0]; // TODO: プレイヤー操作に変更
   if(!target)break;
   log(actor.attack(target));
+  // 倒された敵を選択肢から除外し、次の味方の攻撃先を有効に保つ。
+  updateTargetOptions();
  }
  if(!enemies().length){finished=true;log("敵スライムをすべて倒した！");}
  else{
