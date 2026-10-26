@@ -22,3 +22,11 @@
 ## 全キャラクターの操作方式の統一（2026-10-24）
 
 改善例では勇者・魔法使いもコンストラクター引数で `playerControl` を受け取り、各インスタンスの `controller` に保持する。味方の行動は `for (const actor of allies())` で共通化し、`actor.controller(actor, enemies())` で対象を選ぶ。クラスの種類による操作方式の特別扱いは行わない。`team` は所属、`controller` は操作方式という独立した責務を示す。
+
+## 第3章課題1の軽量化（2026-10-26）
+- `starter/` は第2章 `solution/` との完全一致を維持する**章開始デモ**。
+- **受講者への配布開始点は `task1-starter/`**。課題1用のUI（敵A/B選択、仲間スライムCPU切替チェック）、敵2体、`playerControl(actor,targets)`・`cpuControl(actor,targets)`、対象選択肢の更新処理は実装済み。
+- `task1-starter/game.js` の `nextTurn()` では味方が先頭の敵を狙う暫定処理のまま。受講者は主にこの部分を `playerControl(actor,enemies())` に置き換える。敵側のCPU操作は実装済み。
+- `task1/` は課題1完成例、`task2/` は課題2完成例、`solution/` は改善例。これらは変更していない。
+- チェックボックスは課題1開始時点から画面にあるが、課題2で初めて操作方式の切替を実装する。課題1でチェックを操作しても仲間スライムの行動は変わらない。
+- 実ブラウザ操作・受講者の実作業時間は未検証。
