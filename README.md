@@ -6,7 +6,7 @@ JavaScriptの基礎を学んだ人向けの、RPGを使ったオブジェクト�
 
 - [第0章〜第4章のコード](examples/)
 - [企画・設計記録](docs/oop_rpg_workshop_plan.md)
-- [教材棚卸し](docs/materials_audit.md)
+- [現行仕様・進捗（教材棚卸し）](docs/materials_audit.md)
 - [総合ロジック検証](docs/integration_validation_report.md)
 
 第1〜4章は `starter`（開始）、`task1`（最初の追加要求）、`task2`（次の追加要求）、`solution`（改善例）の順に参照します。第0章は講師用デモです。実ブラウザ検証・配布教材の完成判定はまだ行っていません。
