@@ -1,6 +1,6 @@
 # 第3章「仲間スライム、誰が操作するねん！」
 
-- `starter/`：第2章 `solution/` とHTML・JS完全一致。
+- `starter/`：第2章 `solution/` と**JS一致、HTMLはタイトルおよび`id="actors"`の差あり**（2026-11-03確認）。
 - `task1/`：仲間スライムはプレイヤー操作、敵はCPU操作。
 - `task2/`：仲間スライムもCPU操作へ切替可能にする。
 - `solution/`：操作関数を各 `Slime` インスタンスの `controller` プロパティへコンストラクターで渡し、`team` と操作方式を分離。
@@ -9,11 +9,11 @@
 
 **改善例の確定**：`new Slime(name, team, sprite, controller)` で操作関数を注入。仲間スライムの切替ではその個体の `controller` を差し替える。敵スライムは `cpuControl` を持ち、行動時に `enemy.controller(enemy, allies())` を呼ぶ。ゲーム側の `friendlyController` / `enemyController` は使用しない。第4章では同じ `controller` に個体別の状態を持つオブジェクトを渡す。
 
-`solution/` と第4章 `starter/` はHTML・JS完全一致（改修後も維持）。DOM簡易モックで選択・戦闘・リセット確認済み。実ブラウザ操作、受講者負担、課題文・講師台本は未完了。
+`solution/` と第4章 `starter/` は**JS一致、HTMLはページタイトル差あり**（2026-11-03再確認）。DOM簡易モックで選択・戦闘・リセット確認済み。実ブラウザ操作、受講者負担、課題文・講師台本は未完了。
 
 ## 共通キャラクター配列
 
-第2章改善版から引き継いだ `characters` 配列を全段階で使用。敵味方は `team` と `hp` によるフィルタで抽出する。第3章の課題1・2も個体別変数による敵管理を行わない。第3章完成版と第4章開始版はHTML・JS同一。
+第2章改善版から引き継いだ `characters` 配列を全段階で使用。敵味方は `team` と `hp` によるフィルタで抽出する。第3章の課題1・2も個体別変数による敵管理を行わない。第3章完成版と第4章開始版はJS一致。HTMLはページタイトルが異なる。
 
 ## 後続改修の反映（2026-10-24）
 
@@ -24,7 +24,7 @@
 改善例では勇者・魔法使いもコンストラクター引数で `playerControl` を受け取り、各インスタンスの `controller` に保持する。味方の行動は `for (const actor of allies())` で共通化し、`actor.controller(actor, enemies())` で対象を選ぶ。クラスの種類による操作方式の特別扱いは行わない。`team` は所属、`controller` は操作方式という独立した責務を示す。
 
 ## 第3章課題1の軽量化（2026-10-26）
-- `starter/` は第2章 `solution/` との完全一致を維持する**章開始デモ**。
+- `starter/` は第2章 `solution/` とゲームJSの一致を維持する**章開始デモ**。
 - **受講者への配布開始点は `task1-starter/`**。課題1用のUI（敵A/B選択、仲間スライムCPU切替チェック）、敵2体、`playerControl(actor,targets)`・`cpuControl(actor,targets)`、対象選択肢の更新処理は実装済み。
 - `task1-starter/game.js` の `nextTurn()` では味方が先頭の敵を狙う暫定処理のまま。受講者は主にこの部分を `playerControl(actor,enemies())` に置き換える。敵側のCPU操作は実装済み。
 - `task1/` は課題1完成例、`task2/` は課題2完成例、`solution/` は改善例。これらは変更していない。
