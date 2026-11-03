@@ -2,7 +2,7 @@
 
 ## 現行の課題構成（2026-10-25）
 
-- `starter/`：第3章 `solution/` のHTML・JSを**完全一致**で引き継ぐ。関数 `cpuControl(actor, targets)` を注入した状態。
+- `starter/`：第3章 `solution/` の**JSは一致、HTMLはタイトル差あり**で引き継ぐ（2026-11-03再確認）。関数 `cpuControl(actor, targets)` を注入した状態。
 - `task1/`：敵スライムA・Bが、それぞれ最初に選んだ生存対象を倒れるまで狙う。素直な実装例では `Slime.lockedTarget` に対象を保持し、`Slime.chooseTarget()` で更新する。初回は従来の `cpuControl` に従いHPが最も低い生存相手を選ぶ。
 - `task2/`：敵A・Bは**連携攻撃**として同じ対象を共有し、敵Cは独立して対象を追跡する。素直な実装例では `Slime.targetLeader` を増やし、BがAの `lockedTarget` を参照する。状態共有の要件が `Slime` に侵入する変更負担を体験する。リセット時は参照を作り直す。
 - `solution/`：`TrackingController` が `lockedTarget` と `choose(actor,targets)` を持つ。A・Bに**同じインスタンス**を注入して共有、Cに**別のインスタンス**を注入して独立させる。敵ターンは `enemy.controller.choose(enemy,allies())` を呼ぶ。
