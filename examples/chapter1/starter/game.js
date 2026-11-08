@@ -68,7 +68,9 @@ function beginTurnLog() {
 }
 
 function nextTurn() {
-  if (finished) return;
+  if (finished === true) {
+    return;
+  }
   beginTurnLog();
 
   showMessage(hero.attack(enemySlime));
