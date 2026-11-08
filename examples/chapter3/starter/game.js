@@ -24,7 +24,9 @@ class Slime {
     return this.team !== target.team;
   }
   attack(target) {
-    if (!this.canAttack(target)) return `${this.name}は${target.name}を攻撃できない！`;
+    if (this.canAttack(target) === false) {
+      return `${this.name}は${target.name}を攻撃できない！`;
+    }
     const damage = 7;
     target.hp = Math.max(0, target.hp - damage);
     return `${this.name}の攻撃！ ${target.name}に${damage}ダメージ！`;
@@ -70,17 +72,24 @@ function render(){
 }
 
 function nextTurn(){
- if(finished)return;
+ if (finished === true) {
+   return;
+ }
  beginTurnLog();
  for(const actor of allies()){
-  const target=enemies()[0];if(!target)break;
+  const target=enemies()[0];
+  if(!target) {
+    break;
+  }
   log(actor.attack(target));
  }
  if(!enemies().length){finished=true;log("敵スライムをすべて倒した！");}
  else{
   for(const enemy of enemies()){
    const target=allies()[0];
-   if(target)log(enemy.attack(target));
+   if(target) {
+     log(enemy.attack(target));
+   }
   }
   if(!allies().length){finished=true;log("味方が全員倒れた");}
  }
