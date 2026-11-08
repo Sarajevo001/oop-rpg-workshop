@@ -26,7 +26,9 @@ class Slime {
     return this.team !== target.team;
   }
   attack(target) {
-    if (!this.canAttack(target)) return `${this.name}は${target.name}を攻撃できない！`;
+    if (this.canAttack(target) === false) {
+      return `${this.name}は${target.name}を攻撃できない！`;
+    }
     const damage = 7;
     target.hp = Math.max(0, target.hp - damage);
     return `${this.name}の攻撃！ ${target.name}に${damage}ダメージ！`;
@@ -79,14 +81,20 @@ function updateTargetOptions(){
  const previous=select.value;
  select.replaceChildren();
  characters.forEach((character,index)=>{
-  if(character.team!=="enemy"||character.hp<=0)return;
+  if(character.team!=="enemy"||character.hp<=0) {
+    return;
+  }
   const option=document.createElement("option");
   option.value=String(index);option.textContent=character.name;
   select.appendChild(option);
  });
  const preserved=Array.from(select.options).some(option=>option.value===previous);
- if(preserved)select.value=previous;
- else if(select.options.length)select.selectedIndex=0;
+ if (preserved === true) {
+   select.value=previous;
+ }
+ else if(select.options.length) {
+   select.selectedIndex=0;
+ }
  select.disabled=select.options.length===0;
 }
 function playerControl(actor,targets){
@@ -108,22 +116,32 @@ class TrackingController {
 }
 
 function nextTurn(){
- if(finished)return;
+ if (finished === true) {
+   return;
+ }
  updateTargetOptions();
  beginTurnLog();
  for(const actor of allies()){
   updateTargetOptions();
   const targets=enemies();
-  if(!targets.length)break;
+  if(!targets.length) {
+    break;
+  }
   const target=actor.controller(actor,targets);
-  if(target)log(actor.attack(target));
-  else log(actor.name+"は攻撃を見送った");
+  if(target) {
+    log(actor.attack(target));
+  }
+  else log(actor.name+"は攻撃を見送った") {
+    ;
+  }
  }
  if(!enemies().length){finished=true;log("敵スライムをすべて倒した！");}
  else{
   for(const enemy of enemies()){
    const target=enemy.controller.choose(enemy,allies());
-   if(target)log(enemy.attack(target));
+   if(target) {
+     log(enemy.attack(target));
+   }
   }
   if(!allies().length){finished=true;log("味方が全員倒れた");}
  }
