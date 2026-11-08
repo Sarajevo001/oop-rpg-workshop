@@ -50,10 +50,14 @@ function beginTurnLog() {
 }
 
 function nextTurn() {
-  if (finished) return;
+  if (finished === true) {
+    return;
+  }
   beginTurnLog();
   showMessage(hero.attack(enemySlime));
-  if (enemySlime.hp > 0) showMessage(friendlySlime.attack(enemySlime));
+  if (enemySlime.hp > 0) {
+    showMessage(friendlySlime.attack(enemySlime));
+  }
   if (enemySlime.hp === 0) {
     showMessage("敵スライムを倒した！"); finished = true;
   } else {
