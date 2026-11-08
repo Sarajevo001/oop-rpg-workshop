@@ -129,8 +129,8 @@ function nextTurn(){
   if(target) {
     log(actor.attack(target));
   }
-  else log(actor.name+"は攻撃を見送った") {
-    ;
+  else {
+    log(actor.name+"は攻撃を見送った");
   }
  }
  if(!enemies().length){finished=true;log("敵スライムをすべて倒した！");}
