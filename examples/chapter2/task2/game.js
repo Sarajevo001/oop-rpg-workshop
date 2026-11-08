@@ -27,7 +27,9 @@ class Slime {
     return false;
   }
   attack(target) {
-    if (!this.canAttack(target)) return `${this.name}は${target.name}を攻撃できない！`;
+    if (this.canAttack(target) === false) {
+      return `${this.name}は${target.name}を攻撃できない！`;
+    }
     const damage = 7;
     target.hp = Math.max(0, target.hp - damage);
     return `${this.name}の攻撃！ ${target.name}に${damage}ダメージ！`;
@@ -69,13 +71,17 @@ function beginTurnLog() {
 }
 
 function nextTurn() {
-  if (finished) return;
+  if (finished === true) {
+    return;
+  }
   beginTurnLog();
   showMessage(hero.attack(enemySlime));
   if (enemySlime.hp > 0) {
     showMessage(friendlySlime.attack(enemySlime));
   }
-  if (enemySlime.hp > 0) showMessage(wizard.attack(enemySlime));
+  if (enemySlime.hp > 0) {
+    showMessage(wizard.attack(enemySlime));
+  }
   if (enemySlime.hp === 0) {
     showMessage("敵スライムを倒した！");
     finished = true;
