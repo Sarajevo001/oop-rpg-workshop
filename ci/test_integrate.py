@@ -36,7 +36,9 @@ class IntegrationTests(unittest.TestCase):
             result = unittest.mock.Mock(returncode=1 if args[0] == "push" else 0, stderr="rejected")
             return result
         mock_git.side_effect = fake_git
-        with patch("integrate.remote_head", side_effect=["a" * 40, "c" * 40]):
+        with patch("integrate.remote_head", side_effect=["a" * 40, "c" * 40]), \
+             patch.dict("os.environ", {"GITHUB_REPOSITORY": "owner/repo", "GITHUB_TOKEN": "test"}), \
+             patch("integrate.verify"):
             with self.assertRaisesRegex(RuntimeError, "classification=conflict"):
                 integrate.run("a" * 40, "b" * 40, True)
 
