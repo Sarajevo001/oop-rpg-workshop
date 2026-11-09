@@ -50,3 +50,6 @@ jobs:
 
       - name: Test manual guarded integration command without remote writes
         run: python3 ci/test_integrate.py
+
+      - name: Test exact-SHA CI evidence requirements
+        run: python3 ci/test_verify_ci.py
