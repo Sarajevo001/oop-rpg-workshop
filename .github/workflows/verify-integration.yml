@@ -47,3 +47,6 @@ jobs:
 
       - name: Check conservative GitHub update-error classification
         run: python3 ci/test_sha_guard.py
+
+      - name: Test manual guarded integration command without remote writes
+        run: python3 ci/test_integrate.py
