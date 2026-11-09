@@ -45,16 +45,17 @@ def run(expected_main, tested_sha, apply):
     if observed != expected_main:
         raise RuntimeError(f"CONFLICT: main moved from {expected_main} to {observed}")
     print(f"Ready: main={expected_main}, tested={tested_sha}")
-    if not apply:
-        print("DRY RUN: no branch updated")
-        return
+    # Check exact SHA evidence in both dry-run and apply modes.
+    # A dry-run is only meaningful if it exercises the same preflight gates.
 
-    # Recheck the exact tested SHA against successful GitHub Actions runs.
     repo = os.environ.get("GITHUB_REPOSITORY")
     token = os.environ.get("GITHUB_TOKEN")
     if not repo or not token:
         raise RuntimeError("GITHUB_REPOSITORY and GITHUB_TOKEN required for apply")
     verify(repo, tested_sha, token)
+    if not apply:
+        print("DRY RUN: all preflight checks passed; no branch updated")
+        return
 
     # Normal push is non-forced and GitHub rejects non-fast-forward races.
     # Re-check the remote after any error. Never automatically retry.
