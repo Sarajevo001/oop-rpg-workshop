@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0",
+  "standards": [
+    {
+      "id": "management",
+      "repository": "Sarajevo001/xo-code-busters",
+      "path": "standards/management.md",
+      "version": "1.2.0",
+      "commit": "2d94a7ece22fbf9106e4f8651fabfcc27f7992bd"
+    },
+    {
+      "id": "operations",
+      "repository": "Sarajevo001/xo-code-busters",
+      "path": "standards/operations.md",
+      "version": "1.3.0",
+      "commit": "2d94a7ece22fbf9106e4f8651fabfcc27f7992bd"
+    },
+    {
+      "id": "common",
+      "repository": "Sarajevo001/xo-code-busters",
+      "path": "standards/common.md",
+      "version": "1.3.0",
+      "commit": "2d94a7ece22fbf9106e4f8651fabfcc27f7992bd"
+    },
+    {
+      "id": "javascript",
+      "repository": "Sarajevo001/xo-code-busters",
+      "path": "standards/languages/javascript.md",
+      "version": "1.1.0",
+      "commit": "2d94a7ece22fbf9106e4f8651fabfcc27f7992bd"
+    },
+    {
+      "id": "ci-testing",
+      "repository": "Sarajevo001/xo-code-busters",
+      "path": "standards/ci-testing.md",
+      "version": "1.0.0",
+      "commit": "2d94a7ece22fbf9106e4f8651fabfcc27f7992bd"
+    }
+  ]
+}
