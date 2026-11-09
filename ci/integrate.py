@@ -5,10 +5,12 @@ Requires a checkout with full history and an authenticated 'origin' remote.
 No force pushes. The caller must independently verify CI for tested_sha.
 """
 import argparse
+import os
 import subprocess
 import sys
 
 from sha_guard import classify_update_failure
+from verify_ci import verify
 
 
 def git(*args, check=True):
@@ -46,6 +48,13 @@ def run(expected_main, tested_sha, apply):
     if not apply:
         print("DRY RUN: no branch updated")
         return
+
+    # Recheck the exact tested SHA against successful GitHub Actions runs.
+    repo = os.environ.get("GITHUB_REPOSITORY")
+    token = os.environ.get("GITHUB_TOKEN")
+    if not repo or not token:
+        raise RuntimeError("GITHUB_REPOSITORY and GITHUB_TOKEN required for apply")
+    verify(repo, tested_sha, token)
 
     # Normal push is non-forced and GitHub rejects non-fast-forward races.
     # Re-check the remote after any error. Never automatically retry.
