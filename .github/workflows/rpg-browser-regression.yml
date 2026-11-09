@@ -1,0 +1,33 @@
+name: RPG Chromium regression against main
+on:
+  push:
+    branches:
+      - chore/c802-c804-rpg
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  chromium-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch comparison baseline
+        run: git fetch origin main
+      - name: Install Playwright Chromium
+        run: |
+          python3 -m pip install playwright
+          python3 -m playwright install --with-deps chromium
+      - name: Run 16-screen browser regression
+        run: python3 ci/test_rpg_browser.py
+      - name: Upload browser regression report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpg-browser-regression
+          path: rpg-browser-regression-report.json
+          if-no-files-found: ignore
