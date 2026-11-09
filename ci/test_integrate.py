@@ -9,8 +9,11 @@ class IntegrationTests(unittest.TestCase):
     @patch("integrate.git")
     def test_dry_run_does_not_push(self, mock_git):
         mock_git.return_value.returncode = 0
-        with patch("integrate.remote_head", return_value="a" * 40):
+        with patch("integrate.remote_head", return_value="a" * 40), \
+             patch.dict("os.environ", {"GITHUB_REPOSITORY": "owner/repo", "GITHUB_TOKEN": "test"}), \
+             patch("integrate.verify") as verify_mock:
             integrate.run("a" * 40, "b" * 40, False)
+            verify_mock.assert_called_once_with("owner/repo", "b" * 40, "test")
         self.assertFalse(any(call.args and call.args[0] == "push" for call in mock_git.call_args_list))
 
     @patch("integrate.git")
