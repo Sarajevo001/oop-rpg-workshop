@@ -1,0 +1,55 @@
+name: Validate tested branch against main
+
+on:
+  push:
+    branches:
+      - main
+      - 'chore/ci-integration-pilot'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out actual branch HEAD
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Record revision and check main integration
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          tested_sha="$(git rev-parse HEAD)"
+          main_sha="$(git rev-parse origin/main)"
+          echo "Tested commit: $tested_sha"
+          echo "Current main: $main_sha"
+          {
+            echo "tested_sha=$tested_sha"
+            echo "main_sha=$main_sha"
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [[ "$GITHUB_REF_NAME" != "main" ]]; then
+            if ! git merge-base --is-ancestor "$main_sha" "$tested_sha"; then
+              echo "::error::Latest main is not incorporated into this branch. Update from main and rerun tests."
+              exit 1
+            fi
+          fi
+
+      - name: Run existing regression check
+        run: python3 verify_handoffs.py
+
+      - name: Verify SHA guarded integration behavior locally
+        run: python3 tests/test_integration_gate.py
+
+      - name: Check conservative GitHub update-error classification
+        run: python3 ci/test_sha_guard.py
+
+      - name: Test manual guarded integration command without remote writes
+        run: python3 ci/test_integrate.py
+
+      - name: Test exact-SHA CI evidence requirements
+        run: python3 ci/test_verify_ci.py
