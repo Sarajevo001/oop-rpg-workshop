@@ -41,3 +41,6 @@ jobs:
 
       - name: Run existing regression check
         run: python3 verify_handoffs.py
+
+      - name: Verify SHA guarded integration behavior locally
+        run: python3 tests/test_integration_gate.py
