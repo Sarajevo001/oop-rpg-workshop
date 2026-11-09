@@ -2,9 +2,6 @@ name: Validate tested branch against main
 
 on:
   push:
-    branches:
-      - main
-      - 'chore/ci-integration-pilot'
   workflow_dispatch:
 
 permissions:
