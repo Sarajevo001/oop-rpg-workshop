@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RPGで学ぶオブジェクト指向 | 導入・第0章</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,"Noto Sans JP",sans-serif;background:#101d35;color:#f7f9ff}*{box-sizing:border-box}body{margin:0}
+main{width:100vw;height:100dvh;display:grid;place-items:center;padding:1rem 1rem 4rem}
+.slide{width:min(100%,calc((100dvh - 5rem)*16/9));aspect-ratio:16/9;background:linear-gradient(140deg,#172947,#111d35);border:1px solid #354765;border-radius:1rem;padding:clamp(1rem,4vw,3.8rem);overflow:auto;box-shadow:0 18px 70px #0007}
+.kicker{font-size:clamp(.65rem,1.1vw,1rem);font-weight:800;letter-spacing:.13em;color:#ffc66a}
+h1{font-size:clamp(1.45rem,3.5vw,3.3rem);line-height:1.35;margin:.7em 0}
+.feature{background:#263c60;border-radius:1rem;padding:clamp(1rem,3vw,2.6rem);font-size:clamp(1.15rem,2.65vw,2.6rem);font-weight:700;white-space:pre-wrap;line-height:1.75;color:#ffc66a}
+.feature.code{font:clamp(.8rem,1.65vw,1.55rem)/1.5 ui-monospace,Consolas,monospace;color:#e5f2ff}
+.description{font-size:clamp(.9rem,1.7vw,1.6rem);line-height:1.7;white-space:pre-wrap}
+.controls{position:fixed;bottom:.65rem;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:.75rem;flex-wrap:wrap}
+button,a{font:inherit}button{background:#2e4b78;color:white;border:1px solid #7791b6;border-radius:.5rem;padding:.4rem .85rem;cursor:pointer}button:hover{background:#456b9e}button:focus-visible{outline:3px solid #ffc66a}#count{min-width:4rem;text-align:center}
+.speaker{margin-top:1rem;border-top:1px solid #8194b2;padding-top:.7rem;color:#c5d6ec;font-size:clamp(.75rem,1.1vw,1rem)}
+[hidden]{display:none!important}
+@media print{main{height:auto;display:block;padding:0}.slide{width:100%;height:100vh;aspect-ratio:auto;page-break-after:always;border:0;border-radius:0;box-shadow:none;display:block!important}.controls,.speaker{display:none!important}}
+</style></head><body><main id="deck"><section class="slide" aria-label="スライド1" ><div class="kicker">RPG WORKSHOP / 導入・第0章</div><h1>RPGで学ぶオブジェクト指向</h1><div class="feature ">勇者 × スライム × JavaScript</div><p class="description">ゲームを改修しながら「設計の工夫が必要になる瞬間」を体験する</p><aside class="speaker" hidden>2分：講座の目的。設計原則の暗記ではなく仕様変更の体験。</aside></section>
+<section class="slide" aria-label="スライド2" hidden><div class="kicker">RPG WORKSHOP / 導入・第0章</div><h1>今日のルール</h1><div class="feature ">01 最初の要求を実装する
+02 追加の仕様変更が来る
+03 改善例と比べてみる</div><p class="description">完成よりも、変更するときの手間に注目。別の実装方法も歓迎。</p><aside class="speaker" hidden>2分：課題2は未完成でも区切る。先回りした実装を否定しない。</aside></section>
+<section class="slide" aria-label="スライド3" hidden><div class="kicker">RPG WORKSHOP / 導入・第0章</div><h1>まずは、勇者が攻撃！</h1><div class="feature ">勇者 HP 40　⚔　敵スライム HP 30 → 22</div><p class="description">勇者の攻撃！ 8ダメージ！
+実際の第0章デモをブラウザで表示</p><aside class="speaker" hidden>3分：現行game.jsのhero.attack(enemySlime)の結果。デモへ切り替える。</aside></section>
+<section class="slide" aria-label="スライド4" hidden><div class="kicker">RPG WORKSHOP / 導入・第0章</div><h1>クラスは「定義」</h1><div class="feature code">class Slime {
+  constructor(name) {
+    this.name = name;
+    this.hp = 30;
+  }
+  attack(target) { /* 攻撃処理 */ }
+}</div><p class="description">name / hp はプロパティ、attack() はメソッド。</p><aside class="speaker" hidden>4分：constructorは生成時の初期化。コードはスライド用に一部省略。</aside></section>
+<section class="slide" aria-label="スライド5" hidden><div class="kicker">RPG WORKSHOP / 導入・第0章</div><h1>new すると、実体ができる</h1><div class="feature ">class Slime
+↓ new Slime(...)
+スライムA　　　スライムB</div><p class="description">同じクラスから作っても、名前やHPを個別に持つ別のオブジェクト。</p><aside class="speaker" hidden>3分：A/Bは概念図。第0章デモで実際に生成するスライムは1体。</aside></section>
+<section class="slide" aria-label="スライド6" hidden><div class="kicker">RPG WORKSHOP / 導入・第0章</div><h1>メソッドを呼ぶと、状態が変わる</h1><div class="feature code">hero.attack(enemySlime);
+target.hp = Math.max(0, target.hp - damage);</div><p class="description">敵スライムのHP：30 → 22</p><aside class="speaker" hidden>3分：targetはenemySlime。Hero.attackのdamageは8。</aside></section>
+<section class="slide" aria-label="スライド7" hidden><div class="kicker">RPG WORKSHOP / 導入・第0章</div><h1>クラスの考え方には歴史がある</h1><div class="feature ">Simula</div><p class="description">クラスの考え方が発展してきた背景を紹介。</p><aside class="speaker" hidden>1分：人物・年代・原典は未検証。クラスは現実の分類と一対一でなくてよい。</aside></section>
+<section class="slide" aria-label="スライド8" hidden><div class="kicker">RPG WORKSHOP / 導入・第0章</div><h1>敵だったスライムを、仲間にしたい！</h1><div class="feature ">敵スライム　→　仲間スライム？</div><p class="description">さて、どうやって追加しましょう？</p><aside class="speaker" hidden>2分：第1章への橋渡し。解決策を先に示さない。</aside></section></main>
+<nav class="controls" aria-label="スライド操作"><button id="prev" type="button">← 前へ</button><span id="count" aria-live="polite">1 / 8</span><button id="next" type="button">次へ →</button><button id="notes" type="button" aria-pressed="false">講師メモ</button><button id="full" type="button">全画面</button><a href="../../examples/chapter0/demo/" style="color:#d5e9ff">第0章デモ</a></nav>
+<script>
+(()=>{'use strict';const slides=[...document.querySelectorAll('.slide')];let index=0;let notes=false;
+const show=()=>{slides.forEach((s,i)=>{s.hidden=i!==index;s.querySelector('.speaker').hidden=!notes});document.getElementById('count').textContent=(index+1)+' / '+slides.length;document.getElementById('prev').disabled=index===0;document.getElementById('next').disabled=index===slides.length-1};
+const move=d=>{index=Math.max(0,Math.min(slides.length-1,index+d));show()};
+document.getElementById('prev').addEventListener('click',()=>move(-1));
+document.getElementById('next').addEventListener('click',()=>move(1));
+document.getElementById('notes').addEventListener('click',()=>{notes=!notes;document.getElementById('notes').setAttribute('aria-pressed',String(notes));show()});
+document.getElementById('full').addEventListener('click',()=>{if(document.fullscreenElement){document.exitFullscreen()}else{document.documentElement.requestFullscreen?.()}});
+document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();move(1)}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();move(-1)}if(e.key==='Home'){index=0;show()}if(e.key==='End'){index=slides.length-1;show()}});show()})();
+</script></body></html>
