@@ -22,8 +22,8 @@ def normalized_html(source: str) -> str:
 def main() -> int:
     failures = []
     for previous, following in PAIRS:
-        left = ROOT / "examples" / f"chapter{previous}" / "solution"
-        right = ROOT / "examples" / f"chapter{following}" / "starter"
+        left = ROOT / "src" / "public" / "examples" / f"chapter{previous}" / "solution"
+        right = ROOT / "src" / "public" / "examples" / f"chapter{following}" / "starter"
         for name in ("game.js", "index.html"):
             try:
                 a = (left / name).read_text(encoding="utf-8")
