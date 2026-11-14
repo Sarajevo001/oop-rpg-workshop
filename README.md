@@ -4,7 +4,7 @@ JavaScriptの基礎を学んだ人向けの、RPGを使ったオブジェクト�
 
 ## 現行教材
 
-- [第0章〜第4章のコード](examples/)
+- [第0章〜第4章のコード](src/public/examples/)
 - [企画・設計記録](docs/oop_rpg_workshop_plan.md)
 - [現行仕様・進捗（教材棚卸し）](docs/materials_audit.md)
 - [総合ロジック検証](docs/integration_validation_report.md)
