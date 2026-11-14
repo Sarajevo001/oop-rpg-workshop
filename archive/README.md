@@ -6,4 +6,4 @@
 - `prototype/`：初期RPG技術試作
 - `docs/audit-2026-10-22.md`：旧企画に基づく監査記録
 
-現在の教材はリポジトリ直下の `examples/`、企画書は `docs/oop_rpg_workshop_plan.md` を参照してください。
+現在の教材は`src/public/examples/`、企画書は `docs/oop_rpg_workshop_plan.md` を参照してください。
