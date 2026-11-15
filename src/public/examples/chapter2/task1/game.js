@@ -20,7 +20,7 @@ class Slime {
     return target instanceof Hero;
   }
   attack(target) {
-    if (!this.canAttack(target)) {
+    if (this.canAttack(target) === false) {
       return `${this.name}は${target.name}を攻撃できない！`;
     }
     const damage = 7;
@@ -37,7 +37,7 @@ let currentTurnLog = null;
 function showMessage(message) {
   const p = document.createElement('p');
   p.textContent = message;
-  (currentTurnLog || document.querySelector('#log')).appendChild(p);
+  (currentTurnLog ?? document.querySelector('#log')).appendChild(p);
 }
 function render() {
   const host = document.querySelector('.battle');
