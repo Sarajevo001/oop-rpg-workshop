@@ -4,7 +4,8 @@ class Hero {
     this.name = name; // プロパティ
     this.hp = 40;     // プロパティ
   }
-  attack(target) {    // メソッド
+  attack(target) {
+    // メソッド
     const damage = 8;
     target.hp = Math.max(0, target.hp - damage);
     return `${this.name}の攻撃！ ${target.name}に${damage}ダメージ！`;
@@ -21,8 +22,8 @@ class Slime {
     return `${this.name}の攻撃！ ${target.name}に${damage}ダメージ！`;
   }
 }
-const hero = new Hero("勇者");
-const enemySlime = new Slime("敵スライム");
-document.querySelector("#before").textContent = `${hero.name} HP:${hero.hp} / ${enemySlime.name} HP:${enemySlime.hp}`;
-document.querySelector("#action").textContent = hero.attack(enemySlime);
-document.querySelector("#after").textContent = `${hero.name} HP:${hero.hp} / ${enemySlime.name} HP:${enemySlime.hp}`;
+const hero = new Hero('勇者');
+const enemySlime = new Slime('敵スライム');
+document.querySelector('#before').textContent = `${hero.name} HP:${hero.hp} / ${enemySlime.name} HP:${enemySlime.hp}`;
+document.querySelector('#action').textContent = hero.attack(enemySlime);
+document.querySelector('#after').textContent = `${hero.name} HP:${hero.hp} / ${enemySlime.name} HP:${enemySlime.hp}`;
