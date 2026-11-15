@@ -49,6 +49,7 @@ for (const chapter of ['chapter3', 'chapter4']) {
     assert.equal(run('cpuControl(enemies()[0], allies()) === allies()[1] || cpuControl(enemies()[0], allies()) === allies()[0] || cpuControl(enemies()[0], allies()) === allies()[2]'), true, file);
     assert.throws(() => run('cpuControl(enemies()[0], [])'), /不正/, file);
     const select = elements.get('friend-target');
+    select.appendChild({ value: '9999' });
     select.value = '9999';
     assert.throws(() => run('playerControl(allies()[0], enemies())'), /不正/, file);
     select.value = '';
