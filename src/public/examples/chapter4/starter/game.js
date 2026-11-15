@@ -113,13 +113,29 @@ function updateTargetOptions() {
   }
   select.disabled = select.options.length === 0;
 }
+function validateTarget(actor, targets, target) {
+  if (
+    target === null ||
+    target === undefined ||
+    targets.includes(target) === false ||
+    actor.team === target.team ||
+    target.hp <= 0
+  ) {
+    throw new Error('コントローラーが不正な攻撃対象を返しました');
+  }
+  return target;
+}
 function playerControl(actor, targets) {
   const value = document.getElementById('friend-target').value;
-  const selected = value === '' ? null : characters[Number(value)];
-  return selected !== null && selected !== undefined && targets.includes(selected) && actor.team !== selected.team ? selected : null;
+  if (value === '') {
+    throw new Error('攻撃対象が選択されていません');
+  }
+  const selected = characters[Number(value)];
+  return validateTarget(actor, targets, selected);
 }
 function cpuControl(actor, targets) {
-  return targets.filter(c => c.hp > 0 && actor.canAttack(c)).sort((a, b) => a.hp - b.hp)[0] ?? null;
+  const selected = targets.filter(c => c.hp > 0 && actor.canAttack(c) === true).sort((a, b) => a.hp - b.hp)[0];
+  return validateTarget(actor, targets, selected);
 }
 function nextTurn() {
   if (finished === true) {
@@ -133,22 +149,20 @@ function nextTurn() {
     if (targets.length === 0) {
       break;
     }
-    const target = actor.controller(actor, targets);
-    if (target !== null && target !== undefined) {
-      log(actor.attack(target));
-    } else {
-      log(actor.name + 'は攻撃を見送った');
-    }
+    const target = validateTarget(actor, targets, actor.controller(actor, targets));
+    log(actor.attack(target));
   }
   if (enemies().length === 0) {
     finished = true;
     log('敵スライムをすべて倒した！');
   } else {
     for (const enemy of enemies()) {
-      const target = enemy.controller(enemy, allies());
-      if (target !== null && target !== undefined) {
-        log(enemy.attack(target));
+      const targets = allies();
+      if (targets.length === 0) {
+        break;
       }
+      const target = validateTarget(enemy, targets, enemy.controller(enemy, targets));
+      log(enemy.attack(target));
     }
     if (allies().length === 0) {
       finished = true;
