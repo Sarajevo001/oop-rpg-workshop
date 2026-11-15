@@ -1,8 +1,10 @@
 // 第0章：クラスの基本を説明するための最小例（演習なし）
 class Hero {
   constructor(name) {
-    this.name = name; // プロパティ
-    this.hp = 40;     // プロパティ
+    this.name = name;
+    // プロパティ
+    this.hp = 40;
+    // プロパティ
   }
   attack(target) {
     // メソッド
