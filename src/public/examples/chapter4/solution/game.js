@@ -38,7 +38,7 @@ class Slime {
     return this.team !== target.team;
   }
   attack(target) {
-    if (!this.canAttack(target)) {
+    if (this.canAttack(target) === false) {
       return `${this.name}は${target.name}を攻撃できない！`;
     }
     const damage = 7;
@@ -53,7 +53,7 @@ let currentTurnLog = null;
 function log(message) {
   const p = document.createElement('p');
   p.textContent = message;
-  (currentTurnLog || document.getElementById('log')).appendChild(p);
+  (currentTurnLog ?? document.getElementById('log')).appendChild(p);
 }
 function beginTurnLog() {
   const section = document.createElement('section');
@@ -73,7 +73,7 @@ function allies() {
   return living('friend');
 }
 function render() {
-  const host = document.getElementById('actors') || document.querySelector('.battle');
+  const host = document.getElementById('actors') ?? document.querySelector('.battle');
   host.replaceChildren();
   for (const character of characters) {
     const card = document.createElement('article');
@@ -108,25 +108,25 @@ function updateTargetOptions() {
   const preserved = Array.from(select.options).some(option => option.value === previous);
   if (preserved === true) {
     select.value = previous;
-  } else if (select.options.length) {
+  } else if (select.options.length > 0) {
     select.selectedIndex = 0;
   }
   select.disabled = select.options.length === 0;
 }
 function playerControl(actor, targets) {
   const value = document.getElementById('friend-target').value;
-  const selected = value === '' ? null: characters[Number(value)];
-  return selected && targets.includes(selected) && actor.team !== selected.team ? selected: null;
+  const selected = value === '' ? null : characters[Number(value)];
+  return selected !== null && selected !== undefined && targets.includes(selected) && actor.team !== selected.team ? selected : null;
 }
 function cpuControl(actor, targets) {
-  return targets.filter(c => c.hp > 0 && actor.canAttack(c)).sort((a, b) => a.hp - b.hp)[0] || null;
+  return targets.filter(c => c.hp > 0 && actor.canAttack(c)).sort((a, b) => a.hp - b.hp)[0] ?? null;
 }
 class TrackingController {
   constructor() {
     this.lockedTarget = null;
   }
   choose(actor, targets) {
-    if (!this.lockedTarget || this.lockedTarget.hp <= 0 || !targets.includes(this.lockedTarget)) {
+    if (this.lockedTarget === null || this.lockedTarget.hp <= 0 || targets.includes(this.lockedTarget) === false) {
       this.lockedTarget = cpuControl(actor, targets);
     }
     return this.lockedTarget;
@@ -141,27 +141,27 @@ function nextTurn() {
   for (const actor of allies()) {
     updateTargetOptions();
     const targets = enemies();
-    if (!targets.length) {
+    if (targets.length === 0) {
       break;
     }
     const target = actor.controller(actor, targets);
-    if (target) {
+    if (target !== null && target !== undefined) {
       log(actor.attack(target));
     } else {
       log(actor.name + 'は攻撃を見送った');
     }
   }
-  if (!enemies().length) {
+  if (enemies().length === 0) {
     finished = true;
     log('敵スライムをすべて倒した！');
   } else {
     for (const enemy of enemies()) {
       const target = enemy.controller.choose(enemy, allies());
-      if (target) {
+      if (target !== null && target !== undefined) {
         log(enemy.attack(target));
       }
     }
-    if (!allies().length) {
+    if (allies().length === 0) {
       finished = true;
       log('味方が全員倒れた');
     }
@@ -184,7 +184,7 @@ function resetGame() {
 document.getElementById('next-turn').addEventListener('click', nextTurn);
 document.getElementById('reset').addEventListener('click', resetGame);
 document.getElementById('auto-friend').addEventListener('change', () => {
-  characters.find(c => c.name === '仲間スライム').controller = document.getElementById('auto-friend').checked ? cpuControl: playerControl;
+  characters.find(c => c.name === '仲間スライム').controller = document.getElementById('auto-friend').checked === true ? cpuControl : playerControl;
   render();
 });
 resetGame();
