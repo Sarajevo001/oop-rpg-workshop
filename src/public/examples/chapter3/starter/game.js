@@ -35,7 +35,7 @@ class Slime {
     return this.team !== target.team;
   }
   attack(target) {
-    if (!this.canAttack(target)) {
+    if (this.canAttack(target) === false) {
       return `${this.name}は${target.name}を攻撃できない！`;
     }
     const damage = 7;
@@ -50,7 +50,7 @@ let currentTurnLog = null;
 function log(message) {
   const p = document.createElement('p');
   p.textContent = message;
-  (currentTurnLog || document.getElementById('log')).appendChild(p);
+  (currentTurnLog ?? document.getElementById('log')).appendChild(p);
 }
 function beginTurnLog() {
   const section = document.createElement('section');
@@ -70,7 +70,7 @@ function allies() {
   return living('friend');
 }
 function render() {
-  const host = document.getElementById('actors') || document.querySelector('.battle');
+  const host = document.getElementById('actors') ?? document.querySelector('.battle');
   host.replaceChildren();
   for (const character of characters) {
     const card = document.createElement('article');
@@ -94,22 +94,22 @@ function nextTurn() {
   beginTurnLog();
   for (const actor of allies()) {
     const target = enemies()[0];
-    if (!target) {
+    if (target === null || target === undefined) {
       break;
     }
     log(actor.attack(target));
   }
-  if (!enemies().length) {
+  if (enemies().length === 0) {
     finished = true;
     log('敵スライムをすべて倒した！');
   } else {
     for (const enemy of enemies()) {
       const target = allies()[0];
-      if (target) {
+      if (target !== null && target !== undefined) {
         log(enemy.attack(target));
       }
     }
-    if (!allies().length) {
+    if (allies().length === 0) {
       finished = true;
       log('味方が全員倒れた');
     }

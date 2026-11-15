@@ -35,7 +35,7 @@ class Slime {
     return this.team !== target.team;
   }
   attack(target) {
-    if (!this.canAttack(target)) {
+    if (this.canAttack(target) === false) {
       return `${this.name}は${target.name}を攻撃できない！`;
     }
     const damage = 7;
@@ -50,7 +50,7 @@ let currentTurnLog = null;
 function log(message) {
   const p = document.createElement('p');
   p.textContent = message;
-  (currentTurnLog || document.getElementById('log')).appendChild(p);
+  (currentTurnLog ?? document.getElementById('log')).appendChild(p);
 }
 function beginTurnLog() {
   const section = document.createElement('section');
@@ -70,7 +70,7 @@ function allies() {
   return living('friend');
 }
 function render() {
-  const host = document.getElementById('actors') || document.querySelector('.battle');
+  const host = document.getElementById('actors') ?? document.querySelector('.battle');
   host.replaceChildren();
   for (const character of characters) {
     const card = document.createElement('article');
@@ -105,18 +105,34 @@ function updateTargetOptions() {
   const preserved = Array.from(select.options).some(option => option.value === previous);
   if (preserved === true) {
     select.value = previous;
-  } else if (select.options.length) {
+  } else if (select.options.length > 0) {
     select.selectedIndex = 0;
   }
   select.disabled = select.options.length === 0;
 }
+function validateTarget(actor, targets, target) {
+  if (
+    target === null ||
+    target === undefined ||
+    targets.includes(target) === false ||
+    actor.team === target.team ||
+    target.hp <= 0
+  ) {
+    throw new Error('コントローラーが不正な攻撃対象を返しました');
+  }
+  return target;
+}
 function playerControl(actor, targets) {
   const value = document.getElementById('friend-target').value;
-  const selected = value === '' ? null: characters[Number(value)];
-  return selected && targets.includes(selected) && actor.team !== selected.team ? selected: null;
+  if (value === '') {
+    throw new Error('攻撃対象が選択されていません');
+  }
+  const selected = characters[Number(value)];
+  return validateTarget(actor, targets, selected);
 }
 function cpuControl(actor, targets) {
-  return targets.filter(c => c.hp > 0 && actor.canAttack(c)).sort((a, b) => a.hp - b.hp)[0] || null;
+  const selected = targets.filter(c => c.hp > 0 && actor.canAttack(c) === true).sort((a, b) => a.hp - b.hp)[0];
+  return validateTarget(actor, targets, selected);
 }
 function nextTurn() {
   if (finished === true) {
@@ -127,35 +143,33 @@ function nextTurn() {
   const hero = characters.find(c => c.name === '勇者');
   const wizard = characters.find(c => c.name === '魔法使い');
   const friend = characters.find(c => c.name === '仲間スライム');
-  let target = playerControl(hero, enemies());
-  if (hero.hp > 0 && target) {
+  if (hero.hp > 0 && enemies().length > 0) {
+    const target = playerControl(hero, enemies());
     log(hero.attack(target));
   }
   updateTargetOptions();
-  if (friend.hp > 0 && enemies().length) {
-    target = document.getElementById('auto-friend').checked ? cpuControl(friend, enemies()): playerControl(friend, enemies());
-    if (target) {
-      log(friend.attack(target));
-    } else {
-      log('仲間スライムは攻撃を見送った');
-    }
+  if (friend.hp > 0 && enemies().length > 0) {
+    const target = document.getElementById('auto-friend').checked === true ? cpuControl(friend, enemies()) : playerControl(friend, enemies());
+    log(friend.attack(target));
   }
   updateTargetOptions();
-  target = playerControl(wizard, enemies());
-  if (wizard.hp > 0 && target) {
+  if (wizard.hp > 0 && enemies().length > 0) {
+    const target = playerControl(wizard, enemies());
     log(wizard.attack(target));
   }
-  if (!enemies().length) {
+  if (enemies().length === 0) {
     finished = true;
     log('敵スライムをすべて倒した！');
   } else {
     for (const enemy of enemies()) {
-      const target = cpuControl(enemy, allies());
-      if (target) {
-        log(enemy.attack(target));
+      const targets = allies();
+      if (targets.length === 0) {
+        break;
       }
+      const target = cpuControl(enemy, targets);
+      log(enemy.attack(target));
     }
-    if (!allies().length) {
+    if (allies().length === 0) {
       finished = true;
       log('味方が全員倒れた');
     }
