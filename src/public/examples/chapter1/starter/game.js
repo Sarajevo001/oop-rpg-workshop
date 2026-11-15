@@ -31,7 +31,7 @@ let currentTurnLog = null;
 function showMessage(message) {
   const paragraph = document.createElement('p');
   paragraph.textContent = message;
-  (currentTurnLog || document.querySelector('#log')).appendChild(paragraph);
+  (currentTurnLog ?? document.querySelector('#log')).appendChild(paragraph);
 }
 function render() {
   const host = document.querySelector('.battle');
