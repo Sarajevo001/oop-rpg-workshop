@@ -1,8 +1,8 @@
 class Hero {
   constructor(name) {
     this.name = name;
-  this.hp = 40;
-  this.sprite = '🧑‍🦱';
+    this.hp = 40;
+    this.sprite = '🧑‍🦱';
   }
   attack(target) {
     const damage = 8;
@@ -13,8 +13,8 @@ class Hero {
 class Slime {
   constructor(name, sprite) {
     this.name = name;
-  this.hp = 30;
-  this.sprite = sprite;
+    this.hp = 30;
+    this.sprite = sprite;
   }
   attack(target) {
     const damage = 7;
@@ -29,13 +29,14 @@ let finished;
 let turnNumber = 0;
 let currentTurnLog = null;
 function showMessage(message) {
-  const p = document.createElement('p'); p.textContent = message;
+  const p = document.createElement('p');
+  p.textContent = message;
   (currentTurnLog || document.querySelector('#log')).appendChild(p);
 }
 function render() {
   const host = document.querySelector('.battle');
   host.replaceChildren();
-  for (const actor of [hero, enemySlime, friendlySlime]) {
+  for (const actor of[hero, enemySlime, friendlySlime]) {
     const card = document.createElement('section');
     card.className = 'character';
     const sprite = document.createElement('div');
@@ -59,9 +60,8 @@ function beginTurnLog() {
   document.querySelector('#log').prepend(section);
   currentTurnLog = section;
 }
-
 function nextTurn() {
-  if (finished) {
+  if (finished === true) {
     return;
   }
   beginTurnLog();
@@ -76,15 +76,15 @@ function nextTurn() {
     showMessage(enemySlime.attack(hero));
     if (hero.hp === 0) {
       showMessage('勇者は倒れた……。');
-    finished = true;
+      finished = true;
     }
   }
   render();
 }
 function resetGame() {
   hero = new Hero('勇者');
-  enemySlime = new Slime('敵スライム','🟦');
-  friendlySlime = new Slime('仲間スライム','🟩');
+  enemySlime = new Slime('敵スライム', '🟦');
+  friendlySlime = new Slime('仲間スライム', '🟩');
   finished = false;
   turnNumber = 0;
   currentTurnLog = null;
