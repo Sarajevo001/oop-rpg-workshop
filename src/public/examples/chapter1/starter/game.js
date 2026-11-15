@@ -3,7 +3,8 @@
 class Hero {
   constructor(name) {
     this.name = name;
-    this.hp = 40; this.sprite = "🧑‍🦱";
+    this.hp = 40;
+    this.sprite = '🧑‍🦱';
   }
 
   attack(target) {
@@ -16,7 +17,8 @@ class Hero {
 class Slime {
   constructor(name, sprite) {
     this.name = name;
-    this.hp = 30; this.sprite = sprite;
+    this.hp = 30;
+    this.sprite = sprite;
   }
 
   attack(target) {
@@ -33,42 +35,44 @@ let turnNumber = 0;
 let currentTurnLog = null;
 
 function showMessage(message) {
-  const paragraph = document.createElement("p");
+  const paragraph = document.createElement('p');
   paragraph.textContent = message;
-  (currentTurnLog || document.querySelector("#log")).appendChild(paragraph);
+  (currentTurnLog || document.querySelector('#log')).appendChild(paragraph);
 }
 
 function render() {
-  const host = document.querySelector(".battle");
+  const host = document.querySelector('.battle');
   host.replaceChildren();
   for (const actor of [hero, enemySlime]) {
-    const card = document.createElement("section");
-    card.className = "character";
-    const sprite = document.createElement("div");
-    sprite.className = "sprite";
+    const card = document.createElement('section');
+    card.className = 'character';
+    const sprite = document.createElement('div');
+    sprite.className = 'sprite';
     sprite.textContent = actor.sprite;
-    const name = document.createElement("h2");
+    const name = document.createElement('h2');
     name.textContent = actor.name;
-    const hp = document.createElement("p");
-    hp.className = "hp";
+    const hp = document.createElement('p');
+    hp.className = 'hp';
     hp.textContent = `HP: ${actor.hp}`;
     card.append(sprite, name, hp);
     host.appendChild(card);
   }
-  document.querySelector("#next-turn").disabled = finished;
+  document.querySelector('#next-turn').disabled = finished;
 }
 
 function beginTurnLog() {
-  const section = document.createElement("section");
-  const heading = document.createElement("h3");
-  heading.textContent = "ターン" + (++turnNumber);
+  const section = document.createElement('section');
+  const heading = document.createElement('h3');
+  heading.textContent = 'ターン' + (++turnNumber);
   section.appendChild(heading);
-  document.querySelector("#log").prepend(section);
+  document.querySelector('#log').prepend(section);
   currentTurnLog = section;
 }
 
 function nextTurn() {
-  if (finished) return;
+  if (finished) {
+    return;
+  }
   beginTurnLog();
 
   showMessage(hero.attack(enemySlime));
@@ -81,23 +85,23 @@ function nextTurn() {
 
   showMessage(enemySlime.attack(hero));
   if (hero.hp === 0) {
-    showMessage("勇者は倒れてしまった……。");
+    showMessage('勇者は倒れてしまった……。');
     finished = true;
   }
   render();
 }
 
 function resetGame() {
-  hero = new Hero("勇者");
-  enemySlime = new Slime("敵スライム","🟦");
+  hero = new Hero('勇者');
+  enemySlime = new Slime('敵スライム','🟦');
   finished = false;
   turnNumber = 0;
   currentTurnLog = null;
-  document.querySelector("#log").replaceChildren();
-  showMessage("敵スライムが現れた！");
+  document.querySelector('#log').replaceChildren();
+  showMessage('敵スライムが現れた！');
   render();
 }
 
-document.querySelector("#next-turn").addEventListener("click", nextTurn);
-document.querySelector("#reset").addEventListener("click", resetGame);
+document.querySelector('#next-turn').addEventListener('click', nextTurn);
+document.querySelector('#reset').addEventListener('click', resetGame);
 resetGame();
