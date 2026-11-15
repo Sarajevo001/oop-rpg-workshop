@@ -19,15 +19,15 @@
       "id": "common",
       "repository": "Sarajevo001/xo-code-busters",
       "path": "standards/common.md",
-      "version": "1.6.0",
-      "commit": "d2861ff0a6eac2525bf7f949814c73025edea8dc"
+      "version": "1.7.0",
+      "commit": "2857bb4017c2f68517c36c0bc94530ab1284b7ad"
     },
     {
       "id": "javascript",
       "repository": "Sarajevo001/xo-code-busters",
       "path": "standards/languages/javascript.md",
-      "version": "1.6.0",
-      "commit": "d2861ff0a6eac2525bf7f949814c73025edea8dc"
+      "version": "1.7.0",
+      "commit": "2857bb4017c2f68517c36c0bc94530ab1284b7ad"
     },
     {
       "id": "ci-testing",
