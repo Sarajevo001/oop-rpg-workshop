@@ -2,19 +2,113 @@
 :root{color-scheme:dark;font-family:system-ui,"Noto Sans JP",sans-serif;background:#101d35;color:#f7f9ff}*{box-sizing:border-box}body{margin:0}
 main{width:100vw;height:100dvh;display:grid;place-items:center;padding:1rem 1rem 4rem}.slide{width:min(100%,calc((100dvh - 5rem)*16/9));aspect-ratio:16/9;background:linear-gradient(140deg,#172947,#111d35);border:1px solid #354765;border-radius:1rem;padding:clamp(1rem,4vw,3.8rem);overflow:auto;box-shadow:0 18px 70px #0007}
 .kicker{font-size:clamp(.65rem,1.1vw,1rem);font-weight:800;letter-spacing:.13em;color:#ffc66a}h1{font-size:clamp(1.45rem,3.5vw,3.3rem);line-height:1.35;margin:.7em 0}.feature{background:#263c60;border-radius:1rem;padding:clamp(1rem,3vw,2.6rem);font-size:clamp(1.15rem,2.65vw,2.6rem);font-weight:700;white-space:pre-wrap;line-height:1.65;color:#ffc66a}.feature.code{font:clamp(.8rem,1.65vw,1.55rem)/1.5 ui-monospace,Consolas,monospace;color:#e5f2ff}.description{font-size:clamp(.9rem,1.7vw,1.6rem);line-height:1.6;white-space:pre-wrap}.demo{display:inline-block;color:#fff;background:#3564a1;padding:.55rem 1rem;border-radius:.5rem;font-size:clamp(.85rem,1.3vw,1.1rem)}.controls{position:fixed;bottom:.65rem;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:.75rem;flex-wrap:wrap}button,a{font:inherit}button{background:#2e4b78;color:white;border:1px solid #7791b6;border-radius:.5rem;padding:.4rem .85rem;cursor:pointer}button:hover{background:#456b9e}button:focus-visible,a:focus-visible{outline:3px solid #ffc66a}#count{min-width:4rem;text-align:center}.speaker{margin-top:1rem;border-top:1px solid #8194b2;padding-top:.7rem;color:#c5d6ec;font-size:clamp(.75rem,1.1vw,1rem)}[hidden]{display:none!important}@media print{main{height:auto;display:block;padding:0}.slide{width:100%;height:100vh;aspect-ratio:auto;page-break-after:always;border:0;border-radius:0;box-shadow:none;display:block!important}.controls,.speaker{display:none!important}}
-</style></head><body><main id="deck"><section class="slide" aria-label="スライド1" ><div class="kicker">RPG WORKSHOP / 第1章</div><h1>第1章：仲間スライム、誕生！</h1><div class="feature ">敵スライム 🟦　＋　仲間スライム 🟩</div><p class="description">今あるRPGに仲間を増やしてみよう。</p><aside class="speaker" hidden>1分：第0章の続き。改善策は先に示さない。</aside></section>
-<section class="slide" aria-label="スライド2" hidden><div class="kicker">RPG WORKSHOP / 第1章</div><h1>まずは、現在のゲーム</h1><div class="feature ">勇者 HP40　⚔　敵スライム HP30</div><p class="description">ゲームの開始コードを確認。まずは動作を見よう。</p><a class="demo" href="../../examples/chapter1/starter/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><aside class="speaker" hidden>1分：開始コードをブラウザで開く。</aside></section>
+</style><style>.detail{font-size:clamp(.85rem,1.3vw,1.25rem);line-height:1.55}.detail p{margin:.65em 0}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}.comparison>div{min-width:0;background:#243a5b;padding:.6rem;border-radius:.5rem}.comparison h2{font-size:.9em;margin:.2em 0}.comparison pre{font-size:clamp(.55rem,.83vw,.85rem);white-space:pre-wrap;overflow-wrap:anywhere;max-height:24vh;overflow:auto}.source-links{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.65rem}.source-links a{color:#fff;background:#3564a1;border-radius:.4rem;padding:.35rem .6rem;font-size:clamp(.7rem,1vw,.95rem)}@media(max-width:650px){.comparison{grid-template-columns:1fr}.comparison pre{max-height:13vh}}</style></head><body><main id="deck"><section class="slide" aria-label="スライド1" ><div class="kicker">RPG WORKSHOP / 第1章</div><h1>第1章：仲間スライム、誕生！</h1><div class="feature ">敵スライム 🟦　＋　仲間スライム 🟩</div><p class="description">今あるRPGに仲間を増やしてみよう。</p><aside class="speaker" hidden>1分：第0章の続き。改善策は先に示さない。</aside></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter1</div><h1>詳説 1：第1章：仲間スライム、誕生！</h1><div class="detail"><p><strong>目的：</strong>仲間スライムを追加する最初の要求には、既存のスライム処理を参考にする方法があります。</p><p><strong>内容：</strong>今あるRPGに仲間を増やしてみよう。</p><p><strong>確認事項：</strong>どの要求が追加され、どのオブジェクト・条件・処理を変更する必要があるかを整理してください。実行結果とコードの対応も確認しましょう。</p></div></section>
+<section class="slide" aria-label="スライド2" hidden><div class="kicker">RPG WORKSHOP / 第1章</div><h1>まずは、現在のゲーム</h1><div class="feature ">勇者 HP40　⚔　敵スライム HP30</div><p class="description">ゲームの開始コードを確認。まずは動作を見よう。</p><a class="demo" href="../../examples/chapter1/starter/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><div class="source-links"><a href="../../examples/chapter1/starter/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/starter/index.html" target="_blank" rel="noopener">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/starter/game.js" target="_blank" rel="noopener">JavaScriptコードを見る ↗</a></div><aside class="speaker" hidden>1分：開始コードをブラウザで開く。</aside></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter1</div><h1>詳説 2：まずは、現在のゲーム</h1><div class="detail"><p><strong>目的：</strong>敵と仲間の攻撃ダメージを同時に変更する要求では、複製した実装の修正漏れが問題になります。</p><p><strong>内容：</strong>ゲームの開始コードを確認。まずは動作を見よう。</p><p><strong>確認事項：</strong>どの要求が追加され、どのオブジェクト・条件・処理を変更する必要があるかを整理してください。実行結果とコードの対応も確認しましょう。</p></div></section>
 <section class="slide" aria-label="スライド3" hidden><div class="kicker">RPG WORKSHOP / 第1章</div><h1>課題1：仲間スライムを追加しよう</h1><div class="feature ">🧑‍🦱 勇者　＋　🟩 仲間スライム
 　　　　　　VS
 　　　　　🟦 敵スライム</div><p class="description">画面に仲間スライムを1体追加し、敵スライムを攻撃できるようにする。リセット時は初期状態へ。実装方法は自由。</p><aside class="speaker" hidden>3分：受講者が実装。既存コードのコピーも許容。</aside></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter1</div><h1>詳説 3：課題1：仲間スライムを追加しよう</h1><div class="detail"><p><strong>目的：</strong>改善例ではSlimeに共通の攻撃処理を集約し、変更箇所を減らします。</p><p><strong>内容：</strong>画面に仲間スライムを1体追加し、敵スライムを攻撃できるようにする。リセット時は初期状態へ。実装方法は自由。</p><p><strong>確認事項：</strong>どの要求が追加され、どのオブジェクト・条件・処理を変更する必要があるかを整理してください。実行結果とコードの対応も確認しましょう。</p></div></section>
 <section class="slide" aria-label="スライド4" hidden><div class="kicker">RPG WORKSHOP / 第1章</div><h1>課題1：実装例を確認</h1><div class="feature code">class Slime { ... }
-class FriendlySlime { ... }</div><p class="description">既存のSlimeを参考に、仲間用の類似クラスを作る方法もある。これは一例であり唯一解ではない。</p><a class="demo" href="../../examples/chapter1/task1/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><aside class="speaker" hidden>1分：task1の例を表示。コピー方式を強制しない。</aside></section>
+class FriendlySlime { ... }</div><p class="description">既存のSlimeを参考に、仲間用の類似クラスを作る方法もある。これは一例であり唯一解ではない。</p><a class="demo" href="../../examples/chapter1/task1/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><div class="source-links"><a href="../../examples/chapter1/task1/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task1/index.html" target="_blank" rel="noopener">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task1/game.js" target="_blank" rel="noopener">JavaScriptコードを見る ↗</a></div><aside class="speaker" hidden>1分：task1の例を表示。コピー方式を強制しない。</aside></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter1</div><h1>詳説 4：課題1：実装例を確認</h1><div class="detail"><p><strong>目的：</strong>仲間スライムを追加する最初の要求には、既存のスライム処理を参考にする方法があります。</p><p><strong>内容：</strong>既存のSlimeを参考に、仲間用の類似クラスを作る方法もある。これは一例であり唯一解ではない。</p><p><strong>確認事項：</strong>どの要求が追加され、どのオブジェクト・条件・処理を変更する必要があるかを整理してください。実行結果とコードの対応も確認しましょう。</p></div></section>
 <section class="slide" aria-label="スライド5" hidden><div class="kicker">RPG WORKSHOP / 第1章</div><h1>課題2：仕様変更です！</h1><div class="feature ">スライムの攻撃ダメージ
 5 → 7</div><p class="description">敵スライムも仲間スライムも7ダメージ。勇者の攻撃は8のまま。変更箇所を数えてみよう。</p><aside class="speaker" hidden>3分：課題2の実装。修正箇所数に注目。解決策はまだ示さない。</aside></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter1</div><h1>詳説 5：課題2：仕様変更です！</h1><div class="detail"><p><strong>目的：</strong>敵と仲間の攻撃ダメージを同時に変更する要求では、複製した実装の修正漏れが問題になります。</p><p><strong>内容：</strong>敵スライムも仲間スライムも7ダメージ。勇者の攻撃は8のまま。変更箇所を数えてみよう。</p><p><strong>確認事項：</strong>どの要求が追加され、どのオブジェクト・条件・処理を変更する必要があるかを整理してください。実行結果とコードの対応も確認しましょう。</p></div></section>
 <section class="slide" aria-label="スライド6" hidden><div class="kicker">RPG WORKSHOP / 第1章</div><h1>どこを修正しましたか？</h1><div class="feature ">Slime.attack()　　　　5 → 7
-FriendlySlime.attack()　5 → 7</div><p class="description">コピー方式なら2か所の修正が必要。20か所、200か所ならどうなる？</p><a class="demo" href="../../examples/chapter1/task2/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><aside class="speaker" hidden>2分：変更漏れの危険を問いかける。先に共通クラスを使った人は1か所で済む。</aside></section>
+FriendlySlime.attack()　5 → 7</div><p class="description">コピー方式なら2か所の修正が必要。20か所、200か所ならどうなる？</p><a class="demo" href="../../examples/chapter1/task2/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><div class="source-links"><a href="../../examples/chapter1/task2/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task2/index.html" target="_blank" rel="noopener">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task2/game.js" target="_blank" rel="noopener">JavaScriptコードを見る ↗</a></div><aside class="speaker" hidden>2分：変更漏れの危険を問いかける。先に共通クラスを使った人は1か所で済む。</aside></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter1</div><h1>詳説 6：どこを修正しましたか？</h1><div class="detail"><p><strong>目的：</strong>改善例ではSlimeに共通の攻撃処理を集約し、変更箇所を減らします。</p><p><strong>内容：</strong>コピー方式なら2か所の修正が必要。20か所、200か所ならどうなる？</p><p><strong>確認事項：</strong>どの要求が追加され、どのオブジェクト・条件・処理を変更する必要があるかを整理してください。実行結果とコードの対応も確認しましょう。</p></div></section>
 <section class="slide" aria-label="スライド7" hidden><div class="kicker">RPG WORKSHOP / 第1章</div><h1>改善例：共通化する</h1><div class="feature code">const enemySlime = new Slime('敵スライム','🟦');
-const friendlySlime = new Slime('仲間スライム','🟩');</div><p class="description">攻撃処理はSlimeクラス1か所に集約。変更漏れの可能性を減らせる。</p><a class="demo" href="../../examples/chapter1/solution/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><aside class="speaker" hidden>2分：改善例を開き、Slime.attackのdamage=7を示す。teamは導入しない。</aside></section>
-<section class="slide" aria-label="スライド8" hidden><div class="kicker">RPG WORKSHOP / 第1章</div><h1>今回のまとめ</h1><div class="feature ">同じ仕様を複数箇所に持つと、変更箇所が増える。</div><p class="description">共通化は変更の手間を減らす工夫。ただし、いつでも一つにまとめるのが唯一の正解ではない。</p><aside class="speaker" hidden>2分：重複と再利用の背景を短く補足。次章では敵味方の区別が問題になる。</aside></section></main><nav class="controls" aria-label="スライド操作"><button id="prev" type="button">← 前へ</button><span id="count" aria-live="polite">1 / 8</span><button id="next" type="button">次へ →</button><button id="notes" type="button" aria-pressed="false">講師メモ</button><button id="full" type="button">全画面</button><a href="../chapter0/" style="color:#d5e9ff">第0章スライド</a></nav><script>
+const friendlySlime = new Slime('仲間スライム','🟩');</div><p class="description">攻撃処理はSlimeクラス1か所に集約。変更漏れの可能性を減らせる。</p><a class="demo" href="../../examples/chapter1/solution/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><div class="source-links"><a href="../../examples/chapter1/solution/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/solution/index.html" target="_blank" rel="noopener">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/solution/game.js" target="_blank" rel="noopener">JavaScriptコードを見る ↗</a></div><aside class="speaker" hidden>2分：改善例を開き、Slime.attackのdamage=7を示す。teamは導入しない。</aside></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter1</div><h1>詳説 7：改善例：共通化する</h1><div class="detail"><p><strong>目的：</strong>仲間スライムを追加する最初の要求には、既存のスライム処理を参考にする方法があります。</p><p><strong>内容：</strong>攻撃処理はSlimeクラス1か所に集約。変更漏れの可能性を減らせる。</p><p><strong>確認事項：</strong>どの要求が追加され、どのオブジェクト・条件・処理を変更する必要があるかを整理してください。実行結果とコードの対応も確認しましょう。</p></div></section>
+<section class="slide" aria-label="スライド8" hidden><div class="kicker">RPG WORKSHOP / 第1章</div><h1>今回のまとめ</h1><div class="feature ">同じ仕様を複数箇所に持つと、変更箇所が増える。</div><p class="description">共通化は変更の手間を減らす工夫。ただし、いつでも一つにまとめるのが唯一の正解ではない。</p><aside class="speaker" hidden>2分：重複と再利用の背景を短く補足。次章では敵味方の区別が問題になる。</aside></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter1</div><h1>詳説 8：今回のまとめ</h1><div class="detail"><p><strong>目的：</strong>敵と仲間の攻撃ダメージを同時に変更する要求では、複製した実装の修正漏れが問題になります。</p><p><strong>内容：</strong>共通化は変更の手間を減らす工夫。ただし、いつでも一つにまとめるのが唯一の正解ではない。</p><p><strong>確認事項：</strong>どの要求が追加され、どのオブジェクト・条件・処理を変更する必要があるかを整理してください。実行結果とコードの対応も確認しましょう。</p></div></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter1</div><h1>開始コード → 課題1：変更前後の比較</h1><div class="detail"><p>実際の <code>game.js</code> の変更部分を抜粋しています。省略部分もあるため、必ずソース全文と照合してください。</p><div class="comparison"><div><h2>変更前：開始コード</h2><pre><code>// 第1章の初期コード。team・操作関数・DIはまだ登場しません。
+class Hero {
+  constructor(name) {
+    this.name = name;
+    this.hp = 40;
+    this.sprite = '🧑‍🦱';
+  }
+  attack(target) {
+    const damage = 8;
+    target.hp = Math.max(0, target.hp - damage);
+    return `${this.name}の攻撃！ ${target.name}に${damage}ダメージ！`;
+  }
+}
+class Slime {
+// 以下省略</code></pre></div><div><h2>変更後：課題1</h2><pre><code>class Hero {
+  constructor(name) {
+    this.name = name;
+    this.hp = 40;
+    this.sprite = '🧑‍🦱';
+  }
+  attack(target) {
+    const damage = 8;
+    target.hp = Math.max(0, target.hp - damage);
+    return `${this.name}の攻撃！ ${target.name}に${damage}ダメージ！`;
+  }
+}
+class Slime {
+  constructor(name, sprite) {
+// 以下省略</code></pre></div></div><p>比較の観点：仲間スライムを追加する最初の要求には、既存のスライム処理を参考にする方法があります。</p></div><div class="source-links"><a href="../../examples/chapter1/task1/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task1/index.html" target="_blank" rel="noopener">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task1/game.js" target="_blank" rel="noopener">JavaScriptコードを見る ↗</a></div></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter1</div><h1>課題1：実装の評価</h1><div class="detail"><p>敵と仲間の攻撃ダメージを同時に変更する要求では、複製した実装の修正漏れが問題になります。</p><p>変更前の実装でどの要求を満たせるか、追加要求でどこに変更が必要になったか、変更後の実装で何が改善されたかを比較してください。</p><p>模範解答は唯一の正解ではありません。現在の要求を満たすことと、変更に強い構成であることを分けて考えます。</p></div><div class="source-links"><a href="../../examples/chapter1/task1/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task1/index.html" target="_blank" rel="noopener">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task1/game.js" target="_blank" rel="noopener">JavaScriptコードを見る ↗</a></div></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter1</div><h1>課題1 → 課題2：変更前後の比較</h1><div class="detail"><p>実際の <code>game.js</code> の変更部分を抜粋しています。省略部分もあるため、必ずソース全文と照合してください。</p><div class="comparison"><div><h2>変更前：課題1</h2><pre><code>    const damage = 5;
+    target.hp = Math.max(0, target.hp - damage);
+    return `${this.name}の攻撃！ ${target.name}に${damage}ダメージ！`;
+  }
+}
+class FriendlySlime {
+  constructor(name) {
+    this.name = name;
+    this.hp = 30;
+    this.sprite = '🟩';
+  }
+  attack(target) {
+    const damage = 5;</code></pre></div><div><h2>変更後：課題2</h2><pre><code>    const damage = 7;
+    target.hp = Math.max(0, target.hp - damage);
+    return `${this.name}の攻撃！ ${target.name}に${damage}ダメージ！`;
+  }
+}
+class FriendlySlime {
+  constructor(name) {
+    this.name = name;
+    this.hp = 30;
+    this.sprite = '🟩';
+  }
+  attack(target) {
+    const damage = 7;</code></pre></div></div><p>比較の観点：敵と仲間の攻撃ダメージを同時に変更する要求では、複製した実装の修正漏れが問題になります。</p></div><div class="source-links"><a href="../../examples/chapter1/task2/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task2/index.html" target="_blank" rel="noopener">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task2/game.js" target="_blank" rel="noopener">JavaScriptコードを見る ↗</a></div></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter1</div><h1>課題2：実装の評価</h1><div class="detail"><p>改善例ではSlimeに共通の攻撃処理を集約し、変更箇所を減らします。</p><p>変更前の実装でどの要求を満たせるか、追加要求でどこに変更が必要になったか、変更後の実装で何が改善されたかを比較してください。</p><p>模範解答は唯一の正解ではありません。現在の要求を満たすことと、変更に強い構成であることを分けて考えます。</p></div><div class="source-links"><a href="../../examples/chapter1/task2/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task2/index.html" target="_blank" rel="noopener">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task2/game.js" target="_blank" rel="noopener">JavaScriptコードを見る ↗</a></div></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter1</div><h1>課題2 → 改善例：変更前後の比較</h1><div class="detail"><p>実際の <code>game.js</code> の変更部分を抜粋しています。省略部分もあるため、必ずソース全文と照合してください。</p><div class="comparison"><div><h2>変更前：課題2</h2><pre><code>class FriendlySlime {
+  constructor(name) {
+    this.name = name;
+    this.hp = 30;
+    this.sprite = '🟩';
+  }
+  attack(target) {
+    const damage = 7;
+    target.hp = Math.max(0, target.hp - damage);
+    return `${this.name}の攻撃！ ${target.name}に${damage}ダメージ！`;
+  }
+}
+let hero;
+let enemySlime;
+// 以下省略</code></pre></div><div><h2>変更後：改善例</h2><pre><code>let hero;
+let enemySlime;
+let friendlySlime;
+let finished;
+let turnNumber = 0;
+let currentTurnLog = null;
+function showMessage(message) {
+  const p = document.createElement('p');
+  p.textContent = message;
+  (currentTurnLog ?? document.querySelector('#log')).appendChild(p);
+}
+function render() {
+  const host = document.querySelector('.battle');
+  host.replaceChildren();
+// 以下省略</code></pre></div></div><p>比較の観点：改善例ではSlimeに共通の攻撃処理を集約し、変更箇所を減らします。</p></div><div class="source-links"><a href="../../examples/chapter1/solution/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/solution/index.html" target="_blank" rel="noopener">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/solution/game.js" target="_blank" rel="noopener">JavaScriptコードを見る ↗</a></div></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter1</div><h1>改善例：実装の評価</h1><div class="detail"><p>仲間スライムを追加する最初の要求には、既存のスライム処理を参考にする方法があります。</p><p>変更前の実装でどの要求を満たせるか、追加要求でどこに変更が必要になったか、変更後の実装で何が改善されたかを比較してください。</p><p>模範解答は唯一の正解ではありません。現在の要求を満たすことと、変更に強い構成であることを分けて考えます。</p></div><div class="source-links"><a href="../../examples/chapter1/solution/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/solution/index.html" target="_blank" rel="noopener">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/solution/game.js" target="_blank" rel="noopener">JavaScriptコードを見る ↗</a></div></section></main><nav class="controls" aria-label="スライド操作"><button id="prev" type="button">← 前へ</button><span id="count" aria-live="polite">1 / 8</span><button id="next" type="button">次へ →</button><button id="notes" type="button" aria-pressed="false">講師メモ</button><button id="full" type="button">全画面</button><a href="../chapter0/" style="color:#d5e9ff">第0章スライド</a></nav><script>
 (()=>{'use strict';const slides=[...document.querySelectorAll('.slide')];let index=0;let notes=false;const show=()=>{slides.forEach((s,i)=>{s.hidden=i!==index;s.querySelector('.speaker').hidden=!notes});document.getElementById('count').textContent=(index+1)+' / '+slides.length;document.getElementById('prev').disabled=index===0;document.getElementById('next').disabled=index===slides.length-1};const move=d=>{index=Math.max(0,Math.min(slides.length-1,index+d));show()};document.getElementById('prev').addEventListener('click',()=>move(-1));document.getElementById('next').addEventListener('click',()=>move(1));document.getElementById('notes').addEventListener('click',()=>{notes=!notes;document.getElementById('notes').setAttribute('aria-pressed',String(notes));show()});document.getElementById('full').addEventListener('click',()=>{if(document.fullscreenElement){document.exitFullscreen()}else{document.documentElement.requestFullscreen?.()}});document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();move(1)}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();move(-1)}if(e.key==='Home'){index=0;show()}if(e.key==='End'){index=slides.length-1;show()}});show()})();
 </script></body></html>
