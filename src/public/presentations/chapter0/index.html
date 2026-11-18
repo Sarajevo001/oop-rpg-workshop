@@ -47,7 +47,7 @@ target.hp = Math.max(0, target.hp - damage);</div><p class="description">敵ス�
 <nav class="controls" aria-label="スライド操作"><button id="prev" type="button">← 前へ</button><span id="count" aria-live="polite">1 / 8</span><button id="next" type="button">次へ →</button><button id="notes" type="button" aria-pressed="false">講師メモ</button><button id="full" type="button">全画面</button><a href="../../examples/chapter0/demo/" style="color:#d5e9ff">第0章デモ</a></nav>
 <script>
 (()=>{'use strict';const slides=[...document.querySelectorAll('.slide')];let index=0;let notes=false;
-const show=()=>{slides.forEach((s,i)=>{s.hidden=i!==index;s.querySelector('.speaker').hidden=!notes});document.getElementById('count').textContent=(index+1)+' / '+slides.length;document.getElementById('prev').disabled=index===0;document.getElementById('next').disabled=index===slides.length-1};
+const show=()=>{slides.forEach((s,i)=>{s.hidden=i!==index;const speaker=s.querySelector('.speaker');if(speaker){speaker.hidden=!notes}});document.getElementById('count').textContent=(index+1)+' / '+slides.length;document.getElementById('prev').disabled=index===0;document.getElementById('next').disabled=index===slides.length-1};
 const move=d=>{index=Math.max(0,Math.min(slides.length-1,index+d));show()};
 document.getElementById('prev').addEventListener('click',()=>move(-1));
 document.getElementById('next').addEventListener('click',()=>move(1));
