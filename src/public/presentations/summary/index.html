@@ -1,4 +1,20 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RPGで学ぶオブジェクト指向 | まとめ・種明かし</title><style>:root{color-scheme:dark;font-family:system-ui,"Noto Sans JP",sans-serif;background:#101d35;color:#f7f9ff}*{box-sizing:border-box}body{margin:0}main{width:100vw;height:100dvh;display:grid;place-items:center;padding:1rem 1rem 4rem}.slide{width:min(100%,calc((100dvh - 5rem)*16/9));aspect-ratio:16/9;background:linear-gradient(140deg,#172947,#111d35);border:1px solid #354765;border-radius:1rem;padding:clamp(1rem,4vw,3.8rem);overflow:auto;box-shadow:0 18px 70px #0007}.kicker{font-size:clamp(.65rem,1.1vw,1rem);font-weight:800;letter-spacing:.13em;color:#ffc66a}h1{font-size:clamp(1.45rem,3.5vw,3.3rem);line-height:1.35;margin:.7em 0}.feature{background:#263c60;border-radius:1rem;padding:clamp(1rem,3vw,2.6rem);font-size:clamp(1.05rem,2.5vw,2.4rem);font-weight:700;white-space:pre-wrap;line-height:1.65;color:#ffc66a}.feature.code{font:clamp(.75rem,1.55vw,1.45rem)/1.5 ui-monospace,Consolas,monospace;color:#e5f2ff}.description{font-size:clamp(.9rem,1.65vw,1.55rem);line-height:1.6;white-space:pre-wrap}.demo{display:inline-block;color:#fff;background:#3564a1;padding:.55rem 1rem;border-radius:.5rem;font-size:clamp(.85rem,1.3vw,1.1rem)}.controls{position:fixed;bottom:.65rem;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:.75rem;flex-wrap:wrap}button,a{font:inherit}button{background:#2e4b78;color:white;border:1px solid #7791b6;border-radius:.5rem;padding:.4rem .85rem;cursor:pointer}button:hover{background:#456b9e}button:focus-visible,a:focus-visible{outline:3px solid #ffc66a}#count{min-width:4rem;text-align:center}.speaker{margin-top:1rem;border-top:1px solid #8194b2;padding-top:.7rem;color:#c5d6ec;font-size:clamp(.75rem,1.1vw,1rem)}[hidden]{display:none!important}@media print{main{height:auto;display:block;padding:0}.slide{width:100%;height:100vh;aspect-ratio:auto;page-break-after:always;border:0;border-radius:0;box-shadow:none;display:block!important}.controls,.speaker{display:none!important}}</style><style>.detail{font-size:clamp(.85rem,1.3vw,1.25rem);line-height:1.55}.detail p{margin:.65em 0}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}.comparison>div{min-width:0;background:#243a5b;padding:.6rem;border-radius:.5rem}.comparison h2{font-size:.9em;margin:.2em 0}.comparison pre{font-size:clamp(.55rem,.83vw,.85rem);white-space:pre-wrap;overflow-wrap:anywhere;max-height:24vh;overflow:auto}.source-links{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.65rem}.source-links a{color:#fff;background:#3564a1;border-radius:.4rem;padding:.35rem .6rem;font-size:clamp(.7rem,1vw,.95rem)}@media(max-width:650px){.comparison{grid-template-columns:1fr}.comparison pre{max-height:13vh}}</style></head><body><main id="deck"><section class="slide" aria-label="スライド1" ><div class="kicker">RPG WORKSHOP / まとめ・種明かし</div><h1>振り返り：スライムと歩いた設計の道</h1><div class="feature ">第1章：重複する変更
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>RPGで学ぶオブジェクト指向 | まとめ・種明かし</title><style>:root{color-scheme:dark;font-family:system-ui,"Noto Sans JP",sans-serif;background:#101d35;color:#f7f9ff}*{box-sizing:border-box}body{margin:0}main{width:100vw;height:100dvh;display:grid;place-items:center;padding:1rem 1rem 4rem}.slide{width:min(100%,calc((100dvh - 5rem)*16/9));aspect-ratio:16/9;background:linear-gradient(140deg,#172947,#111d35);border:1px solid #354765;border-radius:1rem;padding:clamp(1rem,4vw,3.8rem);overflow:auto;box-shadow:0 18px 70px #0007}.kicker{font-size:clamp(.65rem,1.1vw,1rem);font-weight:800;letter-spacing:.13em;color:#ffc66a}h1{font-size:clamp(1.45rem,3.5vw,3.3rem);line-height:1.35;margin:.7em 0}.feature{background:#263c60;border-radius:1rem;padding:clamp(1rem,3vw,2.6rem);font-size:clamp(1.05rem,2.5vw,2.4rem);font-weight:700;white-space:pre-wrap;line-height:1.65;color:#ffc66a}.feature.code{font:clamp(.75rem,1.55vw,1.45rem)/1.5 ui-monospace,Consolas,monospace;color:#e5f2ff}.description{font-size:clamp(.9rem,1.65vw,1.55rem);line-height:1.6;white-space:pre-wrap}.demo{display:inline-block;color:#fff;background:#3564a1;padding:.55rem 1rem;border-radius:.5rem;font-size:clamp(.85rem,1.3vw,1.1rem)}.controls{position:fixed;bottom:.65rem;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:.75rem;flex-wrap:wrap}button,a{font:inherit}button{background:#2e4b78;color:white;border:1px solid #7791b6;border-radius:.5rem;padding:.4rem .85rem;cursor:pointer}button:hover{background:#456b9e}button:focus-visible,a:focus-visible{outline:3px solid #ffc66a}#count{min-width:4rem;text-align:center}.speaker{margin-top:1rem;border-top:1px solid #8194b2;padding-top:.7rem;color:#c5d6ec;font-size:clamp(.75rem,1.1vw,1rem)}[hidden]{display:none!important}@media print{main{height:auto;display:block;padding:0}.slide{width:100%;height:100vh;aspect-ratio:auto;page-break-after:always;border:0;border-radius:0;box-shadow:none;display:block!important}.controls,.speaker{display:none!important}}
+/* Portrait phones use available height instead of forcing a landscape slide. */
+@media screen and (max-width: 700px) and (orientation: portrait) {
+  main {display:block;width:100%;height:auto;min-height:100dvh;padding:8px 8px calc(112px + env(safe-area-inset-bottom));}
+  .slide {width:100%;height:calc(100dvh - 126px - env(safe-area-inset-bottom));min-height:300px;max-height:none;aspect-ratio:auto;margin:0;border-radius:12px;padding:clamp(14px,4vw,22px);overflow-y:auto;overscroll-behavior:contain;}
+  .kicker {font-size:12px;letter-spacing:.06em;}
+  h1 {font-size:clamp(21px,6vw,29px);margin:.75em 0;overflow-wrap:anywhere;}
+  .feature {font-size:clamp(17px,5vw,24px);padding:14px;line-height:1.5;overflow-wrap:anywhere;}
+  .feature.code {font-size:clamp(12px,3.3vw,16px);overflow-x:auto;overflow-wrap:normal;}
+  .description {font-size:clamp(15px,4.1vw,19px);line-height:1.55;}
+  .detail {font-size:clamp(14px,3.9vw,18px);line-height:1.5;overflow-wrap:anywhere;}
+  .speaker {font-size:14px;}
+  .controls {left:0;right:0;bottom:0;gap:5px 7px;padding:8px 7px calc(8px + env(safe-area-inset-bottom));background:#101d35;border-top:1px solid #354765;display:flex;justify-content:center;}
+  .controls button,.controls a {font-size:13px;padding:8px 10px;line-height:1.25;min-height:36px;}
+  #count {font-size:13px;min-width:45px;}
+}
+</style><style>.detail{font-size:clamp(.85rem,1.3vw,1.25rem);line-height:1.55}.detail p{margin:.65em 0}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}.comparison>div{min-width:0;background:#243a5b;padding:.6rem;border-radius:.5rem}.comparison h2{font-size:.9em;margin:.2em 0}.comparison pre{font-size:clamp(.55rem,.83vw,.85rem);white-space:pre-wrap;overflow-wrap:anywhere;max-height:24vh;overflow:auto}.source-links{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.65rem}.source-links a{color:#fff;background:#3564a1;border-radius:.4rem;padding:.35rem .6rem;font-size:clamp(.7rem,1vw,.95rem)}@media(max-width:650px){.comparison{grid-template-columns:1fr}.comparison pre{max-height:13vh}}</style></head><body><main id="deck"><section class="slide" aria-label="スライド1" ><div class="kicker">RPG WORKSHOP / まとめ・種明かし</div><h1>振り返り：スライムと歩いた設計の道</h1><div class="feature ">第1章：重複する変更
 第2章：所属による判定
 第3章：操作関数の差し替え
 第4章：状態を持つ部品の共有</div><p class="description">毎回、追加の要求によって変更負担が見えてきた。</p><aside class="speaker" hidden>4分：4章を一気に振り返る。</aside></section>
@@ -22,4 +38,79 @@
 <section class="slide" hidden><div class="kicker">RPG WORKSHOP / summary</div><h1>詳説 7：道具は、使いどころが大事</h1><div class="detail"><p><strong>目的：</strong>追加要求によって変更負担が明らかになります。</p><p>便利な道具も、使う場面を間違えると過剰設計になる。</p><p>この要求を満たすには、どの責務や条件を変更する必要があるか確認します。実装と実行結果を照合してください。</p></div></section>
 <section class="slide" aria-label="スライド8" hidden><div class="kicker">RPG WORKSHOP / まとめ・種明かし</div><h1>質疑・終了</h1><div class="feature ">別解も歓迎。設計は『唯一解探し』ではない。</div><p class="description">今日のRPGのコードは教材サイトからいつでも確認できる。</p><aside class="speaker" hidden>3分：質疑とクロージング。</aside></section>
 <section class="slide" hidden><div class="kicker">RPG WORKSHOP / summary</div><h1>詳説 8：質疑・終了</h1><div class="detail"><p><strong>目的：</strong>各章で、重複、所属判定、操作の注入、状態共有を扱いました。</p><p>今日のRPGのコードは教材サイトからいつでも確認できる。</p><p>この要求を満たすには、どの責務や条件を変更する必要があるか確認します。実装と実行結果を照合してください。</p></div></section>
-<section class="slide" hidden><div class="kicker">RPG WORKSHOP / summary</div><h1>自習用の確認問題</h1><div class="detail"><p>第1章：攻撃処理の複製による変更負担は？</p><p>第2章：種類と所属の判定はどう違う？</p><p>第3章：所属と操作方式をどう分離する？</p><p>第4章：敵A/Bの共有と敵Cの独立をどう表す？</p></div></section></main><nav class="controls" aria-label="スライド操作"><button id="prev" type="button">← 前へ</button><span id="count" aria-live="polite">1 / 8</span><button id="next" type="button">次へ →</button><button id="notes" type="button" aria-pressed="false">講師メモ</button><button id="full" type="button">全画面</button><a href="../../" style="color:#d5e9ff">教材一覧</a></nav><script>(()=>{'use strict';const slides=[...document.querySelectorAll('.slide')];let index=0,notes=false;const show=()=>{slides.forEach((s,i)=>{s.hidden=i!==index;const speaker=s.querySelector('.speaker');if(speaker){speaker.hidden=!notes}});document.getElementById('count').textContent=(index+1)+' / '+slides.length;document.getElementById('prev').disabled=index===0;document.getElementById('next').disabled=index===slides.length-1};const move=d=>{index=Math.max(0,Math.min(slides.length-1,index+d));show()};document.getElementById('prev').addEventListener('click',()=>move(-1));document.getElementById('next').addEventListener('click',()=>move(1));document.getElementById('notes').addEventListener('click',()=>{notes=!notes;document.getElementById('notes').setAttribute('aria-pressed',String(notes));show()});document.getElementById('full').addEventListener('click',()=>{if(document.fullscreenElement){document.exitFullscreen()}else{document.documentElement.requestFullscreen?.()}});document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();move(1)}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();move(-1)}if(e.key==='Home'){index=0;show()}if(e.key==='End'){index=slides.length-1;show()}});show()})();</script></body></html>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / summary</div><h1>自習用の確認問題</h1><div class="detail"><p>第1章：攻撃処理の複製による変更負担は？</p><p>第2章：種類と所属の判定はどう違う？</p><p>第3章：所属と操作方式をどう分離する？</p><p>第4章：敵A/Bの共有と敵Cの独立をどう表す？</p></div></section></main><nav class="controls" aria-label="スライド操作"><button id="prev" type="button">← 前へ</button><span id="count" aria-live="polite">1 / 8</span><button id="next" type="button">次へ →</button><button id="notes" type="button" aria-pressed="false">講師メモ</button><button id="full" type="button">全画面</button><a href="../../" style="color:#d5e9ff">教材一覧</a><a href="../../" class="home-link" style="color:#d5e9ff" aria-label="教材メニューに戻る">⌂ 教材メニュー</a></nav><script>
+(() => {
+  'use strict';
+  const slides = [...document.querySelectorAll('.slide')];
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
+  const count = document.getElementById('count');
+  const notesButton = document.getElementById('notes');
+  const fullscreenButton = document.getElementById('full');
+  let index = 0;
+  let notesVisible = false;
+  const show = () => {
+    slides.forEach((slide, i) => {
+      slide.hidden = i !== index;
+      const speaker = slide.querySelector('.speaker');
+      if (speaker !== null) { speaker.hidden = notesVisible === false; }
+    });
+    count.textContent = (index + 1) + ' / ' + slides.length;
+    prev.disabled = index === 0;
+    next.disabled = index === slides.length - 1;
+  };
+  const move = (delta) => {
+    index = Math.max(0, Math.min(slides.length - 1, index + delta));
+    show();
+  };
+  const updateFullscreenButton = () => {
+    fullscreenButton.textContent = document.fullscreenElement === null ? '全画面' : '全画面終了';
+    fullscreenButton.setAttribute('aria-label', fullscreenButton.textContent);
+  };
+  prev.addEventListener('click', () => { move(-1); });
+  next.addEventListener('click', () => { move(1); });
+  notesButton.addEventListener('click', () => {
+    notesVisible = notesVisible === false;
+    notesButton.setAttribute('aria-pressed', String(notesVisible));
+    show();
+  });
+  fullscreenButton.addEventListener('click', async () => {
+    try {
+      if (document.fullscreenElement !== null) {
+        await document.exitFullscreen();
+      } else if (typeof document.documentElement.requestFullscreen === 'function') {
+        await document.documentElement.requestFullscreen();
+      } else {
+        fullscreenButton.textContent = '全画面非対応';
+      }
+    } catch (error) {
+      fullscreenButton.textContent = '全画面操作不可';
+      console.error('Fullscreen operation failed:', error);
+    }
+  });
+  document.addEventListener('fullscreenchange', updateFullscreenButton);
+  document.addEventListener('keydown', (event) => {
+    // Leave browser history shortcuts (Alt+Left), Escape and other modifiers to the browser.
+    if (event.altKey === true || event.ctrlKey === true || event.metaKey === true || event.shiftKey === true) {
+      return;
+    }
+    if (['ArrowRight', 'PageDown', ' '].includes(event.key) === true) {
+      event.preventDefault();
+      move(1);
+    } else if (['ArrowLeft', 'PageUp'].includes(event.key) === true) {
+      event.preventDefault();
+      move(-1);
+    } else if (event.key === 'Home') {
+      event.preventDefault();
+      index = 0;
+      show();
+    } else if (event.key === 'End') {
+      event.preventDefault();
+      index = slides.length - 1;
+      show();
+    }
+  });
+  show();
+  updateFullscreenButton();
+})();
+</script></body></html>
