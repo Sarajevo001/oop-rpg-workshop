@@ -14,49 +14,65 @@
   .controls button,.controls a {font-size:13px;padding:8px 10px;line-height:1.25;min-height:36px;}
   #count {font-size:13px;min-width:45px;}
 }
+
+/* Visual hierarchy shared by all chapter decks. */
+.slide {display:flex;flex-direction:column;gap:clamp(.65rem,1.4vw,1.2rem);}
+.slide[hidden]{display:none!important}
+.slide .kicker {flex:none;}
+.slide h1 {margin:.1em 0 .2em;line-height:1.3;letter-spacing:.01em;flex:none;}
+.slide .detail {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(.65rem,1.4vw,1.1rem);align-content:start;}
+.slide .detail-card {min-width:0;padding:clamp(.85rem,1.7vw,1.35rem);background:#263c60;border:1px solid #3c577e;border-radius:.8rem;}
+.slide .detail-card:first-child {grid-column:1/-1;border-left:5px solid #ffc66a;background:#2b4266;}
+.slide .detail-card h2 {margin:0 0 .55em;font-size:clamp(.85rem,1.35vw,1.25rem);font-weight:750;color:#ffc66a;line-height:1.35;}
+.slide .detail-card p {margin:0;color:#f7f9ff;font-size:clamp(.95rem,1.65vw,1.55rem);line-height:1.55;overflow-wrap:anywhere;}
+.slide .detail-card p+p {margin-top:.7em;}
+.slide .detail-card ul {margin:.1em 0 0;padding-left:1.4em;}
+.slide .detail-card li {margin:.35em 0;line-height:1.55;}
+.slide .feature {flex:none;max-width:100%;}
+.slide .description {margin:.25em 0;}
+.slide .source-links {display:flex;gap:.55rem;flex-wrap:wrap;}
+.slide .source-links a {color:#d6eaff;}
+@media screen and (max-width:700px) and (orientation:portrait) {
+ .slide {gap:12px;}
+ .slide h1 {font-size:clamp(22px,5.9vw,29px);margin:3px 0 6px;line-height:1.32;}
+ .slide .detail {display:flex;flex-direction:column;gap:12px;}
+ .slide .detail-card {padding:14px 15px;border-radius:12px;}
+ .slide .detail-card h2 {font-size:14px;letter-spacing:.04em;margin-bottom:7px;}
+ .slide .detail-card p {font-size:clamp(16px,4.25vw,19px);line-height:1.6;}
+ .slide .detail-card li {font-size:clamp(15px,4vw,18px);}
+ .slide .feature {font-size:clamp(17px,4.6vw,23px);}
+ .slide .description {font-size:clamp(16px,4.2vw,19px);}
+ .slide .source-links a {font-size:13px;}
+}
 </style><style>.detail{font-size:clamp(.85rem,1.3vw,1.25rem);line-height:1.55}.detail p{margin:.65em 0}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}.comparison>div{min-width:0;background:#243a5b;padding:.6rem;border-radius:.5rem}.comparison h2{font-size:.9em;margin:.2em 0}.comparison pre{font-size:clamp(.55rem,.83vw,.85rem);white-space:pre-wrap;overflow-wrap:anywhere;max-height:24vh;overflow:auto}.source-links{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.65rem}.source-links a{color:#fff;background:#3564a1;border-radius:.4rem;padding:.35rem .6rem;font-size:clamp(.7rem,1vw,.95rem)}@media(max-width:650px){.comparison{grid-template-columns:1fr}.comparison pre{max-height:13vh}}</style></head><body><main id="deck"><section class="slide" aria-label="スライド1" ><div class="kicker">RPG WORKSHOP / 第4章</div><h1>第4章：敵の頭の中まで管理するんか！</h1><div class="feature ">🟦 敵スライムA　🟦 敵スライムB</div><p class="description">今度は、敵が攻撃相手を覚えるようにする。</p><a class="demo" href="../../examples/chapter4/starter/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><div class="source-links"><a href="../../examples/chapter4/starter/">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/starter/index.html">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/starter/game.js">JavaScriptコードを見る ↗</a></div><aside class="speaker" hidden>3分：第3章の関数注入から続ける。</aside></section>
-<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>詳説 1：第4章：敵の頭の中まで管理するんか！</h1><div class="detail"><p><strong>目的：</strong>標的の記憶にはターンをまたぐ状態が必要です。</p><p>今度は、敵が攻撃相手を覚えるようにする。</p><p>この要求を満たすには、どの責務や条件を変更する必要があるか確認します。実装と実行結果を照合してください。</p></div></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>敵の頭の中まで管理するんか！</h1><div class="detail"><div class="detail-card"><h2>今回の目的</h2><p>標的の記憶にはターンをまたぐ状態が必要です。</p></div><div class="detail-card"><h2>説明</h2><p>今度は、敵が攻撃相手を覚えるようにする。</p></div><div class="detail-card"><h2>確認すること</h2><p>この要求を満たすには、どの責務や条件を変更する必要があるか確認します。実装と実行結果を照合してください。</p></div></div></section>
 <section class="slide" aria-label="スライド2" hidden><div class="kicker">RPG WORKSHOP / 第4章</div><h1>課題1：一度狙った相手を追い続ける</h1><div class="feature ">敵A：最初の標的を追跡
 敵B：最初の標的を追跡</div><p class="description">標的が倒れるまでは変えない。AとBはそれぞれ記憶する。</p><aside class="speaker" hidden>8分：状態をどこに持たせるか自由に考える。</aside></section>
-<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>詳説 2：課題1：一度狙った相手を追い続ける</h1><div class="detail"><p><strong>目的：</strong>Slimeに標的を持たせる方法から共有と独立の追加要求へ進みます。</p><p>標的が倒れるまでは変えない。AとBはそれぞれ記憶する。</p><p>この要求を満たすには、どの責務や条件を変更する必要があるか確認します。実装と実行結果を照合してください。</p></div></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>課題1：一度狙った相手を追い続ける</h1><div class="detail"><div class="detail-card"><h2>今回の目的</h2><p>Slimeに標的を持たせる方法から共有と独立の追加要求へ進みます。</p></div><div class="detail-card"><h2>説明</h2><p>標的が倒れるまでは変えない。AとBはそれぞれ記憶する。</p></div><div class="detail-card"><h2>確認すること</h2><p>この要求を満たすには、どの責務や条件を変更する必要があるか確認します。実装と実行結果を照合してください。</p></div></div></section>
 <section class="slide" aria-label="スライド3" hidden><div class="kicker">RPG WORKSHOP / 第4章</div><h1>課題1：実装例</h1><div class="feature code">this.lockedTarget = null;
 chooseTarget(targets) { /* 標的を記憶 */ }</div><p class="description">Slime自身にlockedTargetを持たせる実装は、この要求では合理的。</p><a class="demo" href="../../examples/chapter4/task1/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><div class="source-links"><a href="../../examples/chapter4/task1/">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task1/index.html">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task1/game.js">JavaScriptコードを見る ↗</a></div><aside class="speaker" hidden>3分：task1のコードと挙動を示す。</aside></section>
-<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>詳説 3：課題1：実装例</h1><div class="detail"><p><strong>目的：</strong>改善例ではTrackingControllerが状態と処理を持ちます。</p><p>Slime自身にlockedTargetを持たせる実装は、この要求では合理的。</p><p>この要求を満たすには、どの責務や条件を変更する必要があるか確認します。実装と実行結果を照合してください。</p></div></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>課題1：実装例</h1><div class="detail"><div class="detail-card"><h2>今回の目的</h2><p>改善例ではTrackingControllerが状態と処理を持ちます。</p></div><div class="detail-card"><h2>説明</h2><p>Slime自身にlockedTargetを持たせる実装は、この要求では合理的。</p></div><div class="detail-card"><h2>確認すること</h2><p>この要求を満たすには、どの責務や条件を変更する必要があるか確認します。実装と実行結果を照合してください。</p></div></div></section>
 <section class="slide" aria-label="スライド4" hidden><div class="kicker">RPG WORKSHOP / 第4章</div><h1>課題2：連携攻撃、さらに敵C！</h1><div class="feature ">敵AとB：同じ標的を共有
 敵C：独立して標的を追跡</div><p class="description">A・Bは連携。Cは独立。状態の共有方法を考えよう。</p><aside class="speaker" hidden>9分：共有と独立の両方が必要。</aside></section>
-<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>詳説 4：課題2：連携攻撃、さらに敵C！</h1><div class="detail"><p><strong>目的：</strong>標的の記憶にはターンをまたぐ状態が必要です。</p><p>A・Bは連携。Cは独立。状態の共有方法を考えよう。</p><p>この要求を満たすには、どの責務や条件を変更する必要があるか確認します。実装と実行結果を照合してください。</p></div></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>課題2：連携攻撃、さらに敵C！</h1><div class="detail"><div class="detail-card"><h2>今回の目的</h2><p>標的の記憶にはターンをまたぐ状態が必要です。</p></div><div class="detail-card"><h2>説明</h2><p>A・Bは連携。Cは独立。状態の共有方法を考えよう。</p></div><div class="detail-card"><h2>確認すること</h2><p>この要求を満たすには、どの責務や条件を変更する必要があるか確認します。実装と実行結果を照合してください。</p></div></div></section>
 <section class="slide" aria-label="スライド5" hidden><div class="kicker">RPG WORKSHOP / 第4章</div><h1>課題2：記憶の持ち主は？</h1><div class="feature code">this.lockedTarget
 this.targetLeader
 
 B.targetLeader = A</div><p class="description">スライム同士の参照で状態共有する方法もある。増えると管理はどうなる？</p><a class="demo" href="../../examples/chapter4/task2/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><div class="source-links"><a href="../../examples/chapter4/task2/">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task2/index.html">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task2/game.js">JavaScriptコードを見る ↗</a></div><aside class="speaker" hidden>4分：task2の実装例を示す。</aside></section>
-<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>詳説 5：課題2：記憶の持ち主は？</h1><div class="detail"><p><strong>目的：</strong>Slimeに標的を持たせる方法から共有と独立の追加要求へ進みます。</p><p>スライム同士の参照で状態共有する方法もある。増えると管理はどうなる？</p><p>この要求を満たすには、どの責務や条件を変更する必要があるか確認します。実装と実行結果を照合してください。</p></div></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>課題2：記憶の持ち主は？</h1><div class="detail"><div class="detail-card"><h2>今回の目的</h2><p>Slimeに標的を持たせる方法から共有と独立の追加要求へ進みます。</p></div><div class="detail-card"><h2>説明</h2><p>スライム同士の参照で状態共有する方法もある。増えると管理はどうなる？</p></div><div class="detail-card"><h2>確認すること</h2><p>この要求を満たすには、どの責務や条件を変更する必要があるか確認します。実装と実行結果を照合してください。</p></div></div></section>
 <section class="slide" aria-label="スライド6" hidden><div class="kicker">RPG WORKSHOP / 第4章</div><h1>改善例：状態を持つ部品へ</h1><div class="feature code">class TrackingController {
   constructor() { this.lockedTarget = null; }
   choose(actor, targets) { /* 標的選択 */ }
 }</div><p class="description">標的の記憶と選択をTrackingControllerにまとめる。</p><a class="demo" href="../../examples/chapter4/solution/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><div class="source-links"><a href="../../examples/chapter4/solution/">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/solution/index.html">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/solution/game.js">JavaScriptコードを見る ↗</a></div><aside class="speaker" hidden>5分：第3章の関数controllerと第4章のchooseメソッドの違いを明示。</aside></section>
-<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>詳説 6：改善例：状態を持つ部品へ</h1><div class="detail"><p><strong>目的：</strong>改善例ではTrackingControllerが状態と処理を持ちます。</p><p>標的の記憶と選択をTrackingControllerにまとめる。</p><p>この要求を満たすには、どの責務や条件を変更する必要があるか確認します。実装と実行結果を照合してください。</p></div></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>改善例：状態を持つ部品へ</h1><div class="detail"><div class="detail-card"><h2>今回の目的</h2><p>改善例ではTrackingControllerが状態と処理を持ちます。</p></div><div class="detail-card"><h2>説明</h2><p>標的の記憶と選択をTrackingControllerにまとめる。</p></div><div class="detail-card"><h2>確認すること</h2><p>この要求を満たすには、どの責務や条件を変更する必要があるか確認します。実装と実行結果を照合してください。</p></div></div></section>
 <section class="slide" aria-label="スライド7" hidden><div class="kicker">RPG WORKSHOP / 第4章</div><h1>共有するか、独立させるか</h1><div class="feature code">const shared = new TrackingController();
 A.controller = shared;
 B.controller = shared;
 C.controller = new TrackingController();</div><p class="description">A/Bは同じインスタンス、Cは別のインスタンス。</p><a class="demo" href="../../examples/chapter4/solution/" target="_blank" rel="noopener">対応するRPGを開く ↗</a><div class="source-links"><a href="../../examples/chapter4/solution/">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/solution/index.html">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/solution/game.js">JavaScriptコードを見る ↗</a></div><aside class="speaker" hidden>4分：共有と独立の実演。</aside></section>
-<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>詳説 7：共有するか、独立させるか</h1><div class="detail"><p><strong>目的：</strong>標的の記憶にはターンをまたぐ状態が必要です。</p><p>A/Bは同じインスタンス、Cは別のインスタンス。</p><p>この要求を満たすには、どの責務や条件を変更する必要があるか確認します。実装と実行結果を照合してください。</p></div></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>共有するか、独立させるか</h1><div class="detail"><div class="detail-card"><h2>今回の目的</h2><p>標的の記憶にはターンをまたぐ状態が必要です。</p></div><div class="detail-card"><h2>説明</h2><p>A/Bは同じインスタンス、Cは別のインスタンス。</p></div><div class="detail-card"><h2>確認すること</h2><p>この要求を満たすには、どの責務や条件を変更する必要があるか確認します。実装と実行結果を照合してください。</p></div></div></section>
 <section class="slide" aria-label="スライド8" hidden><div class="kicker">RPG WORKSHOP / 第4章</div><h1>まとめ：状態と処理の責務をまとめる</h1><div class="feature ">関数の注入も、インスタンスの注入もDIの一例</div><p class="description">クロージャでも実現できる。今回は状態と操作を明示できるインスタンスを推奨。</p><aside class="speaker" hidden>4分：クラスが常に優れるとは言わない。歴史的出典は確認待ち。</aside></section>
-<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>詳説 8：まとめ：状態と処理の責務をまとめる</h1><div class="detail"><p><strong>目的：</strong>Slimeに標的を持たせる方法から共有と独立の追加要求へ進みます。</p><p>クロージャでも実現できる。今回は状態と操作を明示できるインスタンスを推奨。</p><p>この要求を満たすには、どの責務や条件を変更する必要があるか確認します。実装と実行結果を照合してください。</p></div></section>
-<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>開始コード → 課題1：変更前後</h1><div class="detail"><p>実ファイルgame.jsの差分から抜粋。省略部分はソース全文を参照してください。</p><div class="comparison"><div><h2>変更前</h2><pre><code>  }
-  canAttack(target) {
-    return this.team !== target.team;
-  }
-  attack(target) {
-    if (this.canAttack(target) === false) {
-      return `${this.name}は${target.name}を攻撃できない！`;
-    }
-    const damage = 7;
-    target.hp = Math.max(0, target.hp - damage);
-    return `${this.name}の攻撃！ ${target.name}に${damage}ダメージ！`;
-  }
-}
-let characters;
-// 以下省略</code></pre></div><div><h2>変更後</h2><pre><code>    this.lockedTarget = null;
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>まとめ：状態と処理の責務をまとめる</h1><div class="detail"><div class="detail-card"><h2>今回の目的</h2><p>Slimeに標的を持たせる方法から共有と独立の追加要求へ進みます。</p></div><div class="detail-card"><h2>説明</h2><p>クロージャでも実現できる。今回は状態と操作を明示できるインスタンスを推奨。</p></div><div class="detail-card"><h2>確認すること</h2><p>この要求を満たすには、どの責務や条件を変更する必要があるか確認します。実装と実行結果を照合してください。</p></div></div></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>開始コード → 課題1：変更前後</h1><div class="detail"><div class="detail-card"><h2>今回のポイント</h2><p>実ファイルgame.jsの差分から抜粋。省略部分はソース全文を参照してください。</p></div></div><div><h2>変更後</h2><pre><code>    this.lockedTarget = null;
   }
   chooseTarget(targets) {
     if (this.lockedTarget === null || this.lockedTarget.hp &lt;= 0 || targets.includes(this.lockedTarget) === false) {
@@ -71,22 +87,8 @@ let characters;
     if (this.canAttack(target) === false) {
       return `${this.name}は${target.name}を攻撃できない！`;
 // 以下省略</code></pre></div></div><p>標的の記憶にはターンをまたぐ状態が必要です。</p></div><div class="source-links"><a href="../../examples/chapter4/task1/">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task1/index.html">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task1/game.js">JavaScriptコードを見る ↗</a></div></section>
-<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>課題1：改修方法の評価</h1><div class="detail"><p>Slimeに標的を持たせる方法から共有と独立の追加要求へ進みます。</p><p>変更前の実装で満たせる要求と、追加要求で増えた変更箇所を確認してください。模範解答は唯一解ではなく、変更負担を軽減する一案です。</p></div><div class="source-links"><a href="../../examples/chapter4/task1/">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task1/index.html">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task1/game.js">JavaScriptコードを見る ↗</a></div></section>
-<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>課題1 → 課題2：変更前後</h1><div class="detail"><p>実ファイルgame.jsの差分から抜粋。省略部分はソース全文を参照してください。</p><div class="comparison"><div><h2>変更前</h2><pre><code>  }
-  chooseTarget(targets) {
-    if (this.lockedTarget === null || this.lockedTarget.hp &lt;= 0 || targets.includes(this.lockedTarget) === false) {
-      this.lockedTarget = this.controller(this, targets);
-    }
-    return this.lockedTarget;
-  }
-  canAttack(target) {
-    return this.team !== target.team;
-  }
-  attack(target) {
-    if (this.canAttack(target) === false) {
-      return `${this.name}は${target.name}を攻撃できない！`;
-    }
-// 以下省略</code></pre></div><div><h2>変更後</h2><pre><code>    this.targetLeader = null;
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>課題1：改修方法の評価</h1><div class="detail"><div class="detail-card"><h2>今回のポイント</h2><p>Slimeに標的を持たせる方法から共有と独立の追加要求へ進みます。</p></div><div class="detail-card"><h2>説明</h2><p>変更前の実装で満たせる要求と、追加要求で増えた変更箇所を確認してください。模範解答は唯一解ではなく、変更負担を軽減する一案です。</p></div></div><div class="source-links"><a href="../../examples/chapter4/task1/">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task1/index.html">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task1/game.js">JavaScriptコードを見る ↗</a></div></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>課題1 → 課題2：変更前後</h1><div class="detail"><div class="detail-card"><h2>今回のポイント</h2><p>実ファイルgame.jsの差分から抜粋。省略部分はソース全文を参照してください。</p></div></div><div><h2>変更後</h2><pre><code>    this.targetLeader = null;
   }
   chooseTarget(targets) {
     // 連携する相手の記憶領域を直接参照する、課題用の実装例。
@@ -101,22 +103,8 @@ let characters;
   }
   attack(target) {
 // 以下省略</code></pre></div></div><p>Slimeに標的を持たせる方法から共有と独立の追加要求へ進みます。</p></div><div class="source-links"><a href="../../examples/chapter4/task2/">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task2/index.html">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task2/game.js">JavaScriptコードを見る ↗</a></div></section>
-<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>課題2：改修方法の評価</h1><div class="detail"><p>改善例ではTrackingControllerが状態と処理を持ちます。</p><p>変更前の実装で満たせる要求と、追加要求で増えた変更箇所を確認してください。模範解答は唯一解ではなく、変更負担を軽減する一案です。</p></div><div class="source-links"><a href="../../examples/chapter4/task2/">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task2/index.html">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task2/game.js">JavaScriptコードを見る ↗</a></div></section>
-<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>課題2 → 改善例：変更前後</h1><div class="detail"><p>実ファイルgame.jsの差分から抜粋。省略部分はソース全文を参照してください。</p><div class="comparison"><div><h2>変更前</h2><pre><code>    this.lockedTarget = null;
-    this.targetLeader = null;
-  }
-  chooseTarget(targets) {
-    // 連携する相手の記憶領域を直接参照する、課題用の実装例。
-    const owner = this.targetLeader ?? this;
-    if (owner.lockedTarget === null || owner.lockedTarget.hp &lt;= 0 || targets.includes(owner.lockedTarget) === false) {
-      owner.lockedTarget = this.controller(this, targets);
-    }
-    return owner.lockedTarget;
-  }
-  canAttack(target) {
-    return this.team !== target.team;
-  }
-// 以下省略</code></pre></div><div><h2>変更後</h2><pre><code>  }
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>課題2：改修方法の評価</h1><div class="detail"><div class="detail-card"><h2>今回のポイント</h2><p>改善例ではTrackingControllerが状態と処理を持ちます。</p></div><div class="detail-card"><h2>説明</h2><p>変更前の実装で満たせる要求と、追加要求で増えた変更箇所を確認してください。模範解答は唯一解ではなく、変更負担を軽減する一案です。</p></div></div><div class="source-links"><a href="../../examples/chapter4/task2/">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task2/index.html">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task2/game.js">JavaScriptコードを見る ↗</a></div></section>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>課題2 → 改善例：変更前後</h1><div class="detail"><div class="detail-card"><h2>今回のポイント</h2><p>実ファイルgame.jsの差分から抜粋。省略部分はソース全文を参照してください。</p></div></div><div><h2>変更後</h2><pre><code>  }
   canAttack(target) {
     return this.team !== target.team;
   }
@@ -131,7 +119,7 @@ let characters;
 }
 let characters;
 // 以下省略</code></pre></div></div><p>改善例ではTrackingControllerが状態と処理を持ちます。</p></div><div class="source-links"><a href="../../examples/chapter4/solution/">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/solution/index.html">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/solution/game.js">JavaScriptコードを見る ↗</a></div></section>
-<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>改善例：改修方法の評価</h1><div class="detail"><p>標的の記憶にはターンをまたぐ状態が必要です。</p><p>変更前の実装で満たせる要求と、追加要求で増えた変更箇所を確認してください。模範解答は唯一解ではなく、変更負担を軽減する一案です。</p></div><div class="source-links"><a href="../../examples/chapter4/solution/">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/solution/index.html">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/solution/game.js">JavaScriptコードを見る ↗</a></div></section></main><nav class="controls" aria-label="スライド操作"><button id="prev" type="button">← 前へ</button><span id="count" aria-live="polite">1 / 8</span><button id="next" type="button">次へ →</button><button id="notes" type="button" aria-pressed="false">講師メモ</button><button id="full" type="button">全画面</button><a href="../../" class="home-link" style="color:#d5e9ff" aria-label="教材メニューに戻る">⌂ 教材メニュー</a></nav><script>
+<section class="slide" hidden><div class="kicker">RPG WORKSHOP / chapter4</div><h1>改善例：改修方法の評価</h1><div class="detail"><div class="detail-card"><h2>今回のポイント</h2><p>標的の記憶にはターンをまたぐ状態が必要です。</p></div><div class="detail-card"><h2>説明</h2><p>変更前の実装で満たせる要求と、追加要求で増えた変更箇所を確認してください。模範解答は唯一解ではなく、変更負担を軽減する一案です。</p></div></div><div class="source-links"><a href="../../examples/chapter4/solution/">対応するRPGを開く ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/solution/index.html">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/solution/game.js">JavaScriptコードを見る ↗</a></div></section></main><nav class="controls" aria-label="スライド操作"><button id="prev" type="button">← 前へ</button><span id="count" aria-live="polite">1 / 8</span><button id="next" type="button">次へ →</button><button id="notes" type="button" aria-pressed="false">講師メモ</button><button id="full" type="button">全画面</button><a href="../../" class="home-link" style="color:#d5e9ff" aria-label="教材メニューに戻る">⌂ 教材メニュー</a></nav><script>
 (() => {
   'use strict';
   const slides = [...document.querySelectorAll('.slide')];
