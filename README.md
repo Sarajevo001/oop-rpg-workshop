@@ -48,6 +48,14 @@ JavaScriptの基礎を学んだ人向けの、RPGを使ったオブジェクト�
 
 レビュー時は適用対象の規約IDごとに、遵守・違反・対象外・判定不能を根拠とともに記録する。
 
+## プレゼン資料の制作規約
+
+スライドの企画・構成・演出・レビューには、[プレゼン工房 制作ガイドライン（GitHub正本）](https://github.com/Sarajevo001/presentation-workshop/blob/main/guidelines/presentation_workshop_guidelines.md) の最新版を適用する。作業開始時にGitHubから内容と版を確認し、取得できない場合は未確認であることを報告する。旧ChatGPTプロジェクト情報源のv1.0は参照しない。
+
+RPG固有の教材設計、演習の順序、解決策を提示するタイミングは [企画・設計記録](docs/oop_rpg_workshop_plan.md) に従う。特に「課題1で自然な実装 → 課題2で変更負担を体験 → 改善例を提示」の流れを保つ。スライドは発表者の説明の流れで統合・分割し、機械的な「概要＋詳細」の重複を避ける。
+
+**規約の役割分担**：プレゼン工房は発表資料の制作規約、XO-Code Bustersはシステム開発・JavaScript・CI等の開発規約を管理する。開発規約の正式採用版は引き続き [standards-reference.json](standards-reference.json) を正本とし、プレゼン工房の規約更新によって自動変更しない。
+
 ## 旧版の保管
 
 [archive/](archive/) に旧企画（v0.3等）で作成した `exercises/`、`prototype/`、旧監査記録を保存しています。**現行の配布コードではありません。**
