@@ -11,6 +11,23 @@ JavaScriptの基礎を学んだ人向けの、RPGを使ったオブジェクト�
 
 第1〜4章は `starter`（開始）、`task1`（最初の追加要求）、`task2`（次の追加要求）、`solution`（改善例）の順に参照します。第0章は講師用デモです。実ブラウザ検証・配布教材の完成判定はまだ行っていません。
 
+## プレゼンテーションの配置
+
+発表用のHTMLプレゼンテーションは `src/public/presentations/` に配置する。各章は独立したHTMLファイルで、ブラウザから表示する。
+
+| 区分 | HTMLファイル |
+| --- | --- |
+| 第0章 | [chapter0/index.html](src/public/presentations/chapter0/index.html) |
+| 第1章 | [chapter1/index.html](src/public/presentations/chapter1/index.html) |
+| 第2章 | [chapter2/index.html](src/public/presentations/chapter2/index.html) |
+| 第3章 | [chapter3/index.html](src/public/presentations/chapter3/index.html) |
+| 第4章 | [chapter4/index.html](src/public/presentations/chapter4/index.html) |
+| まとめ・種明かし | [summary/index.html](src/public/presentations/summary/index.html) |
+
+- 教材サイトの入口は [src/public/index.html](src/public/index.html)。
+- 章別の発表用HTMLと、演習・実演用コード `src/public/examples/` は別の成果物として管理する。
+- プレゼン資料を編集する際は、対象章のHTMLを確認し、既存のページ送り・講師メモ・参考資料を含む構成を維持する。構成・演出の基準は [企画・設計記録](docs/oop_rpg_workshop_plan.md) とプレゼン工房の制作ガイドラインを参照する。
+
 ## 開発規約
 
 本プロジェクトは、[XO-Code Busters](https://github.com/Sarajevo001/xo-code-busters) で管理する共通システム開発標準、JavaScriptコーディング規約、標準管理規程および関連する運用・CI標準を正式採用する。
