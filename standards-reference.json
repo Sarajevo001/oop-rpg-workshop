@@ -19,8 +19,8 @@
       "id": "common",
       "repository": "Sarajevo001/xo-code-busters",
       "path": "standards/common.md",
-      "version": "1.9.0",
-      "commit": "e2c54ae7e851f238e8a887a7b803601e5e548a9f"
+      "version": "1.10.0",
+      "commit": "99e2fd078c23fb073629d974a9dd7cbdddb92aca"
     },
     {
       "id": "javascript",
