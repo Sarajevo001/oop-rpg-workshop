@@ -9,7 +9,7 @@ JavaScriptの基礎を学んだ人向けの、RPGを使ったオブジェクト�
 - [現行仕様・進捗（教材棚卸し）](docs/materials_audit.md)
 - [総合ロジック検証](docs/integration_validation_report.md)
 
-第1〜4章は `starter`（開始）、`task1`（最初の追加要求）、`task2`（次の追加要求）、`solution`（改善例）の順に参照します。第0章は講師用デモです。実ブラウザ検証・配布教材の完成判定はまだ行っていません。
+第1〜4章は `starter`（開始）、`task1`（最初の追加要求）、`task2`（次の追加要求）、`solution`（改善例）の順に参照します。第0章は講師用デモです。共通教材化・公開検証は2026-11-25完了。講座全体の開催準備は継続中です。公開サイト: https://demo.sarajevo.jp/oop-rpg-workshop/ 。
 
 ## プレゼンテーションの配置
 
@@ -79,10 +79,10 @@ RPG固有の教材設計、演習の順序、解決策を提示するタイミ�
 
 旧版は設計変更の比較・検証記録として保管しており、現行教材と混在させないでください。
 
-## 共通教材形式への移行（2026-11-24、作業ブランチ）
+## 共通教材形式への移行（2026-11-25完了）
 
 - 全18ステージの共通ソースは `demo.html`、`demo.css`、`demo.js`、`demo.details` の4ファイル。教材一覧からブラウザ起動、JSFiddle、ダウンロードを選択できる。
 - `verify_handoffs.py` は `demo.html`、`demo.css`、`demo.js` の章間一致を検査する。`tests/verify_shared_materials.py` は4ファイル構成、参照整合性、旧URL互換用HTMLと重複JSの不存在を検査する。移行元との一致は移行コミット `c7f9d0e1597c52d00bb5147c8c6fb5797206493c` のCIで確認済み。
 - 旧 `game.js` は全18件削除。旧 `index.html` は同一ディレクトリの `demo.html` へ遷移する互換用HTMLに置換し、ゲーム本体を持たない。配布対象は引き続き4ファイルのみ。過去の作業記録に記載した旧ファイル名は履歴として扱う。
-- 本変更は `feature-jsfiddle-chapter1-starter` 上の作業。公開用のJSFiddleリンクとGitHubソースリンクは `main` を参照するよう切り替え済み。mainへの統合とVPS公開は別工程であり、統合前は公開用リンクの新教材を開けない。
-- 実ブラウザ・公開前検証の結果と未確認事項は `docs/shared_materials_release_validation_2026-11-24.md`（READMEからの相対パス表記）を参照。
+- 作業ブランチからmainへ統合し、VPSへ配備済み。公開用のJSFiddleリンクとGitHubソースリンクは `main` を参照する。公開版コードSHAは `3b56de84c6c806a62b985fec9ec33b8518fd30df`。
+- 自動ブラウザ50ケース、既存84アサーション、章間9組、公開99ファイルのバイト一致、公開環境の代表操作3項目が合格。共通教材化は2026-11-25完了。実環境での確認範囲・残る開催準備は [公開・検証記録](docs/shared_materials_release_validation_2026-11-24.md) を参照。
