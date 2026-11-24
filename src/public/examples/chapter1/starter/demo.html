@@ -1,0 +1,15 @@
+<h1>⚔️ スライムRPG</h1>
+<p>「1ターン進める」を押すと、勇者と敵スライムが順番に攻撃します。</p>
+<div class="battle"></div>
+<p><button id="next-turn">1ターン進める</button> <button id="reset">最初から</button></p>
+<h2>戦闘ログ</h2>
+<div id="log" role="log" aria-live="polite"></div>
+<script>
+  if (location.protocol === 'file:' ||
+      location.hostname === 'localhost' ||
+      location.hostname === '127.0.0.1' ||
+      location.hostname === 'demo.sarajevo.jp') {
+    document.write('<link rel="stylesheet" href="demo.css">');
+    document.write('<script src="demo.js"><\/script>');
+  }
+</script>
