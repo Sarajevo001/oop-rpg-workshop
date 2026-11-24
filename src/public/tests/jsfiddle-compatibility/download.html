@@ -9,6 +9,7 @@
   <h1>一括ダウンロード検証</h1>
   <button id="download-all" type="button">4ファイルをダウンロード</button>
   <p>複数ファイルのダウンロード許可を求められた場合は、許可してください。</p>
+  <p id="status" role="status"></p>
   <h2>個別ダウンロード</h2>
   <ul>
     <li><a href="demo.html" download="demo.html">demo.html</a></li>
@@ -17,14 +18,66 @@
     <li><a href="demo.details" download="demo.details">demo.details</a></li>
   </ul>
   <script>
-    document.querySelector('#download-all').addEventListener('click', () => {
-      for (const file of ['demo.html', 'demo.css', 'demo.js', 'demo.details']) {
-        const link = document.createElement('a');
-        link.href = file;
-        link.download = file;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
+    const files = ['demo.html', 'demo.css', 'demo.js', 'demo.details'];
+    const button = document.querySelector('#download-all');
+    const status = document.querySelector('#status');
+    const supportsPicker = typeof window.showDirectoryPicker === 'function';
+
+    if (supportsPicker) {
+      button.textContent = '保存先フォルダを選んでダウンロード';
+    }
+
+    button.addEventListener('click', async () => {
+      status.textContent = '';
+      if (!supportsPicker) {
+        for (const file of files) {
+          const link = document.createElement('a');
+          link.href = file;
+          link.download = file;
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+        }
+        status.textContent = 'ダウンロード履歴で4ファイルを確認してください。';
+        return;
+      }
+
+      button.disabled = true;
+      let saved = 0;
+      try {
+        const directory = await window.showDirectoryPicker({ mode: 'readwrite' });
+        const existing = [];
+        for (const file of files) {
+          try {
+            await directory.getFileHandle(file);
+            existing.push(file);
+          } catch (error) {
+            if (error.name !== 'NotFoundError') throw error;
+          }
+        }
+        if (existing.length && !window.confirm('次のファイルを上書きしますか？\n' + existing.join('\n'))) {
+          status.textContent = '保存を中止しました。';
+          return;
+        }
+        const blobs = await Promise.all(files.map(async (file) => {
+          const response = await fetch(file);
+          if (!response.ok) throw new Error('取得失敗: ' + file);
+          return response.blob();
+        }));
+        for (let i = 0; i < files.length; i++) {
+          const handle = await directory.getFileHandle(files[i], { create: true });
+          const writable = await handle.createWritable();
+          await writable.write(blobs[i]);
+          await writable.close();
+          saved++;
+        }
+        status.textContent = saved + 'ファイルの保存が完了しました。';
+      } catch (error) {
+        status.textContent = error.name === 'AbortError' && saved === 0
+          ? '処理を中止しました。'
+          : '保存処理が完了しませんでした（保存完了: ' + saved + '件）。' + error.message;
+      } finally {
+        button.disabled = false;
       }
     });
   </script>
