@@ -29,3 +29,8 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Test actual Chromium rendering and file saving
         run: node tests/browser-materials.cjs
+      - name: One-time external JSFiddle diagnostic
+        if: github.ref_name == 'feature-jsfiddle-chapter1-starter'
+        continue-on-error: true
+        timeout-minutes: 3
+        run: node tests/check-live-jsfiddle.cjs feature-jsfiddle-chapter1-starter
