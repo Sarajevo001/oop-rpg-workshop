@@ -7,7 +7,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-REQUIRED = frozenset(("Validate tested branch against main", "Verify chapter handoffs"))
+REQUIRED = frozenset(("Validate tested branch against main", "Verify chapter handoffs", "Validate RPG target contracts"))
 
 
 def evaluate(runs, sha, required=REQUIRED):

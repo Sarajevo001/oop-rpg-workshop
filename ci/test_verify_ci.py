@@ -4,7 +4,7 @@ from verify_ci import evaluate
 
 SHA = "a" * 40
 OTHER = "b" * 40
-NAMES = ("Validate tested branch against main", "Verify chapter handoffs")
+NAMES = ("Validate tested branch against main", "Verify chapter handoffs", "Validate RPG target contracts")
 
 
 def run(name, sha=SHA, status="completed", conclusion="success", event="push", id=1):
@@ -18,14 +18,17 @@ class EvidenceTests(unittest.TestCase):
         self.assertTrue(evaluate([run(n) for n in NAMES], SHA)[0])
 
     def test_missing(self):
-        self.assertFalse(evaluate([run(NAMES[0])], SHA)[0])
+        for missing in NAMES:
+            self.assertFalse(evaluate([run(n) for n in NAMES if n != missing], SHA)[0])
 
     def test_wrong_sha(self):
         self.assertFalse(evaluate([run(n, OTHER) for n in NAMES], SHA)[0])
 
     def test_failure_and_pending(self):
         for status, conclusion in (("completed", "failure"), ("in_progress", None)):
-            self.assertFalse(evaluate([run(NAMES[0]), run(NAMES[1], status=status, conclusion=conclusion)], SHA)[0])
+            for failed in NAMES:
+                runs = [run(n, status=status, conclusion=conclusion) if n == failed else run(n) for n in NAMES]
+                self.assertFalse(evaluate(runs, SHA)[0])
 
     def test_pull_request_is_not_push(self):
         self.assertFalse(evaluate([run(n, event="pull_request") for n in NAMES], SHA)[0])
