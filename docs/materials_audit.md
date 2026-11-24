@@ -8,7 +8,7 @@
 - 第1章：類似したスライムのコピー実装から共通 `Slime` クラスへの改善。第2章：`team` による攻撃許可、改善例で単一 `characters` 配列と `filter()` を用いた発展デモ。
 - 第3章：`task1-starter` が課題1の受講者配布開始点。改善例では各キャラクターに操作関数を `controller` として注入し、単一 `characters` 配列で管理。
 - 第4章：課題1は `Slime.lockedTarget`、課題2はA/Bの `targetLeader` 連携とCの独立追跡。改善例は **`TrackingController`** を採用し、A/Bが同一インスタンスを共有、Cは別インスタンスを保持する。旧 `AlternatingTargetController`・中央Map方式は非現行。
-- 章間の現行ファイル比較（2026-11-03再確認）：第1→2、第2→3、第3→4の各 `solution/game.js` と次章 `starter/game.js` は一致。**HTMLは3組ともページタイトルのみ異なり、それ以外の内容は一致**。第2→3に存在した `id="actors"` の欠落は2026-11-03に修正済み。`verify_handoffs.py` でJS完全一致とHTMLのタイトル以外の完全一致を検査する。
+- 章間の現行ファイル比較（2026-11-24）：第1→2、第2→3、第3→4の `demo.html`・`demo.css`・`demo.js` は各3組完全一致。`verify_handoffs.py` で検査する。移行前のHTMLタイトル差は履歴。
 
 ## 検証の現在地
 
@@ -29,7 +29,7 @@
 
 ## 再発防止（2026-11-03）
 
-- `verify_handoffs.py` を追加。章間の `game.js` は完全一致、`index.html` は `<title>` の内容以外完全一致を要求する。未許可の差分があれば終了コード1で失敗する。
+- 2026-11-03に `verify_handoffs.py` を追加（当時は `game.js` と `index.html` を対象）。2026-11-24に共通3ファイルの完全一致検査へ移行。差分があれば終了コード1で失敗する。
 - `.github/workflows/verify-handoffs.yml` でpush・プルリクエスト時に検査する。導入直後のCI実行結果は別途確認する。
 - `id="actors"` 欠落の導入コミット・作成者・目的は未特定。既知のタイトル変更コミットより前から欠落していた。推測による責任者認定は行わない。
 
@@ -41,6 +41,6 @@
 ## 共通教材形式への移行（2026-11-24、作業ブランチ）
 
 - 全18ステージの共通ソースは `demo.html`、`demo.css`、`demo.js`、`demo.details` の4ファイル。教材一覧からブラウザ起動、JSFiddle、ダウンロードを選択できる。
-- `verify_handoffs.py` は `demo.html`、`demo.css`、`demo.js` の章間一致を検査する。`tests/verify_shared_materials.py` は移行元との一致と参照整合性を検査する。
-- 旧 `index.html` と `game.js` は回帰比較・旧URL確認のため一時保持。検証完了後に整理する。過去の作業記録に記載した旧ファイル名は履歴として扱う。
+- `verify_handoffs.py` は `demo.html`、`demo.css`、`demo.js` の章間一致を検査する。`tests/verify_shared_materials.py` は4ファイル構成、参照整合性、旧URL互換用HTMLと重複JSの不存在を検査する。移行元との一致は移行コミット `c7f9d0e1597c52d00bb5147c8c6fb5797206493c` のCIで確認済み。
+- 旧 `game.js` は全18件削除。旧 `index.html` は同一ディレクトリの `demo.html` へ遷移する互換用HTMLに置換し、ゲーム本体を持たない。配布対象は引き続き4ファイルのみ。過去の作業記録に記載した旧ファイル名は履歴として扱う。
 - 本変更は `feature-jsfiddle-chapter1-starter` 上の作業であり、mainへの統合と公開は別工程。公開時はJSFiddleおよびGitHub参照ブランチを公開対象に合わせる。
