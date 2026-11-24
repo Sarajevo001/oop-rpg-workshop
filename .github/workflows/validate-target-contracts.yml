@@ -12,6 +12,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Verify shared stage files and material links
+        run: python3 tests/verify_shared_materials.py
       - name: Syntax check all JavaScript examples
         shell: bash
         run: |

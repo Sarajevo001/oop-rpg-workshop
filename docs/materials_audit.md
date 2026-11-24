@@ -37,3 +37,10 @@
 
 - [総合ロジック検証（2026-10-24）](integration_validation_report.md)、[リファクタリング記録（2026-10-24）](refactor_2026-10-24.md)、[整合性確認（2026-10-28）](current_materials_verification_2026-10-28.md) は作業時点の証跡。過去の「HTML/JS完全一致」「敵個別Map」「交互ターゲット」等は現行仕様として採用しない。
 - [公開教材の検証（2026-11-03）](deployment_validation_2026-11-03.md) はその時点の確認範囲を示す。以後のHTMLタイトル変更は当該記録には遡及適用しない。
+
+## 共通教材形式への移行（2026-11-24、作業ブランチ）
+
+- 全18ステージの共通ソースは `demo.html`、`demo.css`、`demo.js`、`demo.details` の4ファイル。教材一覧からブラウザ起動、JSFiddle、ダウンロードを選択できる。
+- `verify_handoffs.py` は `demo.html`、`demo.css`、`demo.js` の章間一致を検査する。`tests/verify_shared_materials.py` は移行元との一致と参照整合性を検査する。
+- 旧 `index.html` と `game.js` は回帰比較・旧URL確認のため一時保持。検証完了後に整理する。過去の作業記録に記載した旧ファイル名は履歴として扱う。
+- 本変更は `feature-jsfiddle-chapter1-starter` 上の作業であり、mainへの統合と公開は別工程。公開時はJSFiddleおよびGitHub参照ブランチを公開対象に合わせる。

@@ -78,3 +78,10 @@ RPG固有の教材設計、演習の順序、解決策を提示するタイミ�
 [archive/](archive/) に旧企画（v0.3等）で作成した `exercises/`、`prototype/`、旧監査記録を保存しています。**現行の配布コードではありません。**
 
 旧版は設計変更の比較・検証記録として保管しており、現行教材と混在させないでください。
+
+## 共通教材形式への移行（2026-11-24、作業ブランチ）
+
+- 全18ステージの共通ソースは `demo.html`、`demo.css`、`demo.js`、`demo.details` の4ファイル。教材一覧からブラウザ起動、JSFiddle、ダウンロードを選択できる。
+- `verify_handoffs.py` は `demo.html`、`demo.css`、`demo.js` の章間一致を検査する。`tests/verify_shared_materials.py` は移行元との一致と参照整合性を検査する。
+- 旧 `index.html` と `game.js` は回帰比較・旧URL確認のため一時保持。検証完了後に整理する。過去の作業記録に記載した旧ファイル名は履歴として扱う。
+- 本変更は `feature-jsfiddle-chapter1-starter` 上の作業であり、mainへの統合と公開は別工程。公開時はJSFiddleおよびGitHub参照ブランチを公開対象に合わせる。
