@@ -84,4 +84,5 @@ RPG固有の教材設計、演習の順序、解決策を提示するタイミ�
 - 全18ステージの共通ソースは `demo.html`、`demo.css`、`demo.js`、`demo.details` の4ファイル。教材一覧からブラウザ起動、JSFiddle、ダウンロードを選択できる。
 - `verify_handoffs.py` は `demo.html`、`demo.css`、`demo.js` の章間一致を検査する。`tests/verify_shared_materials.py` は4ファイル構成、参照整合性、旧URL互換用HTMLと重複JSの不存在を検査する。移行元との一致は移行コミット `c7f9d0e1597c52d00bb5147c8c6fb5797206493c` のCIで確認済み。
 - 旧 `game.js` は全18件削除。旧 `index.html` は同一ディレクトリの `demo.html` へ遷移する互換用HTMLに置換し、ゲーム本体を持たない。配布対象は引き続き4ファイルのみ。過去の作業記録に記載した旧ファイル名は履歴として扱う。
-- 本変更は `feature-jsfiddle-chapter1-starter` 上の作業であり、mainへの統合と公開は別工程。公開時はJSFiddleおよびGitHub参照ブランチを公開対象に合わせる。
+- 本変更は `feature-jsfiddle-chapter1-starter` 上の作業。公開用のJSFiddleリンクとGitHubソースリンクは `main` を参照するよう切り替え済み。mainへの統合とVPS公開は別工程であり、統合前は公開用リンクの新教材を開けない。
+- 実ブラウザ・公開前検証の結果と未確認事項は `docs/shared_materials_release_validation_2026-11-24.md`（READMEからの相対パス表記）を参照。
