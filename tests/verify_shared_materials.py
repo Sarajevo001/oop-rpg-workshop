@@ -27,7 +27,7 @@ STAGES = (
     "chapter4/solution",
 )
 FILES = ("demo.html", "demo.css", "demo.js", "demo.details")
-BRANCH = "feature-jsfiddle-chapter1-starter"
+BRANCH = "main"
 FIDDLE = "https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/" + BRANCH + "/src/public/examples/"
 
 
@@ -82,6 +82,13 @@ def main() -> int:
     for source in PUBLIC.rglob("*"):
         if source.is_file() and source.suffix in (".html", ".js", ".css", ".details"):
             content = source.read_text(encoding="utf-8")
+            if source.suffix == ".html":
+                for href in re.findall(r'href="([^"]+)"', content):
+                    if href.startswith("https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/"):
+                        check(href in {FIDDLE + stage + "/" for stage in STAGES}, f"{source.relative_to(ROOT)}: invalid public JSFiddle link {href}")
+                    if href.startswith("https://github.com/Sarajevo001/oop-rpg-workshop/blob/") and "/src/public/examples/" in href:
+                        match = re.fullmatch(r"https://github\.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/(chapter\d/[\w-]+)/(demo\.(?:html|css|js|details))", href)
+                        check(match is not None and match.group(1) in STAGES and (EXAMPLES / match.group(1) / match.group(2)).is_file(), f"{source.relative_to(ROOT)}: invalid public source link {href}")
             check("game.js" not in content, f"{source.relative_to(ROOT)}: obsolete JS reference")
             check(re.search(r'examples/chapter\d/[\w-]+/index\.html', content) is None, f"{source.relative_to(ROOT)}: obsolete HTML reference")
 
