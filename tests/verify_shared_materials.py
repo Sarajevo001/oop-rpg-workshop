@@ -1,4 +1,4 @@
-"""Validate the shared RPG material migration against its retained baseline."""
+"""Validate the shared RPG materials and legacy URL compatibility."""
 from pathlib import Path
 import re
 import sys
@@ -31,8 +31,7 @@ BRANCH = "feature-jsfiddle-chapter1-starter"
 FIDDLE = "https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/" + BRANCH + "/src/public/examples/"
 
 
-def normalize(source: str) -> str:
-    return "\n".join(line.lstrip() for line in source.strip().splitlines())
+LEGACY_REDIRECT = "<!doctype html>\n<html lang=\"ja\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta http-equiv=\"refresh\" content=\"0; url=demo.html\">\n  <title>教材を開く</title>\n</head>\n<body>\n  <p><a href=\"demo.html\">教材を開く</a></p>\n</body>\n</html>\n"
 
 
 def main() -> int:
@@ -56,16 +55,15 @@ def main() -> int:
         try:
             for name in FILES:
                 check((directory / name).is_file(), f"{stage}: {name} missing")
-            old = (directory / "index.html").read_text(encoding="utf-8")
             html = (directory / "demo.html").read_text(encoding="utf-8")
             css = (directory / "demo.css").read_text(encoding="utf-8")
             details = (directory / "demo.details").read_text(encoding="utf-8")
-            body = re.search(r"<body>([\s\S]*?)</body>", old)
-            style = re.search(r"<style>([\s\S]*?)</style>", old)
-            check(body is not None and normalize(re.sub(r'<script src="game\.js"></script>', "", body.group(1))) == normalize(html.replace(loader.group(0), "")), f"{stage}: HTML body differs")
-            check(style is not None and normalize(style.group(1)) == normalize(css), f"{stage}: CSS differs")
+            check(html.strip() != loader.group(0), f"{stage}: HTML body missing")
+            check(bool(css.strip()), f"{stage}: CSS empty")
+            check((directory / "demo.js").stat().st_size > 0, f"{stage}: JS empty")
+            check(not (directory / "game.js").exists(), f"{stage}: duplicate legacy JS")
+            check((directory / "index.html").read_text(encoding="utf-8") == LEGACY_REDIRECT, f"{stage}: legacy URL redirect differs")
             check(html.count(loader.group(0)) == 1, f"{stage}: loader differs")
-            check((directory / "demo.js").read_bytes() == (directory / "game.js").read_bytes(), f"{stage}: JS differs")
             check(re.fullmatch(r"/\*\n---\nname: [^\n]+\ndescription: [^\n]+\n\.\.\.\n\*/\n?", details) is not None, f"{stage}: metadata invalid")
             for href in (f"./examples/{stage}/demo.html", FIDDLE + stage + "/", f"./examples/download.html?stage={stage}"):
                 check(index.count(f'href="{href}"') == 1, f"{stage}: index link missing or duplicated: {href}")
@@ -81,11 +79,17 @@ def main() -> int:
             check(FIDDLE + stage + "/" in presentation, f"chapter{chapter}: missing JSFiddle link {stage}")
             check(f"../../examples/download.html?stage={stage}" in presentation, f"chapter{chapter}: missing download link {stage}")
 
+    for source in PUBLIC.rglob("*"):
+        if source.is_file() and source.suffix in (".html", ".js", ".css", ".details"):
+            content = source.read_text(encoding="utf-8")
+            check("game.js" not in content, f"{source.relative_to(ROOT)}: obsolete JS reference")
+            check(re.search(r'examples/chapter\d/[\w-]+/index\.html', content) is None, f"{source.relative_to(ROOT)}: obsolete HTML reference")
+
     if failures:
         for failure in failures:
             print("FAIL:", failure)
         return 1
-    print("PASS: 18 stages, 72 shared files, baseline equality, download allowlist and material links")
+    print("PASS: 18 stages, 72 shared files, 18 legacy redirects, no duplicate JS, download allowlist and material links")
     return 0
 
 
