@@ -4,7 +4,28 @@ const button = document.querySelector('#download-all');
 const status = document.querySelector('#status');
 const supportsPicker = typeof window.showDirectoryPicker === 'function';
 
-if (stage !== 'chapter1/starter') {
+const supportedStages = [
+  'chapter0/demo',
+  'chapter1/starter',
+  'chapter1/task1',
+  'chapter1/task2',
+  'chapter1/solution',
+  'chapter2/starter',
+  'chapter2/task1',
+  'chapter2/task2',
+  'chapter2/solution',
+  'chapter3/starter',
+  'chapter3/task1-starter',
+  'chapter3/task1',
+  'chapter3/task2',
+  'chapter3/solution',
+  'chapter4/starter',
+  'chapter4/task1',
+  'chapter4/task2',
+  'chapter4/solution'
+];
+
+if (supportedStages.includes(stage) === false) {
   button.disabled = true;
   status.textContent = '対応していない教材です。';
 } else {
