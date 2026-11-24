@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>一括ダウンロード検証</title>
+</head>
+<body>
+  <h1>一括ダウンロード検証</h1>
+  <button id="download-all" type="button">4ファイルをダウンロード</button>
+  <p>複数ファイルのダウンロード許可を求められた場合は、許可してください。</p>
+  <h2>個別ダウンロード</h2>
+  <ul>
+    <li><a href="demo.html" download="demo.html">demo.html</a></li>
+    <li><a href="demo.css" download="demo.css">demo.css</a></li>
+    <li><a href="demo.js" download="demo.js">demo.js</a></li>
+    <li><a href="demo.details" download="demo.details">demo.details</a></li>
+  </ul>
+  <script>
+    document.querySelector('#download-all').addEventListener('click', () => {
+      for (const file of ['demo.html', 'demo.css', 'demo.js', 'demo.details']) {
+        const link = document.createElement('a');
+        link.href = file;
+        link.download = file;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      }
+    });
+  </script>
+</body>
+</html>
