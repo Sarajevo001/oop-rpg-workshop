@@ -1,0 +1,10 @@
+<h1>動作確認</h1>
+<p id="result">JavaScript未実行</p>
+<script>
+  if (location.protocol === 'file:' ||
+      location.hostname === 'localhost' ||
+      location.hostname === '127.0.0.1') {
+    document.write('<link rel="stylesheet" href="demo.css">');
+    document.write('<script src="demo.js"><\/script>');
+  }
+</script>
