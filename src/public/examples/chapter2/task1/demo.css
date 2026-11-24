@@ -1,0 +1,4 @@
+body{font-family:system-ui,sans-serif;max-width:800px;margin:2rem auto;padding:0 1rem;background:#f8fafc;color:#172033}
+.battle{display:flex;gap:1rem}.character{flex:1;padding:1rem;border:1px solid #ccd4df;background:white;border-radius:12px;text-align:center}
+.sprite{font-size:3rem}button{padding:.8rem;border:0;border-radius:8px;background:#245ac2;color:white;cursor:pointer}button:disabled{background:#aaa}
+#log{background:white;padding:1rem;border-radius:12px;min-height:4rem}#log p{margin:.25rem}
