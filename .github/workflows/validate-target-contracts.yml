@@ -1,9 +1,6 @@
 name: Validate RPG target contracts
 on:
   push:
-    branches:
-      - review/standards-1-6-0-20261115
-      - main
   pull_request:
     branches:
       - main

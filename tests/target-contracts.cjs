@@ -38,7 +38,7 @@ function load(file) {
 let cases = 0;
 for (const chapter of ['chapter3', 'chapter4']) {
   for (const stage of (chapter === 'chapter3' ? ['task1', 'task2', 'solution'] : ['starter', 'task1', 'task2', 'solution'])) {
-    const file = path.join('src/public/examples', chapter, stage, 'game.js');
+    const file = path.join('src/public/examples', chapter, stage, 'demo.js');
     const { context, elements } = load(file);
     const run = source => vm.runInContext(source, context);
     assert.equal(run('enemies().length > 0'), true, file);
