@@ -31,10 +31,19 @@ class Slime {
   canAttack(target) {
     // 既存のクラス判定に、特定の個体を区別する例外が増える。
     if (this === friendlySlime) {
-      return target === enemySlime;
+      if (target === enemySlime) {
+        return true;
+      }
+      return false;
     }
     if (this === enemySlime) {
-      return target instanceof Hero || target instanceof Wizard;
+      if (target instanceof Hero) {
+        return true;
+      }
+      if (target instanceof Wizard) {
+        return true;
+      }
+      return false;
     }
     return false;
   }

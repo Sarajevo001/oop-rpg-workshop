@@ -32,7 +32,10 @@ class Slime {
     this.team = team;
   }
   canAttack(target) {
-    return this.team !== target.team;
+    if (this.team !== target.team) {
+      return true;
+    }
+    return false;
   }
   attack(target) {
     if (this.canAttack(target) === false) {

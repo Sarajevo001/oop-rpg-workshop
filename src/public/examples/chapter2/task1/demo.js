@@ -17,7 +17,10 @@ class Slime {
     this.sprite = sprite;
   }
   canAttack(target) {
-    return target instanceof Hero;
+    if (target instanceof Hero) {
+      return true;
+    }
+    return false;
   }
   attack(target) {
     if (this.canAttack(target) === false) {
