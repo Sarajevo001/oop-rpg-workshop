@@ -248,6 +248,37 @@ async function chapterStickers(browser, origin, viewport, chapter) {
         assert.notEqual(slideBounds, null);
         assert.ok(bounds.x >= slideBounds.x && bounds.x + bounds.width <= slideBounds.x + slideBounds.width, 'sticker horizontal bounds');
         assert.ok(bounds.y >= slideBounds.y && bounds.y + bounds.height <= slideBounds.y + slideBounds.height, 'sticker vertical bounds');
+        if (chapter.number === 3 && index === 2) {
+          const primary = current.locator('.exercise-start a');
+          const reference = current.locator('.source-links a');
+          const stage = 'chapter3/task1-starter';
+          const github = 'https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/';
+          const expectedLinks = [
+            '../../examples/' + stage + '/demo.html',
+            'https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/' + stage + '/',
+            '../../examples/download.html?stage=' + stage,
+            github + stage + '/demo.html',
+            github + stage + '/demo.js'
+          ];
+          assert.equal(await primary.count(), 3);
+          assert.equal(await reference.count(), 2);
+          assert.deepEqual(await current.locator('.exercise-start a, .source-links a').evaluateAll(links =>
+            links.map(link => link.getAttribute('href'))), expectedLinks);
+          assert.equal(await current.locator('.source-links-label').innerText(), 'コードを読む（参照用）');
+          assert.deepEqual(await primary.allTextContents(), ['動作確認：RPGを開く ↗', 'JSFiddleで編集 ↗', 'ローカル用：4ファイルを保存 ↗']);
+          for (const link of await current.locator('.exercise-start a, .source-links a').all()) {
+            await link.scrollIntoViewIfNeeded();
+            await link.click({ trial: true });
+          }
+          const size = await current.evaluate(element => ({
+            width: element.clientWidth,
+            scrollWidth: element.scrollWidth,
+            height: element.clientHeight,
+            scrollHeight: element.scrollHeight
+          }));
+          assert.ok(size.scrollWidth <= size.width + 1, 'exercise link horizontal overflow');
+          console.log('PASS chapter3 exercise links', viewport.width, viewport.height, JSON.stringify(size));
+        }
         if (chapter.rolePages.includes(index) === true) {
           const heading = chapter.headings[chapter.rolePages.indexOf(index)];
           assert.equal(await current.locator('h1').innerText(), heading);
