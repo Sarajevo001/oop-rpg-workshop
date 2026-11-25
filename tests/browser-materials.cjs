@@ -6,6 +6,7 @@ const http = require('node:http');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const { chromium } = require('playwright');
+const { execFileSync } = require('node:child_process');
 
 const root = path.resolve(__dirname, '../src/public');
 const stages = ['chapter0/demo', ...[1, 2, 3, 4].flatMap(chapter =>
@@ -287,6 +288,174 @@ async function chapterStickers(browser, origin, viewport, chapter) {
   }
 }
 
+async function snapshotGame(page) {
+  return page.evaluate(() => ({
+    text: document.body.innerText,
+    controls: Array.from(document.querySelectorAll('input, select, button')).map(element => ({
+      id: element.id,
+      value: element.value,
+      checked: element.checked,
+      disabled: element.disabled,
+      options: Array.from(element.options || []).map(option => ({
+        value: option.value,
+        text: option.textContent
+      }))
+    }))
+  }));
+}
+
+async function compareGameBehavior(browser, origin, stage, baseline) {
+  const original = execFileSync('git', ['show', baseline + ':src/public/examples/' + stage + '/demo.js'], {
+    cwd: path.resolve(root, '../..'),
+    encoding: 'utf8'
+  });
+  const pages = [await browser.newPage(), await browser.newPage()];
+  const errors = [];
+  try {
+    for (const page of pages) {
+      page.on('pageerror', error => errors.push(error.message));
+    }
+    await pages[0].route('**/demo.js', route => route.fulfill({
+      contentType: 'text/javascript; charset=utf-8',
+      body: original
+    }));
+    const url = origin + '/examples/' + stage + '/demo.html';
+    for (const page of pages) {
+      await page.goto(url, { waitUntil: 'load' });
+    }
+    const compare = async label => {
+      assert.deepEqual(await snapshotGame(pages[1]), await snapshotGame(pages[0]), stage + ' ' + label);
+    };
+    await compare('initial');
+    if (stage !== 'chapter0/demo') {
+      for (let turn = 1; turn <= 15; turn++) {
+        if (await pages[0].locator('#next-turn').isDisabled()) {
+          break;
+        }
+        for (const page of pages) {
+          const select = page.locator('#friend-target');
+          if (await select.count() && await select.isEnabled()) {
+            const values = await select.locator('option').evaluateAll(options => options.map(option => option.value));
+            if (values.length > 0) {
+              await select.selectOption(values[values.length - 1]);
+            }
+          }
+          const auto = page.locator('#auto-friend');
+          if (await auto.count() && await auto.isVisible() && await auto.isEnabled()) {
+            await auto.setChecked(turn % 2 === 0);
+          }
+        }
+        await compare('input ' + turn);
+        for (const page of pages) {
+          await page.locator('#next-turn').click();
+        }
+        await compare('turn ' + turn);
+      }
+      assert.equal(await pages[0].locator('#next-turn').isDisabled(), true, stage + ' baseline did not finish in 15 turns');
+      for (const page of pages) {
+        await page.locator('#reset').click();
+      }
+      await compare('reset');
+    }
+    assert.deepEqual(errors, [], 'baseline/current uncaught JavaScript errors');
+  } finally {
+    for (const page of pages) {
+      await page.close();
+    }
+  }
+}
+
+async function checkControlBranches(browser, origin, stage) {
+  const page = await browser.newPage();
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  try {
+    for (const automatic of [false, true]) {
+      await page.goto(origin + '/examples/' + stage + '/demo.html');
+      await page.evaluate(() => {
+        characters.find(character => character.name === '敵スライムA').hp = 1;
+      });
+      await page.locator('#friend-target').selectOption({ label: '敵スライムB' });
+      await page.locator('#auto-friend').setChecked(automatic);
+      await page.locator('#next-turn').click();
+      const target = automatic === true ? '敵スライムA' : '敵スライムB';
+      assert.ok((await page.locator('#log').innerText()).includes('仲間スライムの攻撃！ ' + target + 'に7ダメージ！'), stage + ' control branch ' + automatic);
+    }
+    assert.deepEqual(errors, []);
+  } finally {
+    await page.close();
+  }
+}
+
+async function checkStarterSelection(browser, origin) {
+  const page = await browser.newPage();
+  try {
+    await page.goto(origin + '/examples/chapter3/task1-starter/demo.html');
+    const result = await page.evaluate(() => {
+      const actor = allies()[0];
+      const targets = enemies();
+      const select = document.getElementById('friend-target');
+      select.value = String(characters.indexOf(targets[0]));
+      const valid = playerControl(actor, targets) === targets[0];
+      select.value = '';
+      const empty = playerControl(actor, targets) === null;
+      const option = document.createElement('option');
+      option.value = '9999';
+      select.appendChild(option);
+      select.value = '9999';
+      const invalid = playerControl(actor, targets) === null;
+      select.value = String(characters.indexOf(targets[0]));
+      return [valid, empty, invalid, playerControl(actor, []) === null, cpuControl(actor, []) === null];
+    });
+    assert.deepEqual(result, [true, true, true, true, true]);
+  } finally {
+    await page.close();
+  }
+}
+
+async function checkExcerptLayout(browser, origin, deck, viewport) {
+  const page = await browser.newPage({ viewport });
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  try {
+    await page.route('**/*', route => {
+      if (route.request().url().startsWith(origin + '/') === true) {
+        return route.continue();
+      }
+      return route.abort();
+    });
+    await page.goto(origin + '/presentations/' + deck + '/index.html');
+    const count = await page.locator('.slide').count();
+    for (let index = 1; index <= count; index++) {
+      const current = page.locator('.slide:visible');
+      assert.equal(await current.count(), 1);
+      assert.equal(await page.locator('#count').innerText(), index + ' / ' + count);
+      for (const code of await current.locator('[data-code-source], pre code').all()) {
+        assert.ok(await code.isVisible());
+        await code.scrollIntoViewIfNeeded();
+        const box = await code.boundingBox();
+        assert.notEqual(box, null);
+        assert.ok(box.width > 0 && box.height > 0);
+      }
+      if (await current.locator('[data-code-source], pre code').count() > 0) {
+        const size = await current.evaluate(element => ({ client: element.clientWidth, scroll: element.scrollWidth }));
+        assert.ok(size.scroll <= size.client + 1, deck + ' slide ' + index + ' horizontal overflow');
+        for (const link of await current.locator('.source-links a').all()) {
+          await link.scrollIntoViewIfNeeded();
+          await link.click({ trial: true });
+        }
+      }
+      if (index < count) {
+        await page.locator('#next').click();
+      }
+    }
+    assert.equal(await page.locator('#next').isDisabled(), true);
+    assert.deepEqual(errors, []);
+  } finally {
+    await page.close();
+  }
+}
+
 async function main() {
   const server = await startServer();
   const port = server.address().port;
@@ -304,12 +473,29 @@ async function main() {
     await run('127.0.0.1 host', () => game(browser, 'chapter3/task1-starter', 'http://127.0.0.1:' + port + '/examples/chapter3/task1-starter/demo.html'));
     await run('production hostname simulated locally', () => game(browser, 'chapter4/solution', 'http://demo.sarajevo.jp:' + port + '/examples/chapter4/solution/demo.html'));
     await downloads(browser, origin);
+    const baseline = process.env.RPG_BEHAVIOR_BASELINE;
+    if (baseline !== undefined && baseline !== '') {
+      assert.match(baseline, /^[0-9a-f]{40}$/);
+      for (const stage of stages) {
+        await run('behavior unchanged ' + stage, () => compareGameBehavior(browser, origin, stage, baseline));
+      }
+    }
+    for (const stage of ['chapter3/task2', 'chapter3/solution', 'chapter4/starter', 'chapter4/task1', 'chapter4/task2', 'chapter4/solution']) {
+      await run('explicit control branches ' + stage, () => checkControlBranches(browser, origin, stage));
+    }
+    await run('chapter3 task1 starter selection contracts', () => checkStarterSelection(browser, origin));
     const chapters = [
       { number: 1, slideCount: 12, tryPages: [3, 5], rolePages: [6, 7], headings: ['どこを修正しましたか？', '改善例：共通化する'] },
       { number: 2, slideCount: 12, tryPages: [2, 4], rolePages: [5, 6], headings: ['課題2：条件が増えていく', '改善例：所属を持たせる'] },
       { number: 3, slideCount: 13, tryPages: [2, 4], rolePages: [5, 6], headings: ['課題2：分岐が増える', '改善例：関数を渡す'] },
       { number: 4, slideCount: 12, tryPages: [2, 4], rolePages: [5, 6], headings: ['課題2：記憶の持ち主は？', '改善例：状態を持つ部品へ'] }
     ];
+    for (const deck of ['chapter0', 'chapter1', 'chapter2', 'chapter3', 'chapter4', 'summary']) {
+      for (const viewport of [{ width: 1280, height: 720 }, { width: 393, height: 780 }]) {
+        await run('code excerpt layout ' + deck + ' ' + viewport.width + 'x' + viewport.height,
+          () => checkExcerptLayout(browser, origin, deck, viewport));
+      }
+    }
     for (const chapter of chapters) {
       for (const viewport of [{ width: 1280, height: 720 }, { width: 393, height: 780 }]) {
         await run('chapter' + chapter.number + ' role stickers ' + viewport.width + 'x' + viewport.height, () => chapterStickers(browser, origin, viewport, chapter));

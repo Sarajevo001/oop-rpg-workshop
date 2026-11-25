@@ -14,6 +14,8 @@ jobs:
           node-version: '22'
       - name: Verify shared stage files and material links
         run: python3 tests/verify_shared_materials.py
+      - name: Verify readable source and presentation excerpts
+        run: python3 tests/verify_readable_materials.py
       - name: Syntax check all JavaScript examples
         shell: bash
         run: |
@@ -27,5 +29,11 @@ jobs:
         run: npm install --no-save --no-package-lock playwright@1.56.1
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
+      # Fixed baseline for this readability migration only.
+      - name: Fetch readability migration baseline
+        if: github.ref == 'refs/heads/feature-readable-rpg-materials' || (github.ref == 'refs/heads/main' && github.event.before == '23e3cc3d1e36ffa8e38b4f9cf9948e48159a1542')
+        run: git fetch --no-tags --depth=1 origin 23e3cc3d1e36ffa8e38b4f9cf9948e48159a1542
       - name: Test actual Chromium rendering and file saving
+        env:
+          RPG_BEHAVIOR_BASELINE: ${{ (github.ref == 'refs/heads/feature-readable-rpg-materials' || (github.ref == 'refs/heads/main' && github.event.before == '23e3cc3d1e36ffa8e38b4f9cf9948e48159a1542')) && '23e3cc3d1e36ffa8e38b4f9cf9948e48159a1542' || '' }}
         run: node tests/browser-materials.cjs
