@@ -199,7 +199,7 @@ async function downloads(browser, origin) {
   }
 }
 
-async function chapter1Stickers(browser, origin, viewport) {
+async function chapterStickers(browser, origin, viewport, chapter) {
   const page = await browser.newPage({ viewport });
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -211,28 +211,45 @@ async function chapter1Stickers(browser, origin, viewport) {
       }
       return route.abort();
     });
-    await page.goto(origin + '/presentations/chapter1/index.html', { waitUntil: 'load' });
+    await page.goto(origin + '/presentations/chapter' + chapter.number + '/index.html', { waitUntil: 'load' });
     const slides = page.locator('.slide');
-    assert.equal(await slides.count(), 12);
+    assert.equal(await slides.count(), chapter.slideCount);
     assert.equal(await page.locator('.try-sticker').count(), 2);
     assert.equal(await page.locator('.role-sticker').count(), 2);
-    const expected = new Map([[3, "LET'S TRY!!"], [5, "LET'S TRY!!"], [6, 'イラッとポイント'], [7, '注目ポイント']]);
-    for (let index = 1; index <= 12; index++) {
+    const expected = new Map([
+      [chapter.tryPages[0], "LET'S TRY!!"],
+      [chapter.tryPages[1], "LET'S TRY!!"],
+      [chapter.rolePages[0], 'イラッとポイント'],
+      [chapter.rolePages[1], '注目ポイント']
+    ]);
+    for (let index = 1; index <= chapter.slideCount; index++) {
       const current = page.locator('.slide:visible');
       assert.equal(await current.count(), 1);
-      assert.equal(await page.locator('#count').innerText(), index + ' / 12');
+      assert.equal(await page.locator('#count').innerText(), index + ' / ' + chapter.slideCount);
       const stickers = current.locator('.try-sticker, .role-sticker');
       if (expected.has(index) === true) {
         assert.equal(await stickers.count(), 1);
         assert.equal(await stickers.innerText(), expected.get(index));
+        const style = await stickers.evaluate(element => ({
+          background: getComputedStyle(element).backgroundColor,
+          border: getComputedStyle(element).borderTopWidth,
+          transform: getComputedStyle(element).transform,
+          followsHeading: element.previousElementSibling?.tagName === 'H1'
+        }));
+        const expectedColor = chapter.rolePages[0] === index ? 'rgb(255, 128, 100)' :
+          chapter.rolePages[1] === index ? 'rgb(130, 227, 232)' : 'rgb(255, 203, 86)';
+        assert.equal(style.background, expectedColor);
+        assert.equal(style.border, '3px');
+        assert.notEqual(style.transform, 'none');
+        assert.equal(style.followsHeading, true);
         const bounds = await stickers.boundingBox();
         const slideBounds = await current.boundingBox();
         assert.notEqual(bounds, null);
         assert.notEqual(slideBounds, null);
         assert.ok(bounds.x >= slideBounds.x && bounds.x + bounds.width <= slideBounds.x + slideBounds.width, 'sticker horizontal bounds');
         assert.ok(bounds.y >= slideBounds.y && bounds.y + bounds.height <= slideBounds.y + slideBounds.height, 'sticker vertical bounds');
-        if (index === 6 || index === 7) {
-          const heading = index === 6 ? 'どこを修正しましたか？' : '改善例：共通化する';
+        if (chapter.rolePages.includes(index) === true) {
+          const heading = chapter.headings[chapter.rolePages.indexOf(index)];
           assert.equal(await current.locator('h1').innerText(), heading);
           const links = current.locator('.source-links a');
           assert.equal(await links.count(), 5);
@@ -252,18 +269,18 @@ async function chapter1Stickers(browser, origin, viewport) {
             scrollHeight: element.scrollHeight
           }));
           assert.ok(dimensions.scrollWidth <= dimensions.width + 1, 'slide horizontal overflow');
-          console.log('LAYOUT chapter1', viewport.width, viewport.height, index, JSON.stringify(dimensions));
+          console.log('LAYOUT chapter' + chapter.number, viewport.width, viewport.height, index, JSON.stringify(dimensions));
         }
       } else {
         assert.equal(await stickers.count(), 0);
       }
-      if (index < 12) {
+      if (index < chapter.slideCount) {
         await page.locator('#next').click();
       }
     }
     assert.equal(await page.locator('#next').isDisabled(), true);
     await page.locator('#prev').click();
-    assert.equal(await page.locator('#count').innerText(), '11 / 12');
+    assert.equal(await page.locator('#count').innerText(), (chapter.slideCount - 1) + ' / ' + chapter.slideCount);
     assert.deepEqual(errors, [], 'uncaught presentation JavaScript errors');
   } finally {
     await page.close();
@@ -287,8 +304,16 @@ async function main() {
     await run('127.0.0.1 host', () => game(browser, 'chapter3/task1-starter', 'http://127.0.0.1:' + port + '/examples/chapter3/task1-starter/demo.html'));
     await run('production hostname simulated locally', () => game(browser, 'chapter4/solution', 'http://demo.sarajevo.jp:' + port + '/examples/chapter4/solution/demo.html'));
     await downloads(browser, origin);
-    for (const viewport of [{ width: 1280, height: 720 }, { width: 393, height: 780 }]) {
-      await run('chapter1 role stickers ' + viewport.width + 'x' + viewport.height, () => chapter1Stickers(browser, origin, viewport));
+    const chapters = [
+      { number: 1, slideCount: 12, tryPages: [3, 5], rolePages: [6, 7], headings: ['どこを修正しましたか？', '改善例：共通化する'] },
+      { number: 2, slideCount: 12, tryPages: [2, 4], rolePages: [5, 6], headings: ['課題2：条件が増えていく', '改善例：所属を持たせる'] },
+      { number: 3, slideCount: 13, tryPages: [2, 4], rolePages: [5, 6], headings: ['課題2：分岐が増える', '改善例：関数を渡す'] },
+      { number: 4, slideCount: 12, tryPages: [2, 4], rolePages: [5, 6], headings: ['課題2：記憶の持ち主は？', '改善例：状態を持つ部品へ'] }
+    ];
+    for (const chapter of chapters) {
+      for (const viewport of [{ width: 1280, height: 720 }, { width: 393, height: 780 }]) {
+        await run('chapter' + chapter.number + ' role stickers ' + viewport.width + 'x' + viewport.height, () => chapterStickers(browser, origin, viewport, chapter));
+      }
     }
   } finally {
     if (browser) await browser.close();
