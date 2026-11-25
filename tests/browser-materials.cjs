@@ -505,6 +505,42 @@ async function checkExcerptLayout(browser, origin, deck, viewport) {
       const current = page.locator('.slide:visible');
       assert.equal(await current.count(), 1);
       assert.equal(await page.locator('#count').innerText(), index + ' / ' + count);
+      const linkOrder = await current.evaluate(slide => {
+        const groups = Array.from(slide.querySelectorAll('.exercise-start, .source-links'));
+        if (groups.length === 0) {
+          return { valid: true, ranks: [] };
+        }
+        const content = Array.from(slide.children).filter(element =>
+          element.matches('.feature, .description, .detail, .talk-prompt, .improvement-panel, .reference-code'));
+        const valid = content.every(element => groups.every(group =>
+          (element.compareDocumentPosition(group) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0));
+        const ranks = groups.flatMap(group => Array.from(group.querySelectorAll('a'), link => {
+          const href = link.getAttribute('href');
+          if (href.startsWith('https://jsfiddle.net/')) {
+            return 2;
+          }
+          if (href.includes('download.html?stage=')) {
+            return 3;
+          }
+          if (href.startsWith('https://github.com/')) {
+            if (href.endsWith('/demo.html')) {
+              return 4;
+            }
+            if (href.endsWith('/demo.js')) {
+              return 5;
+            }
+          }
+          if (href.endsWith('/demo.html')) {
+            return 1;
+          }
+          return 0;
+        }));
+        return { valid, ranks };
+      });
+      assert.equal(linkOrder.valid, true, deck + ' slide ' + index + ' links before content');
+      if (linkOrder.ranks.length > 0) {
+        assert.deepEqual(linkOrder.ranks, Array.from({ length: linkOrder.ranks.length }, (_, i) => i + 1), deck + ' slide ' + index + ' link priority');
+      }
       const blocks = current.locator('.feature.code, .reference-code pre code');
       for (const block of await blocks.all()) {
         assert.ok(await block.locator('.code-line').count() > 0);
