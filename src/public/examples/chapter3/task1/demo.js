@@ -50,7 +50,11 @@ let currentTurnLog = null;
 function log(message) {
   const p = document.createElement('p');
   p.textContent = message;
-  (currentTurnLog ?? document.getElementById('log')).appendChild(p);
+  if (currentTurnLog === null || currentTurnLog === undefined) {
+    document.getElementById('log').appendChild(p);
+  } else {
+    currentTurnLog.appendChild(p);
+  }
 }
 function beginTurnLog() {
   const section = document.createElement('section');
@@ -70,7 +74,10 @@ function allies() {
   return living('friend');
 }
 function render() {
-  const host = document.getElementById('actors') ?? document.querySelector('.battle');
+  let host = document.getElementById('actors');
+  if (host === null || host === undefined) {
+    host = document.querySelector('.battle');
+  }
   host.replaceChildren();
   for (const character of characters) {
     const card = document.createElement('article');
@@ -149,7 +156,12 @@ function nextTurn() {
   }
   updateTargetOptions();
   if (friend.hp > 0 && enemies().length > 0) {
-    const target = friend.team === 'friend' ? playerControl(friend, enemies()) : cpuControl(friend, enemies());
+    let target;
+    if (friend.team === 'friend') {
+      target = playerControl(friend, enemies());
+    } else {
+      target = cpuControl(friend, enemies());
+    }
     log(friend.attack(target));
   }
   updateTargetOptions();
