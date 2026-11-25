@@ -522,6 +522,20 @@ async function checkExcerptLayout(browser, origin, deck, viewport) {
       const current = page.locator('.slide:visible');
       assert.equal(await current.count(), 1);
       assert.equal(await page.locator('#count').innerText(), index + ' / ' + count);
+      if (deck === 'chapter0' && index === 3) {
+        const links = current.locator('.source-links a');
+        assert.deepEqual(await links.allTextContents(), ["対応するRPGを開く ↗","JSFiddleで編集 ↗","4ファイルをダウンロード ↗","HTMLコードを見る ↗","JavaScriptコードを見る ↗"]);
+        assert.deepEqual(await links.evaluateAll(elements => elements.map(element => element.getAttribute('href'))), ["../../examples/chapter0/demo/demo.html","https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter0/demo/","../../examples/download.html?stage=chapter0/demo","https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter0/demo/demo.html","https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter0/demo/demo.js"]);
+        assert.equal(await links.first().getAttribute('target'), null);
+        for (const link of await links.all()) {
+          assert.ok(await link.isVisible());
+          const box = await link.boundingBox();
+          const slideBox = await current.boundingBox();
+          assert.ok(box.x >= slideBox.x && box.x + box.width <= slideBox.x + slideBox.width);
+        }
+        const response = await page.request.get(origin + '/examples/chapter0/demo/demo.html');
+        assert.equal(response.status(), 200);
+      }
       const linkOrder = await current.evaluate(slide => {
         const groups = Array.from(slide.querySelectorAll('.exercise-start, .source-links'));
         if (groups.length === 0) {
