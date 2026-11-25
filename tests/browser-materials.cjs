@@ -227,6 +227,18 @@ async function chapterStickers(browser, origin, viewport, chapter) {
       const current = page.locator('.slide:visible');
       assert.equal(await current.count(), 1);
       assert.equal(await page.locator('#count').innerText(), index + ' / ' + chapter.slideCount);
+      if (index <= (chapter.number === 1 ? 2 : 1)) {
+        assert.equal(await current.locator('.source-links a, .exercise-start a').count(), 0);
+        if (chapter.number === 3) {
+          assert.ok((await current.innerText()).includes('課題1に向けた準備済みの改修'));
+        }
+      }
+      if (chapter.tryPages.includes(index)) {
+        const stage = index === chapter.tryPages[0] ? (chapter.number === 3 ? 'task1-starter' : 'starter') : 'task1';
+        const start = current.locator('.exercise-start a').first();
+        assert.equal(await start.innerText(), '改修スタート用コードを開く ↗');
+        assert.equal(await start.getAttribute('href'), '../../examples/chapter' + chapter.number + '/' + stage + '/demo.html');
+      }
       const stickers = current.locator('.try-sticker, .role-sticker');
       if (expected.has(index) === true) {
         assert.equal(await stickers.count(), 1);
@@ -266,7 +278,7 @@ async function chapterStickers(browser, origin, viewport, chapter) {
           assert.deepEqual(await current.locator('.exercise-start a, .source-links a').evaluateAll(links =>
             links.map(link => link.getAttribute('href'))), expectedLinks);
           assert.equal(await current.locator('.source-links-label').innerText(), 'コードを読む（参照用）');
-          assert.deepEqual(await primary.allTextContents(), ['動作確認：RPGを開く ↗', 'JSFiddleで編集 ↗', 'ローカル用：4ファイルを保存 ↗']);
+          assert.deepEqual(await primary.allTextContents(), ['改修スタート用コードを開く ↗', 'JSFiddleで編集 ↗', '4ファイルをダウンロード ↗']);
           for (const link of await current.locator('.exercise-start a, .source-links a').all()) {
             await link.scrollIntoViewIfNeeded();
             await link.click({ trial: true });
