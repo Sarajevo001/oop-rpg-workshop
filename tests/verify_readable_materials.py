@@ -18,6 +18,7 @@ for file in sorted((ROOT / "examples").glob("*/*/demo.js")):
         "",
         source,
     )
+    assert not re.search(r"return\s+(?:target\s+instanceof|target\s+===\s+enemySlime|this\.team\s+!==\s+target\.team)", tokens), stage
     assert "?" not in tokens, f"{stage}: unexpected conditional shorthand"
     assert not re.search(r"\$\s*\(|\b(?:const|let|function)\s+\$(?=\s|=|\()", tokens), stage
 

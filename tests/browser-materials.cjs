@@ -505,6 +505,27 @@ async function checkExcerptLayout(browser, origin, deck, viewport) {
       const current = page.locator('.slide:visible');
       assert.equal(await current.count(), 1);
       assert.equal(await page.locator('#count').innerText(), index + ' / ' + count);
+      const blocks = current.locator('.feature.code, .reference-code pre code');
+      for (const block of await blocks.all()) {
+        assert.ok(await block.locator('.code-line').count() > 0);
+        assert.equal(await block.evaluate(element => element.textContent === Array.from(element.querySelectorAll('.code-line'), row => row.textContent).join('\n')), true);
+        const layout = await block.evaluate(element => {
+          const container = element.closest('pre') || element;
+          const style = getComputedStyle(container);
+          container.scrollLeft = container.scrollWidth;
+          const reached = container.scrollLeft >= container.scrollWidth - container.clientWidth - 1;
+          container.scrollLeft = 0;
+          return { preserved: style.whiteSpace === 'pre', reached };
+        });
+        assert.deepEqual(layout, { preserved: true, reached: true });
+      }
+      for (const [role, highlight] of [['irritation', 'problem'], ['attention', 'solution']]) {
+        if (await current.locator('.' + role + '-sticker').count() > 0 && await blocks.count() > 0) {
+          const marked = current.locator('.code-' + highlight);
+          assert.ok(await marked.count() > 0, deck + ' missing ' + highlight);
+          assert.ok(await marked.first().isVisible());
+        }
+      }
       for (const code of await current.locator('[data-code-source], .reference-code pre').all()) {
         assert.ok(await code.isVisible());
         await code.scrollIntoViewIfNeeded();
