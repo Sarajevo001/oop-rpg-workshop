@@ -213,6 +213,11 @@ async function chapterStickers(browser, origin, viewport, chapter) {
       return route.abort();
     });
     await page.goto(origin + '/presentations/chapter' + chapter.number + '/index.html', { waitUntil: 'load' });
+    const gameLinks = page.locator('a[href^="../../examples/"][href$="/demo.html"]');
+    assert.equal(await gameLinks.count(), [0, 8, 9, 10, 9][chapter.number]);
+    for (const link of await gameLinks.all()) {
+      assert.equal(await link.getAttribute('target'), null, 'RPG links must navigate in the same tab');
+    }
     const slides = page.locator('.slide');
     assert.equal(await slides.count(), chapter.slideCount);
     assert.equal(await page.locator('.try-sticker').count(), 2);
