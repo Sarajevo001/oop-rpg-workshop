@@ -45,6 +45,14 @@
  .slide .source-links a {font-size:13px;}
 }
 .talk-prompt{background:#263c60;border-left:4px solid #ffc66a;border-radius:.7rem;padding:.75rem 1rem;font-size:clamp(.85rem,1.4vw,1.15rem);line-height:1.45}.talk-prompt strong{display:block;color:#ffc66a;margin-bottom:.35rem}.talk-prompt ul{margin:.3rem 0;padding-left:1.4em}.talk-prompt li{margin:.2rem 0}@media screen and (max-width:700px) and (orientation:portrait){.talk-prompt{font-size:15px;padding:10px 12px}}
+
+.slide .feature.code,.slide .reference-code pre{white-space:pre;overflow-x:auto;overflow-wrap:normal;word-break:normal;min-width:0;max-width:100%;tab-size:2}
+.slide .feature.code{font:clamp(.75rem,1.45vw,1.25rem)/1.5 ui-monospace,Consolas,monospace;color:#e5f2ff}
+.slide .code-keyword{color:#d1b5ff}.slide .code-literal{color:#a5e8b5}.slide .code-string{color:#ffd18a}.slide .code-comment{color:#aebfd4}
+.slide .code-line{display:inline-block;min-width:100%}
+.slide .code-problem{background:#ff806426;box-shadow:inset 3px 0 #ff8064}
+.slide .code-solution{background:#82e3e826;box-shadow:inset 3px 0 #82e3e8}
+@media screen and (max-width:700px) and (orientation:portrait){.slide .feature.code{font-size:clamp(12px,3.3vw,16px)}}
 </style><style>.detail{font-size:clamp(.85rem,1.3vw,1.25rem);line-height:1.55}.detail p{margin:.65em 0}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}.comparison>div{min-width:0;background:#243a5b;padding:.6rem;border-radius:.5rem}.comparison h2{font-size:.9em;margin:.2em 0}.comparison pre{font-size:clamp(.55rem,.83vw,.85rem);white-space:pre-wrap;overflow-wrap:anywhere;max-height:24vh;overflow:auto}.source-links{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.65rem}.source-links a{color:#fff;background:#3564a1;border-radius:.4rem;padding:.35rem .6rem;font-size:clamp(.7rem,1vw,.95rem)}@media(max-width:650px){.comparison{grid-template-columns:1fr}.comparison pre{max-height:13vh}}</style></head><body><main id="deck"><section class="slide" aria-label="スライド1" ><div class="kicker">RPG WORKSHOP / まとめ・種明かし</div><h1>振り返り：スライムと歩いた設計の道</h1><div class="feature ">第1章：重複する変更
 第2章：所属による判定
 第3章：操作関数の差し替え
@@ -136,4 +144,52 @@
   show();
   updateFullscreenButton();
 })();
-</script></body></html>
+</script>
+<script>
+for (const block of document.querySelectorAll('.feature.code, .reference-code pre code')) {
+  const slide = block.closest('.slide');
+  const problem = slide.querySelector('.irritation-sticker') !== null;
+  const solution = slide.querySelector('.attention-sticker') !== null;
+  const lines = block.textContent.split('\n');
+  block.replaceChildren();
+  for (const [index, line] of lines.entries()) {
+    const row = document.createElement('span');
+    row.className = 'code-line';
+    if (problem === true && /instanceof|this ===|target ===|auto-friend|Control\(friend|targetLeader|lockedTarget|5 → 7/.test(line)) {
+      row.classList.add('code-problem');
+    }
+    if (solution === true && /damage = 7|team = team|team !==|controller|TrackingController|lockedTarget/.test(line)) {
+      row.classList.add('code-solution');
+    }
+    const tokens = /\/\/.*|\/\*.*?\*\/|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"|\x60(?:\\.|[^\x60\\])*\x60|\b(?:class|constructor|const|let|function|return|if|else|new|this|instanceof|for|of|true|false|null|undefined)\b|\b\d+\b/g;
+    let offset = 0;
+    for (const match of line.matchAll(tokens)) {
+      row.append(document.createTextNode(line.slice(offset, match.index)));
+      const token = document.createElement('span');
+      const value = match[0];
+      if (value.startsWith('//') || value.startsWith('/*')) {
+        token.className = 'code-comment';
+      } else if (/^['"\x60]/.test(value)) {
+        token.className = 'code-string';
+      } else if (/^(true|false|null|undefined|\d+)$/.test(value)) {
+        token.className = 'code-literal';
+      } else {
+        token.className = 'code-keyword';
+      }
+      token.textContent = value;
+      row.append(token);
+      offset = match.index + value.length;
+    }
+    row.append(document.createTextNode(line.slice(offset)));
+    block.append(row);
+    if (index < lines.length - 1) {
+      block.append(document.createTextNode('\n'));
+    }
+  }
+  if (block.matches('.feature.code')) {
+    block.tabIndex = 0;
+    block.setAttribute('aria-label', 'コード（横スクロール可能）');
+  }
+}
+</script>
+</body></html>
