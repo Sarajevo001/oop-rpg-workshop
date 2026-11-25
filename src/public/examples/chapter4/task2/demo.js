@@ -38,7 +38,10 @@ class Slime {
   }
   chooseTarget(targets) {
     // 連携する相手の記憶領域を直接参照する、課題用の実装例。
-    const owner = this.targetLeader ?? this;
+    let owner = this.targetLeader;
+    if (owner === null || owner === undefined) {
+      owner = this;
+    }
     if (owner.lockedTarget === null || owner.lockedTarget.hp <= 0 || targets.includes(owner.lockedTarget) === false) {
       owner.lockedTarget = this.controller(this, targets);
     }
@@ -63,7 +66,11 @@ let currentTurnLog = null;
 function log(message) {
   const p = document.createElement('p');
   p.textContent = message;
-  (currentTurnLog ?? document.getElementById('log')).appendChild(p);
+  if (currentTurnLog === null || currentTurnLog === undefined) {
+    document.getElementById('log').appendChild(p);
+  } else {
+    currentTurnLog.appendChild(p);
+  }
 }
 function beginTurnLog() {
   const section = document.createElement('section');
@@ -83,7 +90,10 @@ function allies() {
   return living('friend');
 }
 function render() {
-  const host = document.getElementById('actors') ?? document.querySelector('.battle');
+  let host = document.getElementById('actors');
+  if (host === null || host === undefined) {
+    host = document.querySelector('.battle');
+  }
   host.replaceChildren();
   for (const character of characters) {
     const card = document.createElement('article');
@@ -200,7 +210,12 @@ function resetGame() {
 document.getElementById('next-turn').addEventListener('click', nextTurn);
 document.getElementById('reset').addEventListener('click', resetGame);
 document.getElementById('auto-friend').addEventListener('change', () => {
-  characters.find(c => c.name === '仲間スライム').controller = document.getElementById('auto-friend').checked === true ? cpuControl : playerControl;
+  const friend = characters.find(c => c.name === '仲間スライム');
+  if (document.getElementById('auto-friend').checked === true) {
+    friend.controller = cpuControl;
+  } else {
+    friend.controller = playerControl;
+  }
   render();
 });
 resetGame();
