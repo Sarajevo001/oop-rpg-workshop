@@ -199,6 +199,77 @@ async function downloads(browser, origin) {
   }
 }
 
+async function chapter1Stickers(browser, origin, viewport) {
+  const page = await browser.newPage({ viewport });
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  try {
+    // External history images are not part of this local presentation test.
+    await page.route('**/*', route => {
+      if (route.request().url().startsWith(origin + '/') === true) {
+        return route.continue();
+      }
+      return route.abort();
+    });
+    await page.goto(origin + '/presentations/chapter1/index.html', { waitUntil: 'load' });
+    const slides = page.locator('.slide');
+    assert.equal(await slides.count(), 12);
+    assert.equal(await page.locator('.try-sticker').count(), 2);
+    assert.equal(await page.locator('.role-sticker').count(), 2);
+    const expected = new Map([[3, "LET'S TRY!!"], [5, "LET'S TRY!!"], [6, 'イラッとポイント'], [7, '注目ポイント']]);
+    for (let index = 1; index <= 12; index++) {
+      const current = page.locator('.slide:visible');
+      assert.equal(await current.count(), 1);
+      assert.equal(await page.locator('#count').innerText(), index + ' / 12');
+      const stickers = current.locator('.try-sticker, .role-sticker');
+      if (expected.has(index) === true) {
+        assert.equal(await stickers.count(), 1);
+        assert.equal(await stickers.innerText(), expected.get(index));
+        const bounds = await stickers.boundingBox();
+        const slideBounds = await current.boundingBox();
+        assert.notEqual(bounds, null);
+        assert.notEqual(slideBounds, null);
+        assert.ok(bounds.x >= slideBounds.x && bounds.x + bounds.width <= slideBounds.x + slideBounds.width, 'sticker horizontal bounds');
+        assert.ok(bounds.y >= slideBounds.y && bounds.y + bounds.height <= slideBounds.y + slideBounds.height, 'sticker vertical bounds');
+        if (index === 6 || index === 7) {
+          const heading = index === 6 ? 'どこを修正しましたか？' : '改善例：共通化する';
+          assert.equal(await current.locator('h1').innerText(), heading);
+          const links = current.locator('.source-links a');
+          assert.equal(await links.count(), 5);
+          for (const link of await links.all()) {
+            await link.scrollIntoViewIfNeeded();
+            await link.click({ trial: true });
+          }
+          await page.locator('#notes').click();
+          assert.equal(await current.locator('.speaker').isVisible(), true);
+          await page.locator('#notes').click();
+          assert.equal(await current.locator('.speaker').isVisible(), false);
+          await stickers.scrollIntoViewIfNeeded();
+          const dimensions = await current.evaluate(element => ({
+            width: element.clientWidth,
+            scrollWidth: element.scrollWidth,
+            height: element.clientHeight,
+            scrollHeight: element.scrollHeight
+          }));
+          assert.ok(dimensions.scrollWidth <= dimensions.width + 1, 'slide horizontal overflow');
+          console.log('LAYOUT chapter1', viewport.width, viewport.height, index, JSON.stringify(dimensions));
+        }
+      } else {
+        assert.equal(await stickers.count(), 0);
+      }
+      if (index < 12) {
+        await page.locator('#next').click();
+      }
+    }
+    assert.equal(await page.locator('#next').isDisabled(), true);
+    await page.locator('#prev').click();
+    assert.equal(await page.locator('#count').innerText(), '11 / 12');
+    assert.deepEqual(errors, [], 'uncaught presentation JavaScript errors');
+  } finally {
+    await page.close();
+  }
+}
+
 async function main() {
   const server = await startServer();
   const port = server.address().port;
@@ -216,6 +287,9 @@ async function main() {
     await run('127.0.0.1 host', () => game(browser, 'chapter3/task1-starter', 'http://127.0.0.1:' + port + '/examples/chapter3/task1-starter/demo.html'));
     await run('production hostname simulated locally', () => game(browser, 'chapter4/solution', 'http://demo.sarajevo.jp:' + port + '/examples/chapter4/solution/demo.html'));
     await downloads(browser, origin);
+    for (const viewport of [{ width: 1280, height: 720 }, { width: 393, height: 780 }]) {
+      await run('chapter1 role stickers ' + viewport.width + 'x' + viewport.height, () => chapter1Stickers(browser, origin, viewport));
+    }
   } finally {
     if (browser) await browser.close();
     await new Promise(resolve => server.close(resolve));
