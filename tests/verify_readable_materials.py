@@ -30,7 +30,7 @@ excerpt_count = 0
 for deck in ("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "summary"):
     html = (ROOT / "presentations" / deck / "index.html").read_text(encoding="utf-8")
     for slide in re.findall(r'<section class="slide[^"]*"[^>]*>[\s\S]*?</section>', html):
-        for stage, content in re.findall(r'<div class="feature code" data-code-source="([^"]+)">([\s\S]*?)</div>', slide):
+        for stage, content in re.findall(r'<div class="feature code" data-code-source="([^"]+)"[^>]*>([\s\S]*?)</div>', slide):
             assert stage in sources, stage
             for line in unescape(content).splitlines():
                 line = line.strip()

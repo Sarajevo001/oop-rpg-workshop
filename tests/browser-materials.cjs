@@ -283,6 +283,48 @@ async function chapterStickers(browser, origin, viewport, chapter) {
         if (chapter.rolePages.includes(index) === true) {
           const heading = chapter.headings[chapter.rolePages.indexOf(index)];
           assert.equal(await current.locator('h1').innerText(), heading);
+          if (index === chapter.rolePages[1]) {
+            const panel = current.locator('.improvement-panel');
+            assert.equal(await panel.count(), 1);
+            assert.equal(await panel.getAttribute('data-chapter'), String(chapter.number));
+            const expected = [
+              ['2か所', '1か所', '5 → 7 の変更は、もう1か所でいい！'],
+              ['種類を個別に判定', '所属だけで判定', 'キャラクターが増えても、判定処理はそのまま！'],
+              ['戦闘中に条件分岐', '操作関数を差し替え', '操作方法が変わっても、戦闘処理はそのまま！'],
+              ['スライム同士を参照', '記憶を持つ部品を参照', '同じ部品を渡せば連携。別の部品を渡せば独立！']
+            ][chapter.number - 1];
+            assert.deepEqual(await panel.locator('.improvement-compare strong').allTextContents(), expected.slice(0, 2));
+            assert.equal(await panel.locator('.improvement-message').innerText(), expected[2]);
+            const svg = panel.locator('svg[role="img"]');
+            assert.equal(await svg.count(), 1);
+            await svg.scrollIntoViewIfNeeded();
+            const figure = await svg.evaluate(element => {
+              const view = element.viewBox.baseVal;
+              const bounds = element.getBBox();
+              const rect = element.getBoundingClientRect();
+              const slide = element.closest('.slide').getBoundingClientRect();
+              return { contentFits: bounds.x >= -1 && bounds.y >= -1 &&
+                bounds.x + bounds.width <= view.width + 1 && bounds.y + bounds.height <= view.height + 1,
+                visible: rect.width > 0 && rect.height > 0,
+                widthFits: rect.left >= slide.left && rect.right <= slide.right };
+            });
+            assert.deepEqual(figure, { contentFits: true, visible: true, widthFits: true });
+            const codes = panel.locator('[data-code-source]');
+            assert.equal(await codes.count(), chapter.number === 1 || chapter.number === 3 ? 2 : 1);
+            for (const code of await codes.all()) {
+              await code.scrollIntoViewIfNeeded();
+              assert.equal(await code.isVisible(), true);
+              assert.equal(await code.evaluate(element => {
+                element.scrollLeft = element.scrollWidth;
+                const reached = element.scrollLeft >= element.scrollWidth - element.clientWidth - 1;
+                element.scrollLeft = 0;
+                return reached;
+              }), true);
+            }
+            await panel.locator('.improvement-message').scrollIntoViewIfNeeded();
+            assert.equal(await panel.locator('.improvement-message').isVisible(), true);
+            console.log('PASS improvement visual chapter' + chapter.number, viewport.width, viewport.height);
+          }
           const links = current.locator('.source-links a');
           assert.equal(await links.count(), 5);
           for (const link of await links.all()) {
