@@ -49,3 +49,13 @@ for deck in ("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "summar
 assert appendix_count == 13, appendix_count
 assert excerpt_count >= 13, excerpt_count
 print(f"PASS: 18 readable sources, {excerpt_count} marked main excerpts, {appendix_count} contiguous appendix excerpts")
+
+# The chapter 4 problem and solution must expose the actual complete methods.
+chapter4 = (ROOT / "presentations" / "chapter4" / "index.html").read_text(encoding="utf-8")
+for stage, marker, pattern in (
+    ("chapter4/task2", "irritation-sticker", r"  chooseTarget\(targets\) \{[\s\S]*?\n  \}"),
+    ("chapter4/solution", "attention-sticker", r"class TrackingController \{[\s\S]*?\n\}"),
+):
+    expected = re.search(pattern, sources[stage]).group()
+    slide = next(s for s in re.findall(r'<section class="slide[^"]*"[^>]*>[\s\S]*?</section>', chapter4) if f'role-sticker {marker}' in s)
+    assert normalize(expected) in normalize(unescape(slide)), stage
