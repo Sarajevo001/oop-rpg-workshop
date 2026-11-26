@@ -93,36 +93,67 @@ for deck, patterns in (
         assert any(expected in excerpt for excerpt in excerpts), f"{stage}: core example missing: {expected}"
 print("PASS: four task 1 slides contain complete core implementation excerpts")
 
-# The theory names belong to the reveal, not to the exercises or recap.
-# The historical book title and its source link are explicitly permitted.
+# The opening question is the only pre-reveal theory label, apart from the
+# historical book title. Keep the visual question identical at the callback.
 def deck_slides(deck):
     document = (ROOT / "presentations" / deck / "index.html").read_text(encoding="utf-8")
     return re.findall(r'<section class="slide[^"]*"[^>]*>[\s\S]*?</section>', document)
 
 def no_early_theory(slide):
-    if "<h1>歴史の一場面</h1>" in slide:
+    if "<h1>歴史の一場面</h1>" in slide or 'data-reveal-beat="history"' in slide:
         for book_reference in ("Design Patterns", "Design_Patterns", "『デザインパターン』"):
             slide = slide.replace(book_reference, "")
+    if 'data-reveal-beat="question"' in slide:
+        slide = slide.replace("<h1>依存性の注入</h1>", "")
     assert not re.search(
-        r"\bDI\b|Dependency\s+Injection|デザインパターン|Design[\s_-]+Patterns|\bStrategy\b|ストラテジー|クロージャ",
+        r"\bDI\b|Dependency\s+Injection|依存性の注入|オブジェクト指向|デザインパターン|Design[\s_-]+Patterns|\bStrategy\b|ストラテジー|クロージャ",
         unescape(slide), re.IGNORECASE,
     ), "theory name or closure disclosed before the reveal"
 
-for deck in ("chapter0", "chapter1", "chapter2", "chapter3", "chapter4"):
-    for slide in deck_slides(deck):
-        no_early_theory(slide)
+for deck in ("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "summary"):
+    document = (ROOT / "presentations" / deck / "index.html").read_text(encoding="utf-8")
+    assert "RPGで学ぶ！プログラム改造ハンズオン" in re.search(r"<title>(.*?)</title>", document).group(1)
+    assert "オブジェクト指向" not in re.search(r"<title>(.*?)</title>", document).group(1)
+    if deck != "summary":
+        for slide in deck_slides(deck):
+            no_early_theory(slide)
 
+intro = deck_slides("chapter0")
 summary = deck_slides("summary")
-assert len(summary) == 11, "summary slide count"
-for slide in summary[:6]:
+assert len(intro) == 9 and len(summary) == 10
+assert "<h1>RPGで学ぶ！プログラム改造ハンズオン</h1>" in intro[0]
+assert 'data-reveal-beat="question"' in intro[1]
+assert sum('data-reveal-beat="question"' in slide for slide in intro) == 1
+for slide in summary[:2]:
     no_early_theory(slide)
-assert "<h1>種明かし</h1>" in summary[5]
-assert "<h1>デザインパターン：Strategy</h1>" in summary[6]
-assert "<h1>DI：依存性の注入</h1>" in summary[7]
-di_visible = summary[7].split('<aside class="speaker"')[0]
+assert [re.search(r'data-reveal-beat="([^"]+)"', slide).group(1) for slide in summary[:7]] == [
+    "recap", "history", "mapping", "callback", "climax", "strategy-detail", "di-detail",
+]
+question = r'<div class="reveal-question">[\s\S]*?</div>'
+assert re.search(question, intro[1]).group() == re.search(question, summary[3]).group()
+assert "この言葉、聞いたことありますか？<br>意味、分かりますか？" in intro[1]
+assert summary[0].count('class="reveal-tile"') == 4
+assert "面倒くさかったから、ですよね？" in summary[0]
+assert summary[1].count('class="reveal-history-card"') == 5
+for reference in ("Simula 67", "Smalltalk-72", "パーナス", "Self", "Design Patterns"):
+    assert reference in summary[1], reference
+for chapter in range(5):
+    history = next(slide for slide in deck_slides(f"chapter{chapter}") if "<h1>歴史の一場面</h1>" in slide)
+    figure = re.search(r'<figure class="history-visual">[\s\S]*?</figure>', history).group()
+    assert figure.replace('class="history-visual"', 'class="reveal-history-visual"') in summary[1]
+assert summary[2].count('class="reveal-tile"') == 4
+assert "Strategy・DI" in summary[2] and "コンポジション・DI" in summary[2]
+assert "Dependency Injection / DI" in summary[3]
+assert "オブジェクト指向開発ってね、<br>こういうことなんですよ。" in summary[4]
+assert "<h1>デザインパターン：Strategy</h1>" in summary[5]
+assert "<h1>DI：依存性の注入</h1>" in summary[6]
+di_visible = summary[6].split('<aside class="speaker"')[0]
 assert all(word in di_visible for word in ("第3章", "第4章", "クロージャ", "インスタンス", "外から渡す"))
+assert all("クロージャ" not in slide for slide in summary[:6])
 assert "『Design Patterns』刊行" in next(
     slide for slide in deck_slides("chapter4") if "<h1>歴史の一場面</h1>" in slide
 )
+assert sum(int(value) for slide in intro for value in re.findall(r'<aside class="speaker" hidden>(\d+)分：', slide)) + 1 == 20
+assert "約1分" in next(slide for slide in intro if "<h1>歴史の一場面</h1>" in slide)
 assert sum(int(value) for slide in summary for value in re.findall(r'<aside class="speaker" hidden>(\d+)分：', slide)) == 25
-print("PASS: delayed Strategy/DI/closure reveal, preserved book title and 25-minute summary")
+print("PASS: opening question, all five historical callbacks, four mappings, climax and deferred details; 20/25 minute plans")
