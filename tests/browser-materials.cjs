@@ -712,6 +712,53 @@ async function checkExcerptLayout(browser, origin, deck, viewport) {
   }
 }
 
+async function checkEntranceNavigation(browser, origin, viewport) {
+  const page = await browser.newPage({ viewport });
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  try {
+    await page.goto(origin + '/index.html');
+    const lectureLinks = page.locator('a[href^="./presentations/"]');
+    assert.equal(await lectureLinks.count(), 6);
+    assert.equal(await page.locator('.stage-links').count(), 0);
+    assert.equal(await page.locator('a').count(), 7);
+    for (const link of await lectureLinks.all()) {
+      await link.scrollIntoViewIfNeeded();
+      await link.click({ trial: true });
+      const response = await page.request.get(new URL(await link.getAttribute('href'), page.url()).href);
+      assert.equal(response.status(), 200);
+    }
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth));
+    await page.getByRole('link', { name: 'ソースコード・教材一覧 ↗' }).click();
+    assert.equal(new URL(page.url()).pathname, '/materials.html');
+    assert.equal(await page.locator('.stage-links').count(), stages.length);
+    assert.equal(await page.locator('.stage-source a').count(), stages.length * files.length);
+    assert.equal(await page.locator('a[href^="./presentations/"]').count(), 0);
+    for (const stage of stages) {
+      const demo = page.locator('a[href="./examples/' + stage + '/demo.html"]');
+      assert.equal(await demo.count(), 1);
+      await demo.scrollIntoViewIfNeeded();
+      await demo.click({ trial: true });
+      const download = page.locator('a[href="./examples/download.html?stage=' + stage + '"]');
+      assert.equal(await download.count(), 1);
+      assert.equal((await page.request.get(new URL(await demo.getAttribute('href'), page.url()).href)).status(), 200);
+      assert.equal((await page.request.get(new URL(await download.getAttribute('href'), page.url()).href)).status(), 200);
+      const source = page.locator('a[href^="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/' + stage + '/"]');
+      assert.equal(await source.count(), files.length);
+      for (const link of await source.all()) {
+        await link.scrollIntoViewIfNeeded();
+        await link.click({ trial: true });
+      }
+    }
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth));
+    await page.getByRole('link', { name: '← 講義スライド一覧に戻る' }).click();
+    assert.equal(new URL(page.url()).pathname, '/index.html');
+    assert.deepEqual(errors, []);
+  } finally {
+    await page.close();
+  }
+}
+
 async function main() {
   const server = await startServer();
   const port = server.address().port;
@@ -728,6 +775,10 @@ async function main() {
     }
     await run('127.0.0.1 host', () => game(browser, 'chapter3/task1-starter', 'http://127.0.0.1:' + port + '/examples/chapter3/task1-starter/demo.html'));
     await run('production hostname simulated locally', () => game(browser, 'chapter4/solution', 'http://demo.sarajevo.jp:' + port + '/examples/chapter4/solution/demo.html'));
+    for (const viewport of [{ width: 1280, height: 720 }, { width: 393, height: 780 }]) {
+      await run('lecture entrance and materials ' + viewport.width + 'x' + viewport.height,
+        () => checkEntranceNavigation(browser, origin, viewport));
+    }
     await downloads(browser, origin);
     const baseline = process.env.RPG_BEHAVIOR_BASELINE;
     if (baseline !== undefined && baseline !== '') {

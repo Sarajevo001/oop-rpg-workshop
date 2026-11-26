@@ -24,7 +24,7 @@ JavaScriptの基礎を学んだ人向けの、RPGを使ったオブジェクト�
 | 第4章 | [chapter4/index.html](src/public/presentations/chapter4/index.html) |
 | まとめ・種明かし | [summary/index.html](src/public/presentations/summary/index.html) |
 
-- 教材サイトの入口は [src/public/index.html](src/public/index.html)。
+- 講義スライドの入口は [src/public/index.html](src/public/index.html)。各章のコード閲覧・デモ・JSFiddle・ダウンロードは [src/public/materials.html](src/public/materials.html) に分離する。
 - 章別の発表用HTMLと、演習・実演用コード `src/public/examples/` は別の成果物として管理する。
 - プレゼン資料を編集する際は、対象章のHTMLを確認し、既存のページ送り・講師メモ・参考資料を含む構成を維持する。構成・演出の基準は [企画・設計記録](docs/oop_rpg_workshop_plan.md) とプレゼン工房の制作ガイドラインを参照する。
 

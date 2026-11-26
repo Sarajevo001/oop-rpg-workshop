@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>RPGで学ぶ！プログラム改造ハンズオン | ソースコード・教材一覧</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; color: #1b2840; background: #f5f8ff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; line-height: 1.65; }
+    main { width: min(100% - 2rem, 980px); margin: 0 auto; padding: 2rem 0 4rem; }
+    header { padding: 1.5rem 0 1rem; }
+    h1 { font-size: clamp(1.6rem, 5vw, 2.6rem); line-height: 1.3; margin: .4rem 0; }
+    h2 { font-size: 1.2rem; margin: 0 0 .4rem; }
+    p { margin: .4rem 0 1rem; }
+    .eyebrow { font-weight: 800; color: #315bb4; letter-spacing: .08em; }
+    .intro { max-width: 48rem; color: #44536c; }
+    .note { background: #e9f1ff; border-left: 4px solid #4774d0; border-radius: .4rem; padding: .9rem 1rem; margin: 1.2rem 0 2rem; }
+    .chapters { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: 1rem; }
+    .chapter { background: white; border: 1px solid #d9e2f0; border-radius: 16px; padding: 1.25rem; box-shadow: 0 4px 16px #263e6810; }
+    .chapter p { color: #53617a; font-size: .94rem; }
+    .links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; margin-top: 1rem; }
+    .links a { display: block; padding: .75rem .6rem; text-align: center; text-decoration: none; color: #204a9c; background: #edf3ff; border: 1px solid #ccdaf7; border-radius: 9px; font-weight: 700; }
+    .links a:hover, .links a:focus-visible { background: #dbe8ff; outline-offset: 3px; }
+    .links a.primary { color: white; background: #2759b4; border-color: #2759b4; }
+    .links a.primary:hover, .links a.primary:focus-visible { background: #17458f; }
+    .links a.wide { grid-column: 1 / -1; }
+    .stage-links { display: grid; gap: .3rem; align-content: start; }
+    .stage-links.wide { grid-column: 1 / -1; }
+    .stage-actions { display: grid; gap: .3rem; }
+    .stage-actions a { font-size: .85rem; padding: .4rem .25rem; }
+    .back-link { color: #204a9c; font-weight: 700; text-underline-offset: .2em; }
+    .stage-source { display: flex; flex-wrap: wrap; gap: .3rem; }
+    .stage-source a { flex: 1 1 4rem; }
+    .small { font-size: .85rem; color: #5a6981; }
+    footer { margin-top: 2rem; color: #66748c; font-size: .85rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="eyebrow">⚔️ RPG WORKSHOP</div>
+      <p><a class="back-link" href="./index.html">← 講義スライド一覧に戻る</a></p>
+      <h1>ソースコード・教材一覧</h1>
+      <p class="intro">第0章から第4章までの各ステージのコードを確認・編集できます。</p>
+    </header>
+
+    <div class="note">
+      <strong>使い方</strong>
+      <div>各教材をブラウザで起動するほか、JSFiddleで編集したり、4ファイルをダウンロードしてローカルで編集したりできます。「開始コード」は課題に取り組む前の状態、「課題1・2」は実装例、「改善例」は整理したコードです。第3章の課題1は「課題1の開始コード」から始めます。ソースコードのリンクではGitHub上の各ファイルを直接閲覧できます。</div>
+    </div>
+
+    <div class="chapters">
+      <section class="chapter" aria-labelledby="chapter0">
+        <h2 id="chapter0">🎮 第0章：まずは動かそう</h2>
+        <p>勇者とスライムが登場するゲームの基本を確認します。</p>
+        <div class="links"><div class="stage-links wide"><a class="primary wide" href="./examples/chapter0/demo/demo.html">デモを開く</a><div class="stage-actions"><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter0/demo/" target="_blank" rel="noopener">JSFiddle</a><a href="./examples/download.html?stage=chapter0/demo">ダウンロード</a><div class="stage-source" aria-label="ソースコード"><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter0/demo/demo.html">HTML</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter0/demo/demo.css">CSS</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter0/demo/demo.js">JavaScript</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter0/demo/demo.details">設定</a></div></div></div></div>
+      </section>
+
+      <section class="chapter" aria-labelledby="chapter1">
+        <h2 id="chapter1">🟩 第1章：仲間スライム登場</h2>
+        <p>仲間を追加し、スライムの攻撃力を変更します。</p>
+        <div class="links">
+          <div class="stage-links"><a class="primary" href="./examples/chapter1/starter/demo.html">開始コード</a><div class="stage-actions"><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter1/starter/" target="_blank" rel="noopener">JSFiddle</a><a href="./examples/download.html?stage=chapter1/starter">ダウンロード</a><div class="stage-source" aria-label="ソースコード"><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/starter/demo.html">HTML</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/starter/demo.css">CSS</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/starter/demo.js">JavaScript</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/starter/demo.details">設定</a></div></div></div>
+          <div class="stage-links"><a href="./examples/chapter1/task1/demo.html">課題1</a><div class="stage-actions"><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter1/task1/" target="_blank" rel="noopener">JSFiddle</a><a href="./examples/download.html?stage=chapter1/task1">ダウンロード</a><div class="stage-source" aria-label="ソースコード"><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task1/demo.html">HTML</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task1/demo.css">CSS</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task1/demo.js">JavaScript</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task1/demo.details">設定</a></div></div></div>
+          <div class="stage-links"><a href="./examples/chapter1/task2/demo.html">課題2</a><div class="stage-actions"><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter1/task2/" target="_blank" rel="noopener">JSFiddle</a><a href="./examples/download.html?stage=chapter1/task2">ダウンロード</a><div class="stage-source" aria-label="ソースコード"><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task2/demo.html">HTML</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task2/demo.css">CSS</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task2/demo.js">JavaScript</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task2/demo.details">設定</a></div></div></div>
+          <div class="stage-links"><a href="./examples/chapter1/solution/demo.html">改善例</a><div class="stage-actions"><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter1/solution/" target="_blank" rel="noopener">JSFiddle</a><a href="./examples/download.html?stage=chapter1/solution">ダウンロード</a><div class="stage-source" aria-label="ソースコード"><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/solution/demo.html">HTML</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/solution/demo.css">CSS</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/solution/demo.js">JavaScript</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/solution/demo.details">設定</a></div></div></div>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="chapter2">
+        <h2 id="chapter2">🧙 第2章：敵か、味方か？</h2>
+        <p>攻撃できる相手のルールを変更します。</p>
+        <div class="links">
+          <div class="stage-links"><a class="primary" href="./examples/chapter2/starter/demo.html">開始コード</a><div class="stage-actions"><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter2/starter/" target="_blank" rel="noopener">JSFiddle</a><a href="./examples/download.html?stage=chapter2/starter">ダウンロード</a><div class="stage-source" aria-label="ソースコード"><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter2/starter/demo.html">HTML</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter2/starter/demo.css">CSS</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter2/starter/demo.js">JavaScript</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter2/starter/demo.details">設定</a></div></div></div>
+          <div class="stage-links"><a href="./examples/chapter2/task1/demo.html">課題1</a><div class="stage-actions"><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter2/task1/" target="_blank" rel="noopener">JSFiddle</a><a href="./examples/download.html?stage=chapter2/task1">ダウンロード</a><div class="stage-source" aria-label="ソースコード"><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter2/task1/demo.html">HTML</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter2/task1/demo.css">CSS</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter2/task1/demo.js">JavaScript</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter2/task1/demo.details">設定</a></div></div></div>
+          <div class="stage-links"><a href="./examples/chapter2/task2/demo.html">課題2</a><div class="stage-actions"><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter2/task2/" target="_blank" rel="noopener">JSFiddle</a><a href="./examples/download.html?stage=chapter2/task2">ダウンロード</a><div class="stage-source" aria-label="ソースコード"><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter2/task2/demo.html">HTML</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter2/task2/demo.css">CSS</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter2/task2/demo.js">JavaScript</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter2/task2/demo.details">設定</a></div></div></div>
+          <div class="stage-links"><a href="./examples/chapter2/solution/demo.html">改善例</a><div class="stage-actions"><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter2/solution/" target="_blank" rel="noopener">JSFiddle</a><a href="./examples/download.html?stage=chapter2/solution">ダウンロード</a><div class="stage-source" aria-label="ソースコード"><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter2/solution/demo.html">HTML</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter2/solution/demo.css">CSS</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter2/solution/demo.js">JavaScript</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter2/solution/demo.details">設定</a></div></div></div>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="chapter3">
+        <h2 id="chapter3">🎯 第3章：誰が操作する？</h2>
+        <p>攻撃対象を選び、仲間の操作方法を切り替えます。</p>
+        <div class="links">
+          <div class="stage-links"><a href="./examples/chapter3/starter/demo.html">章開始デモ</a><div class="stage-actions"><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter3/starter/" target="_blank" rel="noopener">JSFiddle</a><a href="./examples/download.html?stage=chapter3/starter">ダウンロード</a><div class="stage-source" aria-label="ソースコード"><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/starter/demo.html">HTML</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/starter/demo.css">CSS</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/starter/demo.js">JavaScript</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/starter/demo.details">設定</a></div></div></div>
+          <div class="stage-links"><a class="primary" href="./examples/chapter3/task1-starter/demo.html">課題1の開始コード</a><div class="stage-actions"><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter3/task1-starter/" target="_blank" rel="noopener">JSFiddle</a><a href="./examples/download.html?stage=chapter3/task1-starter">ダウンロード</a><div class="stage-source" aria-label="ソースコード"><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/task1-starter/demo.html">HTML</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/task1-starter/demo.css">CSS</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/task1-starter/demo.js">JavaScript</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/task1-starter/demo.details">設定</a></div></div></div>
+          <div class="stage-links"><a href="./examples/chapter3/task1/demo.html">課題1</a><div class="stage-actions"><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter3/task1/" target="_blank" rel="noopener">JSFiddle</a><a href="./examples/download.html?stage=chapter3/task1">ダウンロード</a><div class="stage-source" aria-label="ソースコード"><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/task1/demo.html">HTML</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/task1/demo.css">CSS</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/task1/demo.js">JavaScript</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/task1/demo.details">設定</a></div></div></div>
+          <div class="stage-links"><a href="./examples/chapter3/task2/demo.html">課題2</a><div class="stage-actions"><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter3/task2/" target="_blank" rel="noopener">JSFiddle</a><a href="./examples/download.html?stage=chapter3/task2">ダウンロード</a><div class="stage-source" aria-label="ソースコード"><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/task2/demo.html">HTML</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/task2/demo.css">CSS</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/task2/demo.js">JavaScript</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/task2/demo.details">設定</a></div></div></div>
+          <div class="stage-links wide"><a class="wide" href="./examples/chapter3/solution/demo.html">改善例</a><div class="stage-actions"><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter3/solution/" target="_blank" rel="noopener">JSFiddle</a><a href="./examples/download.html?stage=chapter3/solution">ダウンロード</a><div class="stage-source" aria-label="ソースコード"><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/solution/demo.html">HTML</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/solution/demo.css">CSS</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/solution/demo.js">JavaScript</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter3/solution/demo.details">設定</a></div></div></div>
+        </div>
+      </section>
+
+      <section class="chapter" aria-labelledby="chapter4">
+        <h2 id="chapter4">🧠 第4章：敵の作戦を変えよう</h2>
+        <p>攻撃対象を記憶し、敵同士の連携を実現します。</p>
+        <div class="links">
+          <div class="stage-links"><a class="primary" href="./examples/chapter4/starter/demo.html">開始コード</a><div class="stage-actions"><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter4/starter/" target="_blank" rel="noopener">JSFiddle</a><a href="./examples/download.html?stage=chapter4/starter">ダウンロード</a><div class="stage-source" aria-label="ソースコード"><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/starter/demo.html">HTML</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/starter/demo.css">CSS</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/starter/demo.js">JavaScript</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/starter/demo.details">設定</a></div></div></div>
+          <div class="stage-links"><a href="./examples/chapter4/task1/demo.html">課題1</a><div class="stage-actions"><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter4/task1/" target="_blank" rel="noopener">JSFiddle</a><a href="./examples/download.html?stage=chapter4/task1">ダウンロード</a><div class="stage-source" aria-label="ソースコード"><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task1/demo.html">HTML</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task1/demo.css">CSS</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task1/demo.js">JavaScript</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task1/demo.details">設定</a></div></div></div>
+          <div class="stage-links"><a href="./examples/chapter4/task2/demo.html">課題2</a><div class="stage-actions"><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter4/task2/" target="_blank" rel="noopener">JSFiddle</a><a href="./examples/download.html?stage=chapter4/task2">ダウンロード</a><div class="stage-source" aria-label="ソースコード"><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task2/demo.html">HTML</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task2/demo.css">CSS</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task2/demo.js">JavaScript</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/task2/demo.details">設定</a></div></div></div>
+          <div class="stage-links"><a href="./examples/chapter4/solution/demo.html">改善例</a><div class="stage-actions"><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter4/solution/" target="_blank" rel="noopener">JSFiddle</a><a href="./examples/download.html?stage=chapter4/solution">ダウンロード</a><div class="stage-source" aria-label="ソースコード"><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/solution/demo.html">HTML</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/solution/demo.css">CSS</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/solution/demo.js">JavaScript</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter4/solution/demo.details">設定</a></div></div></div>
+        </div>
+      </section>
+    </div>
+
+    <footer>教材はWebサイト、JSFiddle、ローカルで共通のソースコードを使用します。</footer>
+  </main>
+</body>
+</html>

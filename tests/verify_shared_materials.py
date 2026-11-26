@@ -46,6 +46,12 @@ def main() -> int:
             failures.append(message)
 
     index = (PUBLIC / "index.html").read_text(encoding="utf-8")
+    materials = (PUBLIC / "materials.html").read_text(encoding="utf-8")
+    presentations = tuple(f"./presentations/chapter{chapter}/" for chapter in range(5)) + ("./presentations/summary/",)
+    check(tuple(re.findall(r'href="([^"]+)"', index)) == presentations + ("./materials.html",), "lecture entrance links mismatch")
+    check(materials.count('href="./index.html"') == 1, "materials return link missing or duplicated")
+    check('href="./presentations/' not in materials, "lecture links duplicated in materials")
+    check(len(re.findall(r'class="stage-links(?: wide)?"', materials)) == len(STAGES), "materials stage count mismatch")
     download = (EXAMPLES / "download.js").read_text(encoding="utf-8")
     allowlist = re.search(r"const supportedStages = \[([\s\S]*?)\];", download)
     check(allowlist is not None and tuple(re.findall(r"'([^']+)'", allowlist.group(1))) == STAGES, "download allowlist mismatch")
@@ -66,7 +72,10 @@ def main() -> int:
             check(html.count(loader.group(0)) == 1, f"{stage}: loader differs")
             check(re.fullmatch(r"/\*\n---\nname: [^\n]+\ndescription: [^\n]+\n\.\.\.\n\*/\n?", details) is not None, f"{stage}: metadata invalid")
             for href in (f"./examples/{stage}/demo.html", FIDDLE + stage + "/", f"./examples/download.html?stage={stage}"):
-                check(index.count(f'href="{href}"') == 1, f"{stage}: index link missing or duplicated: {href}")
+                check(materials.count(f'href="{href}"') == 1, f"{stage}: materials link missing or duplicated: {href}")
+            for name in FILES:
+                href = f"https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/{stage}/{name}"
+                check(materials.count(f'href="{href}"') == 1, f"{stage}: source link missing or duplicated: {name}")
         except OSError as exc:
             failures.append(f"{stage}: {exc}")
 
