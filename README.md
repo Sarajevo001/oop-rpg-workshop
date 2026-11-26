@@ -9,7 +9,7 @@ JavaScriptの基礎を学んだ人向けの、RPGを使ったオブジェクト�
 - [現行仕様・進捗（教材棚卸し）](docs/materials_audit.md)
 - [総合ロジック検証](docs/integration_validation_report.md)
 
-第1〜4章は `starter`（開始）、`task1`（最初の追加要求）、`task2`（次の追加要求）、`solution`（改善例）の順に参照します。第0章は講師用デモです。共通教材化・公開検証は2026-11-25完了。講座全体の開催準備は継続中です。公開サイト: https://demo.sarajevo.jp/oop-rpg-workshop/ 。
+第1〜4章は `starter`（開始）、`task1`（最初の追加要求）、`task2`（次の追加要求）、`solution`（改善例）の順に参照します。第0章は講師用デモです。共通教材化・公開検証は2026-11-25完了。2026-11-27、作成者による全編確認を経て教材制作はいったん完成。開催準備・未確認事項は [教材棚卸しの最新記録](docs/materials_audit.md) を参照。公開サイト: https://demo.sarajevo.jp/oop-rpg-workshop/ 。
 
 ## プレゼンテーションの配置
 
