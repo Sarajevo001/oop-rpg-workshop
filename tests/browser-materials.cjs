@@ -526,6 +526,26 @@ async function checkExcerptLayout(browser, origin, deck, viewport) {
       const current = page.locator('.slide:visible');
       assert.equal(await current.count(), 1);
       assert.equal(await page.locator('#count').innerText(), index + ' / ' + count);
+      if (deck === 'summary' && (index === 7 || index === 8)) {
+        assert.equal(count, 11);
+        const expected = index === 7 ? 'デザインパターン：Strategy' : 'DI：依存性の注入';
+        assert.equal(await current.locator('h1').innerText(), expected);
+        const descriptions = current.locator('.description');
+        assert.equal(await descriptions.count(), 2);
+        for (const description of await descriptions.all()) {
+          assert.ok(await description.isVisible());
+          await description.scrollIntoViewIfNeeded();
+          const box = await description.boundingBox();
+          assert.notEqual(box, null);
+          assert.ok(box.width > 0 && box.height > 0);
+        }
+        if (index === 8) {
+          assert.ok((await descriptions.last().innerText()).includes('クロージャ'));
+        }
+        const size = await current.evaluate(element => ({ client: element.clientWidth, scroll: element.scrollWidth }));
+        assert.ok(size.scroll <= size.client + 1, 'summary reveal horizontal overflow');
+        console.log('REVEAL_LAYOUT', viewport.width, viewport.height, index);
+      }
       if (deck === 'chapter0' && index === 3) {
         const links = current.locator('.source-links a');
         assert.deepEqual(await links.allTextContents(), ["対応するRPGを開く ↗","JSFiddleで編集 ↗","4ファイルをダウンロード ↗","HTMLコードを見る ↗","JavaScriptコードを見る ↗"]);
