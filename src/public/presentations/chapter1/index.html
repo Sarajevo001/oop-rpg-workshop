@@ -94,9 +94,23 @@ main{width:100vw;height:100dvh;display:grid;place-items:center;padding:1rem 1rem
 <section class="slide exercise-slide" aria-label="スライド3" hidden><div class="kicker">RPG WORKSHOP / 第1章</div><h1>課題1：仲間スライムを追加しよう</h1><div class="try-sticker" aria-label="ここから実装に挑戦">LET'S TRY!!</div><div class="feature ">🧑‍🦱 勇者　＋　🟩 仲間スライム
 　　　　　　VS
 　　　　　🟦 敵スライム</div><p class="description">画面に仲間スライムを1体追加し、敵スライムを攻撃できるようにする。リセット時は初期状態へ。実装方法は自由。</p><div class="talk-prompt"><strong>確認してみよう</strong><ul><li>どの要求が追加され、どのオブジェクト・条件・処理を変更する必要があるかを整理してください。</li><li>実行結果とコードの対応も確認しましょう。</li></ul></div><div class="exercise-start"><span class="exercise-start-label">課題1の開始コード</span><a href="../../examples/chapter1/starter/demo.html">改修スタート用コードを開く ↗</a><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter1/starter/" target="_blank" rel="noopener">JSFiddleで編集 ↗</a><a href="../../examples/download.html?stage=chapter1/starter" target="_blank" rel="noopener">4ファイルをダウンロード ↗</a></div><aside class="speaker" hidden>3分：受講者が実装。既存コードのコピーも許容。</aside></section>
-<section class="slide" hidden aria-label="スライド3"><div class="kicker">RPG WORKSHOP / 第1章</div><h1>課題1：実装例を確認</h1><div class="feature code">// クラスの構成（模式図）
-class Slime { /* 省略 */ }
-class FriendlySlime { /* 省略 */ }</div><p class="description">既存のSlimeを参考に、仲間用の類似クラスを作る方法もある。これは一例であり唯一解ではない。</p><div class="source-links"><a href="../../examples/chapter1/task1/demo.html">対応するRPGを開く ↗</a><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter1/task1/" target="_blank" rel="noopener">JSFiddleで編集 ↗</a><a href="../../examples/download.html?stage=chapter1/task1" target="_blank" rel="noopener">4ファイルをダウンロード ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task1/demo.html" target="_blank" rel="noopener">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task1/demo.js" target="_blank" rel="noopener">JavaScriptコードを見る ↗</a></div><aside class="speaker" hidden>1分：task1の例を表示。コピー方式を強制しない。</aside></section>
+<section class="slide" hidden aria-label="スライド3"><div class="kicker">RPG WORKSHOP / 第1章</div><h1>課題1：実装例を確認</h1><div class="feature code" data-code-source="chapter1/task1" tabindex="0" aria-label="実コード抜粋（横スクロール可能）">class FriendlySlime {
+  constructor(name) {
+    this.name = name;
+    this.hp = 30;
+    this.sprite = '🟩';
+  }
+  attack(target) {
+    const damage = 5;
+    target.hp = Math.max(0, target.hp - damage);
+    return `${this.name}の攻撃！ ${target.name}に${damage}ダメージ！`;
+  }
+}</div><div class="feature code" data-code-source="chapter1/task1" tabindex="0" aria-label="実コード抜粋（横スクロール可能）">// リセット時（抜粋）
+friendlySlime = new FriendlySlime('仲間スライム');
+// ターン進行時（抜粋）
+if (enemySlime.hp &gt; 0) {
+  showMessage(friendlySlime.attack(enemySlime));
+}</div><p class="description">既存のSlimeを参考に仲間用の類似クラスを作り、リセットで生成し、ターン進行で敵を攻撃する。一例であり唯一解ではない。</p><div class="source-links"><a href="../../examples/chapter1/task1/demo.html">対応するRPGを開く ↗</a><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter1/task1/" target="_blank" rel="noopener">JSFiddleで編集 ↗</a><a href="../../examples/download.html?stage=chapter1/task1" target="_blank" rel="noopener">4ファイルをダウンロード ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task1/demo.html" target="_blank" rel="noopener">HTMLコードを見る ↗</a><a href="https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter1/task1/demo.js" target="_blank" rel="noopener">JavaScriptコードを見る ↗</a></div><aside class="speaker" hidden>1分：task1の例を表示。コピー方式を強制しない。</aside></section>
 <section class="slide exercise-slide" aria-label="スライド5" hidden><div class="kicker">RPG WORKSHOP / 第1章</div><h1>課題2：仕様変更です！</h1><div class="try-sticker" aria-label="ここから実装に挑戦">LET'S TRY!!</div><div class="feature ">スライムの攻撃ダメージ
 5 → 7</div><p class="description">敵スライムも仲間スライムも7ダメージ。勇者の攻撃は8のまま。変更箇所を数えてみよう。</p><div class="talk-prompt"><strong>確認してみよう</strong><ul><li>どの要求が追加され、どのオブジェクト・条件・処理を変更する必要があるかを整理してください。</li><li>実行結果とコードの対応も確認しましょう。</li></ul></div><div class="exercise-start"><span class="exercise-start-label">課題2の開始コード（課題1の実装例）</span><a href="../../examples/chapter1/task1/demo.html">改修スタート用コードを開く ↗</a><a href="https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter1/task1/" target="_blank" rel="noopener">JSFiddleで編集 ↗</a><a href="../../examples/download.html?stage=chapter1/task1" target="_blank" rel="noopener">4ファイルをダウンロード ↗</a></div><aside class="speaker" hidden>3分：課題2の実装。修正箇所数に注目。解決策はまだ示さない。</aside></section>
 <section class="slide" hidden aria-label="スライド4"><div class="kicker">RPG WORKSHOP / 第1章</div><h1>どこを修正しましたか？</h1><div class="role-sticker irritation-sticker">イラッとポイント</div><div class="feature code">Slime.attack()        5 → 7
