@@ -59,3 +59,36 @@ for stage, marker, pattern in (
     expected = re.search(pattern, sources[stage]).group()
     slide = next(s for s in re.findall(r'<section class="slide[^"]*"[^>]*>[\s\S]*?</section>', chapter4) if f'role-sticker {marker}' in s)
     assert normalize(expected) in normalize(unescape(slide)), stage
+
+# Each task 1 example must contain its core implementation, not just names
+# or a placeholder for the behavior that the exercise implements.
+for deck, patterns in (
+    ("chapter1", (
+        r"class FriendlySlime \{[\s\S]*?\n\}",
+        r"  friendlySlime = new FriendlySlime\([^\n]+",
+        r"  if \(enemySlime\.hp > 0\) \{\n    showMessage\(friendlySlime\.attack\(enemySlime\)\);\n  \}",
+    )),
+    ("chapter2", (
+        r"  canAttack\(target\) \{[\s\S]*?\n  \}",
+        r"    if \(this\.canAttack\(target\) === false\) \{[\s\S]*?\n    \}",
+    )),
+    ("chapter3", (
+        r"  if \(friend\.hp > 0 && enemies\(\)\.length > 0\) \{[\s\S]*?\n  \}",
+    )),
+    ("chapter4", (
+        r"    this\.lockedTarget = null;",
+        r"  chooseTarget\(targets\) \{[\s\S]*?\n  \}",
+    )),
+):
+    stage = f"{deck}/task1"
+    html = (ROOT / "presentations" / deck / "index.html").read_text(encoding="utf-8")
+    slide = next(
+        item for item in re.findall(r'<section class="slide[^"]*"[^>]*>[\s\S]*?</section>', html)
+        if re.search(r"<h1>課題1：実装例(?:を確認)?</h1>", item)
+    )
+    blocks = re.findall(r'<div class="feature code" data-code-source="([^"]+)"[^>]*>([\s\S]*?)</div>', slide)
+    excerpts = [normalize(unescape(content)) for source, content in blocks if source == stage]
+    for pattern in patterns:
+        expected = normalize(re.search(pattern, sources[stage]).group())
+        assert any(expected in excerpt for excerpt in excerpts), f"{stage}: core example missing: {expected}"
+print("PASS: four task 1 slides contain complete core implementation excerpts")
