@@ -526,12 +526,12 @@ async function checkExcerptLayout(browser, origin, deck, viewport) {
       const current = page.locator('.slide:visible');
       assert.equal(await current.count(), 1);
       assert.equal(await page.locator('#count').innerText(), index + ' / ' + count);
-      if ((deck === 'chapter0' && index === 2) || (deck === 'summary' && index <= 7)) {
+      if ((deck === 'chapter0' && index === 2) || (deck === 'summary' && index <= 8)) {
         const expected = deck === 'chapter0' ? 'question' :
-          ['recap', 'history', 'mapping', 'callback', 'climax', 'strategy-detail', 'di-detail'][index - 1];
-        assert.equal(count, deck === 'chapter0' ? 9 : 10);
+          ['recap', 'history', 'mapping', 'callback', 'climax', 'strategy-detail', 'di-detail', 'wisdom'][index - 1];
+        assert.equal(count, deck === 'chapter0' ? 9 : 11);
         assert.equal(await current.getAttribute('data-reveal-beat'), expected);
-        const items = current.locator('h1, .reveal-question p, .reveal-tile, .reveal-history-card, .reveal-punch, .reveal-answer, .description');
+        const items = current.locator('h1, .reveal-question p, .reveal-tile, .reveal-history-card, .reveal-punch, .reveal-answer, .feature, .description');
         for (const item of await items.all()) {
           assert.ok(await item.isVisible());
           await item.scrollIntoViewIfNeeded();
@@ -553,6 +553,11 @@ async function checkExcerptLayout(browser, origin, deck, viewport) {
         }
         if (expected === 'di-detail') {
           assert.ok((await current.locator('.description').last().innerText()).includes('クロージャ'));
+        }
+        if (expected === 'wisdom') {
+          assert.equal(await current.locator('h1').innerText(), 'オブジェクト指向は、魔法ではない');
+          assert.ok((await current.locator('.feature').innerText()).includes('知恵の蓄積。'));
+          assert.ok((await current.locator('.description').innerText()).includes('銀の弾丸ではない。'));
         }
         const size = await current.evaluate(element => ({ client: element.clientWidth, scroll: element.scrollWidth }));
         assert.ok(size.scroll <= size.client + 1, 'reveal slide horizontal overflow');
