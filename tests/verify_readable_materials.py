@@ -92,3 +92,37 @@ for deck, patterns in (
         expected = normalize(re.search(pattern, sources[stage]).group())
         assert any(expected in excerpt for excerpt in excerpts), f"{stage}: core example missing: {expected}"
 print("PASS: four task 1 slides contain complete core implementation excerpts")
+
+# The theory names belong to the reveal, not to the exercises or recap.
+# The historical book title and its source link are explicitly permitted.
+def deck_slides(deck):
+    document = (ROOT / "presentations" / deck / "index.html").read_text(encoding="utf-8")
+    return re.findall(r'<section class="slide[^"]*"[^>]*>[\s\S]*?</section>', document)
+
+def no_early_theory(slide):
+    if "<h1>歴史の一場面</h1>" in slide:
+        for book_reference in ("Design Patterns", "Design_Patterns", "『デザインパターン』"):
+            slide = slide.replace(book_reference, "")
+    assert not re.search(
+        r"\bDI\b|Dependency\s+Injection|デザインパターン|Design[\s_-]+Patterns|\bStrategy\b|ストラテジー|クロージャ",
+        unescape(slide), re.IGNORECASE,
+    ), "theory name or closure disclosed before the reveal"
+
+for deck in ("chapter0", "chapter1", "chapter2", "chapter3", "chapter4"):
+    for slide in deck_slides(deck):
+        no_early_theory(slide)
+
+summary = deck_slides("summary")
+assert len(summary) == 11, "summary slide count"
+for slide in summary[:6]:
+    no_early_theory(slide)
+assert "<h1>種明かし</h1>" in summary[5]
+assert "<h1>デザインパターン：Strategy</h1>" in summary[6]
+assert "<h1>DI：依存性の注入</h1>" in summary[7]
+di_visible = summary[7].split('<aside class="speaker"')[0]
+assert all(word in di_visible for word in ("第3章", "第4章", "クロージャ", "インスタンス", "外から渡す"))
+assert "『Design Patterns』刊行" in next(
+    slide for slide in deck_slides("chapter4") if "<h1>歴史の一場面</h1>" in slide
+)
+assert sum(int(value) for slide in summary for value in re.findall(r'<aside class="speaker" hidden>(\d+)分：', slide)) == 25
+print("PASS: delayed Strategy/DI/closure reveal, preserved book title and 25-minute summary")
