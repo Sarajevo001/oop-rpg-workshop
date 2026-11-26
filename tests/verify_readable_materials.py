@@ -120,14 +120,14 @@ for deck in ("chapter0", "chapter1", "chapter2", "chapter3", "chapter4", "summar
 
 intro = deck_slides("chapter0")
 summary = deck_slides("summary")
-assert len(intro) == 9 and len(summary) == 10
+assert len(intro) == 9 and len(summary) == 11
 assert "<h1>RPGで学ぶ！プログラム改造ハンズオン</h1>" in intro[0]
 assert 'data-reveal-beat="question"' in intro[1]
 assert sum('data-reveal-beat="question"' in slide for slide in intro) == 1
 for slide in summary[:2]:
     no_early_theory(slide)
-assert [re.search(r'data-reveal-beat="([^"]+)"', slide).group(1) for slide in summary[:7]] == [
-    "recap", "history", "mapping", "callback", "climax", "strategy-detail", "di-detail",
+assert [re.search(r'data-reveal-beat="([^"]+)"', slide).group(1) for slide in summary[:8]] == [
+    "recap", "history", "mapping", "callback", "climax", "strategy-detail", "di-detail", "wisdom",
 ]
 question = r'<div class="reveal-question">[\s\S]*?</div>'
 assert re.search(question, intro[1]).group() == re.search(question, summary[3]).group()
@@ -150,6 +150,13 @@ assert "<h1>DI：依存性の注入</h1>" in summary[6]
 di_visible = summary[6].split('<aside class="speaker"')[0]
 assert all(word in di_visible for word in ("第3章", "第4章", "クロージャ", "インスタンス", "外から渡す"))
 assert all("クロージャ" not in slide for slide in summary[:6])
+assert "<h1>オブジェクト指向は、魔法ではない</h1>" in summary[7]
+wisdom_visible = summary[7].split('<aside class="speaker"')[0]
+assert all(word in wisdom_visible for word in ("先人たちが失敗と工夫を積み重ねて磨いてきた、知恵の蓄積。", "銀の弾丸ではない。", "状況に応じて使いどころを考える価値がある。"))
+assert "<h1>道具は、使いどころが大事</h1>" in summary[8]
+assert "<h1>質疑・終了</h1>" in summary[9]
+assert "<h1>自習用の確認問題</h1>" in summary[10]
+print("PASS: no-silver-bullet message follows DI and precedes tool selection")
 assert "『Design Patterns』刊行" in next(
     slide for slide in deck_slides("chapter4") if "<h1>歴史の一場面</h1>" in slide
 )
