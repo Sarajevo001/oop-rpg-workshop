@@ -526,27 +526,39 @@ async function checkExcerptLayout(browser, origin, deck, viewport) {
       const current = page.locator('.slide:visible');
       assert.equal(await current.count(), 1);
       assert.equal(await page.locator('#count').innerText(), index + ' / ' + count);
-      if (deck === 'summary' && (index === 7 || index === 8)) {
-        assert.equal(count, 11);
-        const expected = index === 7 ? 'デザインパターン：Strategy' : 'DI：依存性の注入';
-        assert.equal(await current.locator('h1').innerText(), expected);
-        const descriptions = current.locator('.description');
-        assert.equal(await descriptions.count(), 2);
-        for (const description of await descriptions.all()) {
-          assert.ok(await description.isVisible());
-          await description.scrollIntoViewIfNeeded();
-          const box = await description.boundingBox();
+      if ((deck === 'chapter0' && index === 2) || (deck === 'summary' && index <= 7)) {
+        const expected = deck === 'chapter0' ? 'question' :
+          ['recap', 'history', 'mapping', 'callback', 'climax', 'strategy-detail', 'di-detail'][index - 1];
+        assert.equal(count, deck === 'chapter0' ? 9 : 10);
+        assert.equal(await current.getAttribute('data-reveal-beat'), expected);
+        const items = current.locator('h1, .reveal-question p, .reveal-tile, .reveal-history-card, .reveal-punch, .reveal-answer, .description');
+        for (const item of await items.all()) {
+          assert.ok(await item.isVisible());
+          await item.scrollIntoViewIfNeeded();
+          const box = await item.boundingBox();
+          const slideBox = await current.boundingBox();
           assert.notEqual(box, null);
           assert.ok(box.width > 0 && box.height > 0);
+          assert.ok(box.x >= slideBox.x - 1 && box.x + box.width <= slideBox.x + slideBox.width + 1);
         }
-        if (index === 8) {
-          assert.ok((await descriptions.last().innerText()).includes('クロージャ'));
+        if (expected === 'question' || expected === 'callback') {
+          assert.equal(await current.locator('.reveal-question h1').innerText(), '依存性の注入');
+          assert.equal(await current.locator('.reveal-question p').innerText(), 'この言葉、聞いたことありますか？\n意味、分かりますか？');
+        }
+        if (expected === 'history') {
+          assert.equal(await current.locator('.reveal-history-card').count(), 5);
+        }
+        if (expected === 'recap' || expected === 'mapping') {
+          assert.equal(await current.locator('.reveal-tile').count(), 4);
+        }
+        if (expected === 'di-detail') {
+          assert.ok((await current.locator('.description').last().innerText()).includes('クロージャ'));
         }
         const size = await current.evaluate(element => ({ client: element.clientWidth, scroll: element.scrollWidth }));
-        assert.ok(size.scroll <= size.client + 1, 'summary reveal horizontal overflow');
-        console.log('REVEAL_LAYOUT', viewport.width, viewport.height, index);
+        assert.ok(size.scroll <= size.client + 1, 'reveal slide horizontal overflow');
+        console.log('REVEAL_LAYOUT', deck, viewport.width, viewport.height, expected);
       }
-      if (deck === 'chapter0' && index === 3) {
+      if (deck === 'chapter0' && index === 4) {
         const links = current.locator('.source-links a');
         assert.deepEqual(await links.allTextContents(), ["対応するRPGを開く ↗","JSFiddleで編集 ↗","4ファイルをダウンロード ↗","HTMLコードを見る ↗","JavaScriptコードを見る ↗"]);
         assert.deepEqual(await links.evaluateAll(elements => elements.map(element => element.getAttribute('href'))), ["../../examples/chapter0/demo/demo.html","https://jsfiddle.net/gh/get/library/pure/Sarajevo001/oop-rpg-workshop/tree/main/src/public/examples/chapter0/demo/","../../examples/download.html?stage=chapter0/demo","https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter0/demo/demo.html","https://github.com/Sarajevo001/oop-rpg-workshop/blob/main/src/public/examples/chapter0/demo/demo.js"]);
