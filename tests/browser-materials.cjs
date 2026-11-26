@@ -563,6 +563,25 @@ async function checkExcerptLayout(browser, origin, deck, viewport) {
         assert.ok(size.scroll <= size.client + 1, 'reveal slide horizontal overflow');
         console.log('REVEAL_LAYOUT', deck, viewport.width, viewport.height, expected);
       }
+      if (deck === 'summary' && index === 9) {
+        assert.equal(count, 11);
+        const illustration = current.locator('img.illustrated-tools-image');
+        assert.equal(await illustration.count(), 1);
+        assert.ok(await illustration.isVisible());
+        await illustration.evaluate(image => image.decode());
+        const dimensions = await illustration.evaluate(image => ({
+          width: image.naturalWidth, height: image.naturalHeight
+        }));
+        assert.deepEqual(dimensions, { width: 1672, height: 941 });
+        assert.ok((await illustration.getAttribute('alt')).includes('過剰設計'));
+        const box = await illustration.boundingBox();
+        const slideBox = await current.boundingBox();
+        assert.ok(box && slideBox && box.width > 0 && box.height > 0);
+        assert.ok(box.x >= slideBox.x - 1 && box.x + box.width <= slideBox.x + slideBox.width + 1);
+        assert.ok(box.y >= slideBox.y - 1 && box.y + box.height <= slideBox.y + slideBox.height + 1);
+        assert.ok(Math.abs(box.width / box.height - 1672 / 941) < 0.03);
+        console.log('OVERENGINEERING_IMAGE_LAYOUT', viewport.width, viewport.height);
+      }
       if (deck === 'chapter0' && index === 4) {
         const links = current.locator('.source-links a');
         assert.deepEqual(await links.allTextContents(), ["対応するRPGを開く ↗","JSFiddleで編集 ↗","4ファイルをダウンロード ↗","HTMLコードを見る ↗","JavaScriptコードを見る ↗"]);
