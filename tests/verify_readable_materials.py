@@ -153,7 +153,7 @@ assert all("クロージャ" not in slide for slide in summary[:6])
 assert "<h1>オブジェクト指向は、魔法ではない</h1>" in summary[7]
 wisdom_visible = summary[7].split('<aside class="speaker"')[0]
 assert all(word in wisdom_visible for word in ("先人たちが失敗と工夫を積み重ねて磨いてきた、知恵の蓄積。", "銀の弾丸ではない。", "状況に応じて使いどころを考える価値がある。"))
-assert "<h1>道具は、使いどころが大事</h1>" in summary[8]
+assert '<h1 class="illustrated-tools-title">道具は、使いどころが大事</h1>' in summary[8]
 assert "<h1>質疑・終了</h1>" in summary[9]
 assert "<h1>自習用の確認問題</h1>" in summary[10]
 print("PASS: no-silver-bullet message follows DI and precedes tool selection")
@@ -164,3 +164,8 @@ assert sum(int(value) for slide in intro for value in re.findall(r'<aside class=
 assert "約1分" in next(slide for slide in intro if "<h1>歴史の一場面</h1>" in slide)
 assert sum(int(value) for slide in summary for value in re.findall(r'<aside class="speaker" hidden>(\d+)分：', slide)) == 25
 print("PASS: opening question, all five historical callbacks, four mappings, climax and deferred details; 20/25 minute plans")
+
+assert 'src="./overengineering.jpg"' in summary[8]
+assert (ROOT / "presentations" / "summary" / "overengineering.jpg").read_bytes().startswith(bytes.fromhex("ffd8ff"))
+assert 'alt="道具は、使いどころが大事。' in summary[8]
+print("PASS: approved illustration on summary slide 9")
