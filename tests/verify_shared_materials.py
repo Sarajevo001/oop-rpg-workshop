@@ -1,5 +1,6 @@
 """Validate the shared RPG materials and legacy URL compatibility."""
 from pathlib import Path
+import hashlib
 import re
 import sys
 
@@ -47,6 +48,11 @@ def main() -> int:
 
     index = (PUBLIC / "index.html").read_text(encoding="utf-8")
     materials = (PUBLIC / "materials.html").read_text(encoding="utf-8")
+    banner = PUBLIC / "assets" / "xo-code-busters-banner.png"
+    check(index.count('src="./assets/xo-code-busters-banner.png"') == 1, "entrance banner missing or duplicated")
+    check("XO-Code Busters の活動の一環" in index, "workshop activity attribution missing")
+    check(banner.is_file() and hashlib.sha256(banner.read_bytes()).hexdigest() == "12df1566c56681e60b090fd106efc7583b726f02550e5e7ab50e5842d182f899", "approved banner bytes differ")
+    check("xo-code-busters-banner.png" not in materials, "banner duplicated on materials page")
     presentations = tuple(f"./presentations/chapter{chapter}/" for chapter in range(5)) + ("./presentations/summary/",)
     check(tuple(re.findall(r'href="([^"]+)"', index)) == presentations + ("./materials.html",), "lecture entrance links mismatch")
     check(materials.count('href="./index.html"') == 1, "materials return link missing or duplicated")

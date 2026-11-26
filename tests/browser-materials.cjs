@@ -718,6 +718,19 @@ async function checkEntranceNavigation(browser, origin, viewport) {
   page.on('pageerror', error => errors.push(error.message));
   try {
     await page.goto(origin + '/index.html');
+    const banner = page.locator('.project-banner img');
+    assert.equal(await banner.count(), 1);
+    assert.ok(await banner.isVisible());
+    await banner.evaluate(image => image.decode());
+    const dimensions = await banner.evaluate(image => ({ width: image.naturalWidth, height: image.naturalHeight }));
+    assert.deepEqual(dimensions, { width: 330, height: 220 });
+    const bannerBox = await banner.boundingBox();
+    assert.ok(bannerBox && bannerBox.width > 0 && bannerBox.width <= 331);
+    assert.ok(Math.abs(bannerBox.width / bannerBox.height - 330 / 220) < 0.03);
+    assert.ok(bannerBox.x >= 0 && bannerBox.x + bannerBox.width <= viewport.width + 1);
+    assert.ok((await banner.getAttribute('alt')).includes('XO-Code Busters'));
+    assert.ok((await page.locator('.project-banner figcaption').innerText()).includes('活動の一環'));
+    console.log('PROJECT_BANNER_LAYOUT', viewport.width, viewport.height);
     const lectureLinks = page.locator('a[href^="./presentations/"]');
     assert.equal(await lectureLinks.count(), 6);
     assert.equal(await page.locator('.stage-links').count(), 0);
