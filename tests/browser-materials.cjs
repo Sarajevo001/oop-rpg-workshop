@@ -214,7 +214,7 @@ async function chapterStickers(browser, origin, viewport, chapter) {
     });
     await page.goto(origin + '/presentations/chapter' + chapter.number + '/index.html', { waitUntil: 'load' });
     const gameLinks = page.locator('a[href^="../../examples/"][href$="/demo.html"]');
-    assert.equal(await gameLinks.count(), [0, 8, 9, 10, 9][chapter.number]);
+    assert.equal(await gameLinks.count(), [0, 8, 8, 9, 8][chapter.number]);
     for (const link of await gameLinks.all()) {
       assert.equal(await link.getAttribute('target'), null, 'RPG links must navigate in the same tab');
     }
@@ -326,8 +326,12 @@ async function chapterStickers(browser, origin, viewport, chapter) {
                 widthFits: rect.left >= slide.left && rect.right <= slide.right };
             });
             assert.deepEqual(figure, { contentFits: true, visible: true, widthFits: true });
+            if (chapter.number > 1) {
+              const retained = ['','', 'function living(team)', '所属（team）はfriendのまま', 'const sharedController = new TrackingController();'][chapter.number];
+              assert.ok((await panel.innerText()).includes(retained));
+            }
             const codes = panel.locator('[data-code-source]');
-            assert.equal(await codes.count(), chapter.number === 1 || chapter.number === 3 ? 2 : 1);
+            assert.equal(await codes.count(), 2);
             for (const code of await codes.all()) {
               await code.scrollIntoViewIfNeeded();
               assert.equal(await code.isVisible(), true);
@@ -682,9 +686,9 @@ async function main() {
     await run('chapter3 task1 starter selection contracts', () => checkStarterSelection(browser, origin));
     const chapters = [
       { number: 1, slideCount: 12, tryPages: [3, 5], rolePages: [6, 7], headings: ['どこを修正しましたか？', '改善例：共通化する'] },
-      { number: 2, slideCount: 12, tryPages: [2, 4], rolePages: [5, 6], headings: ['課題2：条件が増えていく', '改善例：所属を持たせる'] },
-      { number: 3, slideCount: 13, tryPages: [2, 4], rolePages: [5, 6], headings: ['課題2：分岐が増える', '改善例：関数を渡す'] },
-      { number: 4, slideCount: 12, tryPages: [2, 4], rolePages: [5, 6], headings: ['課題2：記憶の持ち主は？', '改善例：状態を持つ部品へ'] }
+      { number: 2, slideCount: 11, tryPages: [2, 4], rolePages: [5, 6], headings: ['課題2：条件が増えていく', '改善例：所属を持たせる'] },
+      { number: 3, slideCount: 12, tryPages: [2, 4], rolePages: [5, 6], headings: ['課題2：分岐が増える', '改善例：関数を渡す'] },
+      { number: 4, slideCount: 11, tryPages: [2, 4], rolePages: [5, 6], headings: ['課題2：記憶の持ち主は？', '改善例：状態を持つ部品へ'] }
     ];
     for (const deck of ['chapter0', 'chapter1', 'chapter2', 'chapter3', 'chapter4', 'summary']) {
       for (const viewport of [{ width: 1280, height: 720 }, { width: 393, height: 780 }]) {
